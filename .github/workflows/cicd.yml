@@ -118,5 +118,5 @@ jobs:
             rm -rf GGUMTLE_FE/.next
             unzip next.zip -d GGUMTLE_FE
             # echo "${{ secrets.ENV }}" > GGUMTLE_FE/.env
-            pm2 reload keyword-next
+            pm2 reload ggumtle-next
           '
