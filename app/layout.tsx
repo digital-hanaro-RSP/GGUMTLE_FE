@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   description: '버킷리스트를 통한 자산 관리 서비스',
 };
 
+// app/layout.tsx
 export default function RootLayout({
   children,
 }: {
@@ -15,9 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang='ko'>
-      <body className='bg-background min-h-screen pb-16'>
-        <main>{children}</main>
-        <Navigation />
+      <body className='bg-white min-h-screen text-black'>
+        <div className='relative mx-auto max-w-screen-md min-h-screen bg-background'>
+          {children}
+          <Navigation />
+        </div>
       </body>
     </html>
   );
