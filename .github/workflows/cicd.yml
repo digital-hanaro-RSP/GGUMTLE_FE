@@ -76,26 +76,26 @@ jobs:
           ls -l
           echo "Checking .next directory:"
           ls -l .next || echo ".next directory not found"
-          echo "Checking KeywordHanaro_FE directory:"
-          ls -l ./KeywordHanaro_FE || echo "KeywordHanaro_FE directory not found"
+          echo "Checking GGUMTLE_FE directory:"
+          ls -l ./GGUMTLE_FE || echo "GGUMTLE_FE directory not found"
           
       - name: Ensure output directory exists
         working-directory: .
-        run: mkdir -p ./KeywordHanaro_FE
+        run: mkdir -p ./GGUMTLE_FE
 
       - name: zip next
         working-directory: .
-        run: zip -rq ./KeywordHanaro_FE/next.zip .next .env
+        run: zip -rq ./GGUMTLE_FE/next.zip .next .env
 
       - name: Verify next.zip exists
         working-directory: .
-        run: ls -l ./KeywordHanaro_FE/next.zip
+        run: ls -l ./GGUMTLE_FE/next.zip
 
       - name: Debug next.zip path
         working-directory: .
         run: |
           echo "Looking for next.zip in:"
-          ls -l ./KeywordHanaro_FE/
+          ls -l ./GGUMTLE_FE/
 
       - name: setup ssh
         run: |
@@ -108,15 +108,15 @@ jobs:
       - name: scp next to was
         working-directory: .
         run: |
-          scp ./KeywordHanaro_FE/next.zip ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/
-          scp -r ./public ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/KeywordHanaro_FE/
+          scp ./GGUMTLE_FE/next.zip ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/
+          # scp -r ./public ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/GGUMTLE_FE/
 
       - name: restart next
         run: |
           ssh ec2-user@${{ secrets.WAS }} '
             cd /home/ec2-user/workspace &&
-            rm -rf KeywordHanaro_FE/.next
-            unzip next.zip -d KeywordHanaro_FE
-            # echo "${{ secrets.ENV }}" > KeywordHanaro_FE/.env
+            rm -rf GGUMTLE_FE/.next
+            unzip next.zip -d GGUMTLE_FE
+            # echo "${{ secrets.ENV }}" > GGUMTLE_FE/.env
             pm2 reload keyword-next
           '
