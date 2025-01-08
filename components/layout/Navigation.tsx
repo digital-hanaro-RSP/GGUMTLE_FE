@@ -3,8 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export default function Navigation() {
+interface NavigationProps {
+  currentPath?: string;
+}
+
+export default function Navigation({ currentPath }: NavigationProps) {
   const pathname = usePathname();
+  const activePath = currentPath || pathname;
 
   const navigationItems = [
     { href: '/', label: '홈' },
@@ -22,7 +27,7 @@ export default function Navigation() {
             key={item.href}
             href={item.href}
             className={`flex flex-col items-center transition-colors ${
-              pathname === item.href
+              activePath === item.href
                 ? 'text-primary-main font-bold'
                 : 'text-gray-500'
             }`}
