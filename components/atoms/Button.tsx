@@ -1,14 +1,10 @@
 'use client';
 
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import Image from 'next/image';
 import { ButtonHTMLAttributes } from 'react';
+import { cn } from '@/lib/utils';
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-/** 버튼 관련 Props */
+/** 일반 버튼 관련 Props */
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isDisabled?: boolean; // 클릭 불가능 상태를 위한 props
   size?: 'sm' | 'md' | 'lg';
@@ -41,6 +37,48 @@ export const Button = ({
       disabled={isDisabled}
       {...props}
     >
+      {children}
+    </button>
+  );
+};
+
+/** 이미지 버튼 관련 Props*/
+interface ImgButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  src: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export const ImgButton = ({
+  src,
+  size = 'md',
+  className = '',
+  children,
+  ...props
+}: ImgButtonProps) => {
+  return (
+    <button className={cn(className, 'flex flex-col')} {...props}>
+      <Image
+        src={src}
+        alt='Image Button'
+        width={
+          size === 'sm'
+            ? 50
+            : size === 'md'
+              ? 100
+              : size === 'lg'
+                ? 200
+                : undefined
+        }
+        height={
+          size === 'sm'
+            ? 50
+            : size === 'md'
+              ? 100
+              : size === 'lg'
+                ? 200
+                : undefined
+        }
+      />
       {children}
     </button>
   );
