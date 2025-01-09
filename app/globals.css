@@ -38,3 +38,9 @@ body {
     text-wrap: balance;
   }
 }
+
+@layer components {
+  .input-box {
+    @apply flex flex-col text-right relative;
+  }
+}
