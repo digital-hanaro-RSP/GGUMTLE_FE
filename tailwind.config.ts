@@ -12,6 +12,7 @@ const config: Config = {
         background: '#F6F7F9',
         primary: {
           main: '#069894',
+          hover: '#07ADA8',
           error: '#D80000',
           disable: '#C0C0C0',
           placeholder: '#B9B9B9',
