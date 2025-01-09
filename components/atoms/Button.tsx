@@ -5,7 +5,7 @@ import { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 /** 일반 버튼 관련 Props */
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   isDisabled?: boolean; // 클릭 불가능 상태를 위한 props
   size?: 'sm' | 'md' | 'lg';
 }
@@ -43,11 +43,16 @@ export const Button = ({
 };
 
 /** 이미지 버튼 관련 Props*/
-interface ImgButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ImgButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   src: string;
   size?: 'sm' | 'md' | 'lg';
 }
 
+/** 이미지 버튼입니다.
+ * src에 imageUrl만 넣어도 되고
+ * size로 크기 변경 가능합니다.
+ * 기타 size 문의는 정성엽에게
+ */
 export const ImgButton = ({
   src,
   size = 'md',
