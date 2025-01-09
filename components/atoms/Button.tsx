@@ -43,7 +43,8 @@ export const Button = ({
 };
 
 /** 이미지 버튼 관련 Props*/
-export interface ImgButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ImgButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
   src: string;
   size?: 'sm' | 'md' | 'lg';
 }
@@ -57,34 +58,20 @@ export const ImgButton = ({
   src,
   size = 'md',
   className = '',
-  children,
   ...props
 }: ImgButtonProps) => {
   return (
-    <button className={cn(className, 'flex flex-col')} {...props}>
-      <Image
-        src={src}
-        alt='Image Button'
-        width={
-          size === 'sm'
-            ? 50
-            : size === 'md'
-              ? 100
-              : size === 'lg'
-                ? 200
-                : undefined
-        }
-        height={
-          size === 'sm'
-            ? 50
-            : size === 'md'
-              ? 100
-              : size === 'lg'
-                ? 200
-                : undefined
-        }
-      />
-      {children}
+    <button
+      className={cn(
+        className,
+        'flex flex-col overflow-hidden relative',
+        size === 'sm' && 'w-14 h-14',
+        size === 'md' && 'w-24 h-24',
+        size === 'lg' && 'w-48 h-48'
+      )}
+      {...props}
+    >
+      <Image src={src} alt='Image Button' fill objectFit='cover' />
     </button>
   );
 };
