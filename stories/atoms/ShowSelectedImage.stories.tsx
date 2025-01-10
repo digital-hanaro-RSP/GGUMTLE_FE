@@ -2,7 +2,7 @@ import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof ShowSelectedImage> = {
-  title: 'Components/ShowSelectedImage',
+  title: 'Atoms/ShowSelectedImage',
   component: ShowSelectedImage,
   parameters: {
     layout: 'centered',
