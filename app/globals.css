@@ -305,15 +305,7 @@
       transform: translate(20px, 0);
     }
   }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+  /* 라디오 버튼 */
   .custom-radio input[type='radio'] {
     appearance: none;
     -webkit-appearance: none;
@@ -361,5 +353,14 @@
 
   .box-radio{
     background-color: white;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
