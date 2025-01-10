@@ -1,5 +1,6 @@
 'use client';
 
+import { IoIosArrowDown } from 'react-icons/io';
 import Image from 'next/image';
 import { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
@@ -73,5 +74,45 @@ export const ImgButton = ({
     >
       <Image src={src} alt='Image Button' fill objectFit='cover' />
     </button>
+  );
+};
+
+/** 더보기 버튼 관련 Props */
+export interface MoreButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  direction: 'right' | 'left' | 'up' | 'down';
+}
+
+/** 더보기 버튼입니다.
+ * 방향을 지정 가능.
+ * 사이즈 지정 가능.
+ * 기타 문의는 정성엽에게
+ */
+export const MoreButton = ({
+  size = 'xs',
+  className = '',
+  direction = 'down',
+  ...props
+}: MoreButtonProps) => {
+  return (
+    <>
+      <button
+        className={cn(className, 'flex flex-col', {
+          ...props,
+        })}
+      >
+        <IoIosArrowDown
+          className={cn(
+            direction == 'left' && 'rotate-90',
+            direction == 'up' && 'rotate-180',
+            direction == 'right' && '-rotate-90',
+            size === 'sm' && 'w-14 h-14',
+            size === 'md' && 'w-24 h-24',
+            size === 'lg' && 'w-48 h-48'
+          )}
+        />
+      </button>
+    </> 
   );
 };
