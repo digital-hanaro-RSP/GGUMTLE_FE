@@ -6,6 +6,9 @@ const meta: Meta<typeof UserProfile> = {
   component: UserProfile,
   parameters: {
     layout: 'centered',
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -18,6 +21,13 @@ const meta: Meta<typeof UserProfile> = {
       description: '이미지 대체 텍스트',
     },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ margin: '1em' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -31,11 +41,42 @@ export const Default: Story = {
   },
 };
 
-// 다른 이미지 URL을 사용하는 스토리
-export const CustomImage: Story = {
+// 모바일 뷰
+export const MobileView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
+  },
   args: {
-    imageUrl: 'https://picsum.photos/id/237/36/36',
-    alt: 'Custom profile image',
+    imageUrl: 'https://picsum.photos/36/36',
+    alt: 'Mobile view',
+  },
+};
+
+// 태블릿 뷰
+export const TabletView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'tablet',
+    },
+  },
+  args: {
+    imageUrl: 'https://picsum.photos/36/36',
+    alt: 'Tablet view',
+  },
+};
+
+// 데스크톱 뷰
+export const DesktopView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'desktop',
+    },
+  },
+  args: {
+    imageUrl: 'https://picsum.photos/36/36',
+    alt: 'Desktop view',
   },
 };
 
