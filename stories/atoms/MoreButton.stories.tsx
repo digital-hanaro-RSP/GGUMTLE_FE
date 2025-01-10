@@ -2,7 +2,7 @@ import { MoreButton, MoreButtonProps } from '@/components/atoms/Button';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<typeof MoreButton> = {
-  title: 'Atoms/MoreButton',
+  title: 'Atoms/Button/MoreButton',
   component: MoreButton,
   tags: ['autodocs'], // 자동 문서화를 활성화
   argTypes: {
