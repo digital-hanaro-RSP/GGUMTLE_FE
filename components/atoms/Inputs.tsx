@@ -95,7 +95,7 @@ function DefaultInput(
           </div>
         )}
         {isTouched && (
-          <span className='peer-invalid:block hidden text-errorRed'>
+          <span className='peer-invalid:block hidden text-primary-error'>
             <small>{error}</small>
           </span>
         )}
@@ -135,7 +135,7 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
     };
 
     return (
-      <div className='flex w-full text-2xl text-primary-main'>
+      <div className='flex items-center w-full text-2xl text-primary-main'>
         <input
           type='text'
           ref={ref}
@@ -144,7 +144,7 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
           onBlur={onBlur}
           placeholder={placeHolder}
           max={Number.MAX_VALUE}
-          className='flex w-full text-center text-2xl font-semibold placeholder:text-primary-placeholder '
+          className='flex w-full text-2xl font-semibold p-[20px] rounded-[10px] border border-[#C0C0C0] placeholder:text-primary-placeholder '
         />
         {ref &&
           'current' in ref &&

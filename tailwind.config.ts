@@ -5,6 +5,7 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './stories/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -23,6 +24,7 @@ const config: Config = {
           have: '#CDF7F7', // 갖고 싶다
           visit: '#F5CFF6', // 가보고 싶다
           learn: '#F3D0CE', // 배우고 싶다
+          gray: '#F4F5F6',
         },
       },
     },
