@@ -3,7 +3,11 @@ import path from 'path';
 
 const config: StorybookConfig = {
   stories: ['../stories/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/addon-viewport',
+  ],
   framework: {
     name: '@storybook/nextjs',
     options: {},

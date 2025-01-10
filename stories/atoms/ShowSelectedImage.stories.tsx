@@ -6,6 +6,9 @@ const meta: Meta<typeof ShowSelectedImage> = {
   component: ShowSelectedImage,
   parameters: {
     layout: 'centered',
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
   },
   tags: ['autodocs'],
   argTypes: {
@@ -18,6 +21,13 @@ const meta: Meta<typeof ShowSelectedImage> = {
       description: '이미지 제거 시 호출되는 콜백 함수',
     },
   },
+  decorators: [
+    (Story) => (
+      <div style={{ margin: '1em' }}>
+        <Story />
+      </div>
+    ),
+  ],
 };
 
 export default meta;
@@ -25,6 +35,42 @@ type Story = StoryObj<typeof ShowSelectedImage>;
 
 // 기본 스토리
 export const Default: Story = {
+  args: {
+    imageUrl: 'https://picsum.photos/100/100',
+  },
+};
+
+// 모바일 뷰
+export const MobileView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'mobile1',
+    },
+  },
+  args: {
+    imageUrl: 'https://picsum.photos/100/100',
+  },
+};
+
+// 태블릿 뷰
+export const TabletView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'tablet',
+    },
+  },
+  args: {
+    imageUrl: 'https://picsum.photos/100/100',
+  },
+};
+
+// 데스크톱 뷰
+export const DesktopView: Story = {
+  parameters: {
+    viewport: {
+      defaultViewport: 'desktop',
+    },
+  },
   args: {
     imageUrl: 'https://picsum.photos/100/100',
   },
