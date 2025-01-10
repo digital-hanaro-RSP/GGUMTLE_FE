@@ -1,5 +1,6 @@
 'use client';
 
+import { FiPlus } from 'react-icons/fi';
 import { IoIosArrowDown } from 'react-icons/io';
 import Image from 'next/image';
 import { ButtonHTMLAttributes } from 'react';
@@ -113,6 +114,41 @@ export const MoreButton = ({
           )}
         />
       </button>
-    </> 
+    </>
+  );
+};
+
+/** 더하기 버튼 Props*/
+export interface PlusButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+}
+
+/** 더하기 버튼입니다.
+ * 크기 조절 가능
+ * 기타 문의는 정성엽에게
+ */
+export const PlusButton = ({
+  size = 'xs',
+  className = '',
+  ...props
+}: PlusButtonProps) => {
+  return (
+    <>
+      <button
+        className={cn(className, 'rounded-full overflow-hidden', { ...props })}
+      >
+        <FiPlus
+          color='white'
+          strokeWidth={4}
+          className={cn(
+            'bg-primary-main p-1',
+            size === 'sm' && 'w-14 h-14',
+            size === 'md' && 'w-24 h-24',
+            size === 'lg' && 'w-48 h-48'
+          )}
+        />
+      </button>
+    </>
   );
 };

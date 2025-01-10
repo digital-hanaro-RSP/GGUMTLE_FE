@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 const meta: Meta = {
-  title: 'Atoms/CheckBox',
+  title: 'Atoms/Input/CheckBox',
   component: CheckBox,
   tags: ['autodocs'],
 };
