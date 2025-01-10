@@ -12,7 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: 'hsl(var(--background))',
+        background: '#f6f7f9',
         primary: {
           main: '#069894',
           hover: '#07ADA8',
