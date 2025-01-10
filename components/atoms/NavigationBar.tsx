@@ -1,5 +1,10 @@
 'use client';
 
+import { GiGraduateCap } from 'react-icons/gi';
+import { GoHomeFill } from 'react-icons/go';
+import { MdPerson } from 'react-icons/md';
+import { PiListChecksFill } from 'react-icons/pi';
+import { RiGroup2Fill } from 'react-icons/ri';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -12,27 +17,38 @@ export default function Navigation({ currentPath }: NavigationProps) {
   const activePath = currentPath || pathname;
 
   const navigationItems = [
-    { href: '/', label: '홈' },
-    { href: '/bucket-list', label: '버킷리스트' },
-    { href: '/community', label: '커뮤니티' },
-    { href: '/support', label: '지원' },
-    { href: '/mypage', label: '마이페이지' },
+    { href: '/', label: '홈', Icon: GoHomeFill },
+    { href: '/bucket-list', label: '버킷리스트', Icon: PiListChecksFill },
+    { href: '/community', label: '커뮤니티', Icon: RiGroup2Fill },
+    { href: '/support', label: '지원', Icon: GiGraduateCap },
+    { href: '/mypage', label: '마이페이지', Icon: MdPerson },
   ];
 
   return (
-    <nav className='fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-screen-md bg-white border-t border-gray-200 p-4'>
-      <div className='flex justify-around items-center'>
+    <nav
+      className='fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-screen-md border-t bg-white rounded-t-2xl flex items-center'
+      style={{ height: '58px' }}
+    >
+      <div className='flex justify-around items-center w-full'>
         {navigationItems.map((item) => (
           <Link
             key={item.href}
             href={item.href}
-            className={`flex flex-col items-center transition-colors ${
+            className={`flex flex-col items-center gap-1 transition-colors ${
               activePath === item.href
                 ? 'text-primary-main font-bold'
-                : 'text-gray-500'
+                : 'text-[#8297AC]'
             }`}
           >
-            <span>{item.label}</span>
+            <item.Icon
+              size={24}
+              color={
+                activePath === item.href ? 'var(--primary-main)' : '#000000'
+              }
+            />
+            <span className='text-xs' style={{ fontSize: '12px' }}>
+              {item.label}
+            </span>
           </Link>
         ))}
       </div>
