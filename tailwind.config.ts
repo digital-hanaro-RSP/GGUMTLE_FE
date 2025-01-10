@@ -23,6 +23,7 @@ const config: Config = {
           have: '#CDF7F7', // 갖고 싶다
           visit: '#F5CFF6', // 가보고 싶다
           learn: '#F3D0CE', // 배우고 싶다
+          gray: '#F4F5F6',
         },
       },
     },
