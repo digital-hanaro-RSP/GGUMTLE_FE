@@ -29,7 +29,7 @@ export const RadioItem = ({
         htmlFor={id}
         className={cn(
           className,
-          'flex custom-radio transition-all duration-500 ease-in-out p-2',
+          'flex custom-radio transition-all duration-500 ease-in-out p-2 w-full',
           contentDirection === 'vertical' && 'flex-col',
           contentDirection === 'horizontal' && 'flex-row',
           { ...props },
@@ -46,7 +46,7 @@ export const RadioItem = ({
 
         {shape === 'circle' && (
           <>
-            <span className='radio-circle transition-all duration-500 ease-in-out after:transition-all after:duration-500 after:ease-in-out'></span>
+            <span className= {cn('radio-circle transition-all duration-500 ease-in-out after:transition-all after:duration-500 after:ease-in-out', contentDirection==='horizontal' && 'mr-3')} />
           </>
         )}
         {children}
