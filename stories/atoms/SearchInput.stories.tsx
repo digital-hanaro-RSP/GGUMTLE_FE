@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useEffect, useRef } from 'react';
 
 const meta: Meta = {
-  title: 'Atoms/SearchInput',
+  title: 'Atoms/Input/SearchInput',
   component: SearchInpuRef,
   tags: ['autodocs'],
 };

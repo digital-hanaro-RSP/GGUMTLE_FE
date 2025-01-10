@@ -3,7 +3,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { useEffect, useRef } from 'react';
 
 const meta: Meta = {
-  title: 'Atoms/MoneyInput',
+  title: 'Atoms/Input/MoneyInput',
   component: MoneyInputRef,
   tags: ['autodocs'],
   decorators: [(Story) => <Story />],

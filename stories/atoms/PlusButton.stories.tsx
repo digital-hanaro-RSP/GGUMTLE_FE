@@ -2,7 +2,7 @@ import { PlusButton, PlusButtonProps } from '@/components/atoms/Button';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta<PlusButtonProps> = {
-  title: 'Atoms/PlusButton',
+  title: 'Atoms/Button/PlusButton',
   component: PlusButton,
   tags: ['autodocs'],
   argTypes: {

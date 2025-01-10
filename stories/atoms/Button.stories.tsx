@@ -5,7 +5,7 @@ import { Button } from '@/components/atoms/Button'
 
 // Meta 객체: 컴포넌트와 관련된 메타데이터 정의
 const meta: Meta<typeof Button> = {
-  title: 'Atoms/Button', // Storybook에서 표시될 경로
+  title: 'Atoms/Button/Button', // Storybook에서 표시될 경로
   component: Button, // 대상 컴포넌트
   tags: ['autodocs'], // 자동 문서화를 위한 태그
   argTypes: {
