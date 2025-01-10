@@ -1,4 +1,4 @@
-import Navigation from '@/components/layout/Navigation';
+import Navigation from '@/components/atoms/NavigationBar';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {

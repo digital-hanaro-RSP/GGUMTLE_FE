@@ -1,5 +1,5 @@
 // app/layout.tsx
-import Navigation from '@/components/layout/Navigation';
+import Navigation from '@/components/atoms/NavigationBar';
 import type { Metadata } from 'next';
 import './globals.css';
 
