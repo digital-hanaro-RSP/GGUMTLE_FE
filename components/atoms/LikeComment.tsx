@@ -10,8 +10,8 @@ type LikeCommentProps = {
 
 export default function LikeComment({
   initialIsLiked = false,
-  likeCount = 4,
-  commentCount = 4,
+  likeCount,
+  commentCount,
   onLikeChange,
 }: LikeCommentProps) {
   const [isLiked, setIsLiked] = useState(initialIsLiked);

@@ -6,6 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { PostProps } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
 import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
@@ -13,51 +14,32 @@ import { Card } from '../atoms/Card';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 
-type PostProps = {
-  postId: any;
-  isLiked: boolean;
-  snapshot?: any; // 자산 관련 게시물일 때만 존재
-  imageUrl?: any;
-  content: any;
-  createdAt: any;
-  likeCount: number;
-  commentCount: number;
-  userId: any; // 작성자 아이디
-  author: any; // 작성자 준다고 가정
-};
-
 export default function Post({
-  postId,
-  isLiked,
+  id,
+  author,
   snapshot,
-  imageUrl,
+  imageUrls,
   content,
   createdAt,
   likeCount: initialLikeCount,
   commentCount,
-  userId,
-  author,
+  isLiked,
 }: PostProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const [localLikeCount, setLocalLikeCount] = useState(initialLikeCount);
   const [localIsLiked, setLocalIsLiked] = useState(isLiked);
 
-  // const author = {
-  //   name: '임시작성자',
-  //   profileImage: 'https://picsum.photos/36/36',
-  // };
-
   const handleLikeChange = async (newLikeState: boolean) => {
     try {
       // API 연동 시 여기에 좋아요 요청 추가
       // const response = await likePost(postId, newLikeState);
-      console.log(postId, userId);
+      console.log(id, imageUrls);
       setLocalIsLiked(newLikeState);
       setLocalLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
     } catch (error) {
       // 에러 처리
-      console.error('실패:', error);
+      console.error('좋아요 처리 실패:', error);
       // 실패 시 상태 롤백
       setLocalIsLiked(!newLikeState);
       setLocalLikeCount((prev) => (!newLikeState ? prev + 1 : prev - 1));
@@ -133,8 +115,15 @@ export default function Post({
             </button>
           )}
           {/* 스냅샷이나 이미지가 있다면 표시 */}
-          {snapshot && <div className='mt-4'>{/* 스냅샷 표시 로직 */}</div>}
-          {imageUrl && <div className='mt-4'>{/* 이미지 표시 로직 */}</div>}
+          {snapshot.bucketLists.length > 0 && (
+            <div className='mt-4'>{/* 버킷리스트 표시 로직 */}</div>
+          )}
+          {snapshot.portfolioLists.length > 0 && (
+            <div className='mt-4'>{/* 포트폴리오 표시 로직 */}</div>
+          )}
+          {imageUrls.length > 0 && (
+            <div className='mt-4'>{/* 이미지 표시 로직 */}</div>
+          )}
         </div>
 
         <LikeComment

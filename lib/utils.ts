@@ -14,7 +14,6 @@ export const formatNumberWithCommas = (inputValue: string): string => {
 export const getRelativeTimeString = (dateString: string): string => {
   const date = new Date(dateString);
   const now = new Date();
-  console.log(date, now);
   const diffInMilliseconds = now.getTime() - date.getTime();
   const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
   const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
