@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang='ko'>
       <body className='bg-white min-h-screen text-black'>
-        <div className='relative mx-auto max-w-screen-md min-h-screen bg-background'>
+        <div className='relative mx-auto max-w-screen-md min-h-screen bg-background px-5'>
           {children}
           <Navigation />
         </div>
