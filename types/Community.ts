@@ -9,9 +9,8 @@ export type Snapshot = {
   portfolioLists: any[]; // portfolioLists의 구체적 타입을 알 수 없으므로 any[]
 };
 
-// api 응답용
 export type Post = {
-  id: string;
+  id: number;
   userId: string;
   groupId: string;
   snapshot: Snapshot;
@@ -26,20 +25,23 @@ export type Post = {
   isLiked: boolean;
 };
 
-// 실제 사용하는 Post 타입
-export type PostProps = {
-  id: string;
-  author: Author;
-  snapshot: Snapshot;
-  imageUrls: any;
-  content: string;
-  createdAt: string;
-  likeCount: number;
-  commentCount: number;
-  isLiked: boolean;
-};
-
 // api 응답용
 export type PostResponse = {
   data: Post[];
+};
+
+export type Comment = {
+  id: number;
+  postId: number;
+  userId: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  isLiked: boolean;
+  author: Author;
+  likeCount: number;
+};
+
+export type CommentResponse = {
+  data: Comment[];
 };

@@ -1,5 +1,5 @@
 import { useApi } from '@/hooks/useApi';
-import { PostResponse } from '@/types/Community';
+import { CommentResponse, PostResponse } from '@/types/Community';
 
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
@@ -9,5 +9,15 @@ export const useCommunityApi = () => {
     return response;
   };
 
-  return { getPosts };
+  const getComments = async (
+    postId: number,
+    groupId: number
+  ): Promise<CommentResponse> => {
+    const response = await fetchApi(
+      `/community/group/${groupId}/post/${postId}/comment`
+    );
+    return response;
+  };
+
+  return { getPosts, getComments };
 };

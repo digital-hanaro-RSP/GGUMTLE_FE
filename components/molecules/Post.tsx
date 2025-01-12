@@ -6,7 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PostProps } from '@/types/Community';
+import { Post as PostType } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
@@ -15,8 +15,11 @@ import { Card } from '../atoms/Card';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 
+// TODO
+// 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
+// 아직 주소 못정해서 제거 로직 만들지 못했음.
+
 export default function Post({
-  id,
   author,
   snapshot,
   imageUrls,
@@ -24,26 +27,23 @@ export default function Post({
   createdAt,
   likeCount: initialLikeCount,
   commentCount,
-  isLiked,
-}: PostProps) {
+  isLiked: initialIsLiked,
+}: PostType) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
-  const [localLikeCount, setLocalLikeCount] = useState(initialLikeCount);
-  const [localIsLiked, setLocalIsLiked] = useState(isLiked);
+  const [likeCount, setLikeCount] = useState(initialLikeCount);
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
 
   const handleLikeChange = async (newLikeState: boolean) => {
     try {
       // API 연동 시 여기에 좋아요 요청 추가
       // const response = await likePost(postId, newLikeState);
-      console.log(id, imageUrls);
-      setLocalIsLiked(newLikeState);
-      setLocalLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
+      setIsLiked(newLikeState);
+      setLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
     } catch (error) {
-      // 에러 처리
       console.error('좋아요 처리 실패:', error);
-      // 실패 시 상태 롤백
-      setLocalIsLiked(!newLikeState);
-      setLocalLikeCount((prev) => (!newLikeState ? prev + 1 : prev - 1));
+      setIsLiked(!newLikeState);
+      setLikeCount((prev) => (!newLikeState ? prev + 1 : prev - 1));
     }
   };
 
@@ -83,6 +83,8 @@ export default function Post({
             </div>
           </div>
 
+          {/* TODO */}
+          {/* 만약 본인이 작성자라면 드롭 다운 노출해야함 현재 본인이 작성자라는 판단을 할 수 없어서 구현 못했음*/}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <BsThreeDots />
@@ -143,8 +145,8 @@ export default function Post({
           </div>
         )}
         <LikeComment
-          initialIsLiked={localIsLiked}
-          likeCount={localLikeCount}
+          initialIsLiked={isLiked}
+          likeCount={likeCount}
           commentCount={commentCount}
           onLikeChange={handleLikeChange}
         />
