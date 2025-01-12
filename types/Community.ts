@@ -45,3 +45,13 @@ export type Comment = {
 export type CommentResponse = {
   data: Comment[];
 };
+
+export type Group = {
+  id: number;
+  name: string;
+  category: string;
+  description: string;
+  imageUrl: string;
+  memberCount: number;
+  createdAt: string;
+};

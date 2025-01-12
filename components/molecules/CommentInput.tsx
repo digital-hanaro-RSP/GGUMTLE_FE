@@ -7,6 +7,9 @@ import UserProfile from '../atoms/UserProfile';
 // 150으로 하면 네비게이션 radius 때문에 공간 비어보임
 // 패딩 bottom 58px 추가했음
 
+// 여기서 Props로 User 받아야 함
+// 아직 User 어떻게 받을 지 몰라서 일단 나머지 구현 보류
+// 필요한것 유저 ID, 유저 이미지
 export default function CommentInput() {
   const [comment, setComment] = useState('');
 
