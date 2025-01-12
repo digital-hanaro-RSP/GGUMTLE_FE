@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { PostProps } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import { Card } from '../atoms/Card';
@@ -68,7 +69,7 @@ export default function Post({
   return (
     <Card>
       <div className='flex flex-col gap-[20px]'>
-        {/* 상단 프로필, 드롭다운 */}
+        {/* 상단 프로필 */}
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
             <UserProfile
@@ -114,18 +115,33 @@ export default function Post({
               더보기
             </button>
           )}
-          {/* 스냅샷이나 이미지가 있다면 표시 */}
-          {snapshot.bucketLists.length > 0 && (
-            <div className='mt-4'>{/* 버킷리스트 표시 로직 */}</div>
-          )}
-          {snapshot.portfolioLists.length > 0 && (
-            <div className='mt-4'>{/* 포트폴리오 표시 로직 */}</div>
-          )}
-          {imageUrls.length > 0 && (
-            <div className='mt-4'>{/* 이미지 표시 로직 */}</div>
-          )}
         </div>
 
+        {/* 스냅샷이나 이미지가 있다면 표시 */}
+        {snapshot.bucketLists.length > 0 && (
+          <div className='mt-4'>{/* 버킷리스트 */}</div>
+        )}
+        {snapshot.portfolioLists.length > 0 && (
+          <div className='mt-4'>{/* 포트폴리오 */}</div>
+        )}
+        {imageUrls.length > 0 && (
+          <div className='flex flex-col gap-[20px]'>
+            {imageUrls.map((imageUrl: any, idx: any) => (
+              <div key={idx} className='relative w-full aspect-auto'>
+                <Image
+                  src={imageUrl}
+                  alt={`게시물 이미지 ${idx + 1}`}
+                  className='object-contain'
+                  width={0}
+                  height={0}
+                  sizes='100vw'
+                  style={{ width: '100%', height: 'auto' }}
+                  priority={idx === 0}
+                />
+              </div>
+            ))}
+          </div>
+        )}
         <LikeComment
           initialIsLiked={localIsLiked}
           likeCount={localLikeCount}
