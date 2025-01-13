@@ -36,7 +36,8 @@ const TextArea: React.FC<TextAreaProps> = ({ type, value, onChange }) => {
     post: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
     dream: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
     memo: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
-    comment: 'w-[309px] h-[55px] sm:w-[85%] sm:h-[60px] md:w-[75%]',
+    // comment: 'w-[309px] h-[55px] sm:w-[85%] sm:h-[60px] md:w-[75%]',
+    comment: 'w-full',
   };
 
   return (

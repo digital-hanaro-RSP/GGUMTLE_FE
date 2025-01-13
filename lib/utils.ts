@@ -11,3 +11,26 @@ export const formatNumberWithCommas = (inputValue: string): string => {
   const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
   return new Intl.NumberFormat('ko-KR').format(parsedValue);
 };
+export const getRelativeTimeString = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInMilliseconds = now.getTime() - date.getTime();
+  const diffInMinutes = Math.floor(diffInMilliseconds / (1000 * 60));
+  const diffInHours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
+  const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
+
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes}분 전`;
+  } else if (diffInHours < 24) {
+    return `${diffInHours}시간 전`;
+  } else if (diffInDays < 7) {
+    return `${diffInDays}일 전`;
+  } else {
+    // 7일 이상이면 년-월-일 형식으로 표시
+    return date.toLocaleDateString('ko-KR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  }
+};
