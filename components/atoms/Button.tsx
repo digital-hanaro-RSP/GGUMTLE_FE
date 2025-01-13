@@ -82,39 +82,41 @@ export const ImgButton = ({
 export interface MoreButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg';
-  direction: 'right' | 'left' | 'up' | 'down';
+  /** down/up/left/right */
+  direction: 'down' | 'up' | 'left' | 'right';
 }
 
 /** 더보기 버튼입니다.
  * 방향을 지정 가능.
  * 사이즈 지정 가능.
- * 기타 문의는 정성엽에게
  */
 export const MoreButton = ({
   size = 'xs',
-  className = '',
   direction = 'down',
+  className = '',
   ...props
 }: MoreButtonProps) => {
   return (
-    <>
-      <button
-        className={cn(className, 'flex flex-col', {
-          ...props,
-        })}
-      >
-        <IoIosArrowDown
-          className={cn(
-            direction == 'left' && 'rotate-90',
-            direction == 'up' && 'rotate-180',
-            direction == 'right' && '-rotate-90',
-            size === 'sm' && 'w-14 h-14',
-            size === 'md' && 'w-24 h-24',
-            size === 'lg' && 'w-48 h-48'
-          )}
-        />
-      </button>
-    </>
+    <button
+      type='button'
+      // 여기서 Spread 해줘야 onClick 등 다른 Props들이 button에 정상 전달됩니다.
+      {...props}
+      className={cn('flex flex-col items-center', className)}
+    >
+      <IoIosArrowDown
+        // 아이콘에 조건부 클래스를 부여해 방향을 바꿉니다.
+        className={cn(
+          'transition-transform duration-300', // 회전 애니메이션(Optional)
+          direction === 'down' && 'rotate-0',
+          direction === 'left' && 'rotate-90',
+          direction === 'up' && 'rotate-180',
+          direction === 'right' && '-rotate-90',
+          size === 'sm' && 'w-14 h-14',
+          size === 'md' && 'w-24 h-24',
+          size === 'lg' && 'w-48 h-48'
+        )}
+      />
+    </button>
   );
 };
 
@@ -136,7 +138,8 @@ export const PlusButton = ({
   return (
     <>
       <button
-        className={cn(className, 'rounded-full overflow-hidden', { ...props })}
+        {...props}
+        className={cn(className, 'rounded-full overflow-hidden')}
       >
         <FiPlus
           color='white'

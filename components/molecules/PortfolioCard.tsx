@@ -1,4 +1,6 @@
-// components/molecules/PortfolioCard/PortfolioCard.tsx
+'use client';
+
+import { MoreButton } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
 import { CurrentPortfolio, GoalPortfolio } from '@/types/Portfolio';
 import {
@@ -11,7 +13,6 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { useState } from 'react';
-import { MoreButton } from '../atoms/Button';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -56,7 +57,6 @@ const textCenter: Plugin<'doughnut'> = {
   id: 'textCenter',
   beforeDraw(chart: ChartJS<'doughnut'>) {
     const ctx = chart.canvas.getContext('2d')!;
-    const {} = chart.canvas;
     const { chartArea } = chart;
     const text = (chart.options as DoughnutOptions).centerText || '';
 
@@ -66,7 +66,6 @@ const textCenter: Plugin<'doughnut'> = {
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
-    // Calculate center point using chartArea
     const centerX = (chartArea.left + chartArea.right) / 2;
     const centerY = (chartArea.top + chartArea.bottom) / 2;
 
@@ -79,8 +78,12 @@ export const PortfolioCard = ({
   currentPortfolio,
   goalPortfolio,
 }: PortfolioCardProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-  const [activeChart, setActiveChart] = useState<'current' | 'goal'>('current');
+  // "상세항목" 표시 여부를 결정하는 state
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const handleToggleDetail = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   const getTotalAssets = () => {
     const {
@@ -166,68 +169,21 @@ export const PortfolioCard = ({
         </div>
       </div>
 
-      <div className='text-center'>
+      {/* morebutton과 상세 항목 */}
+      <div className='flex flex-col items-center'>
         <MoreButton
-          onClick={() => setShowDetails(!showDetails)}
-          direction={'right'}
+          size='xs'
+          direction={isExpanded ? 'up' : 'down'}
+          onClick={handleToggleDetail}
+          className='mb-2'
         />
+        {/* isExpanded 상태에 따라 "상세항목" 표시 */}
+        {isExpanded && (
+          <div className='mt-2 text-gray-700'>
+            <p>상세항목</p>
+          </div>
+        )}
       </div>
-
-      {showDetails && (
-        <div className='mt-4'>
-          <div className='flex gap-4 mb-4'>
-            <button
-              className={`flex-1 py-2 rounded ${activeChart === 'current' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-              onClick={() => setActiveChart('current')}
-            >
-              현재 포트폴리오
-            </button>
-            <button
-              className={`flex-1 py-2 rounded ${activeChart === 'goal' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-              onClick={() => setActiveChart('goal')}
-            >
-              목표 포트폴리오
-            </button>
-          </div>
-
-          <div className='space-y-2'>
-            {Object.entries(
-              activeChart === 'current' ? currentPortfolio : goalPortfolio
-            )
-              .filter(
-                ([key]) =>
-                  ![
-                    'id',
-                    'userId',
-                    'templateId',
-                    'createdAt',
-                    'updatedAt',
-                  ].includes(key)
-              )
-              .map(([key, value]) => (
-                <div key={key} className='flex items-center gap-2'>
-                  <div
-                    className='w-4 h-4 rounded-full'
-                    style={{
-                      backgroundColor:
-                        CHART_COLORS[key as keyof typeof CHART_COLORS],
-                    }}
-                  />
-                  <span className='flex-1'>
-                    {key.replace(/([A-Z])/g, ' $1').toLowerCase()}
-                  </span>
-                  <span>
-                    {typeof value === 'number'
-                      ? key.includes('Ratio')
-                        ? `${(value * 100).toFixed(1)}%`
-                        : value.toLocaleString() + '원'
-                      : value}
-                  </span>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
     </Card>
   );
 };
