@@ -83,7 +83,9 @@ export const AddNewCard = ({
           size === 'md' && 'w-[calc(50%-5px)]'
         )}
       >
-        <Card className={cn('h-full flex justify-center items-center gap-1')}>
+        <Card
+          className={cn('h-full w-full flex justify-center items-center gap-1')}
+        >
           {renderImage()}
           <span className='text-primary-placeholder text-[15px]'>
             {renderText()}
