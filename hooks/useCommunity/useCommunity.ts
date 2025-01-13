@@ -19,5 +19,61 @@ export const useCommunityApi = () => {
     return response;
   };
 
-  return { getPosts, getComments };
+  // 리턴 타입으로 200만 받음
+  const plusLike = async (groupId: number, postId: number): Promise<void> => {
+    const options: RequestInit = {
+      method: 'POST',
+    };
+    await fetchApi(`/community/group/${groupId}/post/${postId}/like`, options);
+  };
+
+  // 리턴 타입으로 200만 받음
+  const minusLike = async (groupId: number, postId: number): Promise<void> => {
+    const options: RequestInit = {
+      method: 'DELETE',
+    };
+    await fetchApi(
+      `/community/group/${groupId}/post/${postId}/dislike`,
+      options
+    );
+  };
+
+  // 리턴 타입으로 200만 받음
+  const plusCommentLike = async (
+    groupId: number,
+    postId: number,
+    commentId: number
+  ): Promise<void> => {
+    const options: RequestInit = {
+      method: 'POST',
+    };
+    await fetchApi(
+      `/community/group/${groupId}/post/${postId}/comment/${commentId}/like`,
+      options
+    );
+  };
+
+  // 리턴 타입으로 200만 받음
+  const minusCommentLike = async (
+    groupId: number,
+    postId: number,
+    commentId: number
+  ): Promise<void> => {
+    const options: RequestInit = {
+      method: 'DELETE',
+    };
+    await fetchApi(
+      `/community/group/${groupId}/post/${postId}/comment/${commentId}/dislike`,
+      options
+    );
+  };
+
+  return {
+    getPosts,
+    getComments,
+    plusLike,
+    minusLike,
+    plusCommentLike,
+    minusCommentLike,
+  };
 };

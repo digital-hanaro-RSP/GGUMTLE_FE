@@ -1,6 +1,7 @@
 import { Group } from '@/types/Community';
 import { IoPeople } from 'react-icons/io5';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Card } from '../atoms/Card';
 
 // 필요한 요소
@@ -10,16 +11,22 @@ import { Card } from '../atoms/Card';
 // 그룹 인원
 // 그룹 카테고리
 
-// 나중에 id 추가하고 라우팅 걸어줘야함.
 export default function GroupCard({
+  id,
   name,
   category,
   description,
   imageUrl,
   memberCount,
 }: Group) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push(`/community/group/${id}`);
+  };
+
   return (
-    <Card>
+    <Card onClick={handleClick}>
       <div className='flex gap-[20px] height-[80px] items-center'>
         <div className='w-[80px] h-[80px] rounded-[10px] overflow-hidden'>
           <Image

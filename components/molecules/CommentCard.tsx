@@ -5,8 +5,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Comment } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
+import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import { Card } from '../atoms/Card';
@@ -14,17 +16,31 @@ import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 
 export default function CommentCard({
+  postId,
+  id,
   content,
   createdAt,
   isLiked: initialIsLiked,
   author,
   likeCount: initialLikeCount,
 }: Comment) {
+  const params = useParams();
+  const { groupId: tempGroupId } = params;
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
+  const { plusCommentLike, minusCommentLike } = useCommunityApi();
+
   const handleLikeChange = async (newLikeState: boolean) => {
     try {
+      if (typeof tempGroupId === 'string') {
+        const groupId = parseInt(tempGroupId);
+        if (newLikeState) {
+          await plusCommentLike(groupId, postId, id);
+        } else {
+          await minusCommentLike(groupId, postId, id);
+        }
+      }
       setIsLiked(newLikeState);
       setLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
     } catch (error) {

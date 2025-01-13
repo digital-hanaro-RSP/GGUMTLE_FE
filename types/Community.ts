@@ -12,17 +12,17 @@ export type Snapshot = {
 export type Post = {
   id: number;
   userId: string;
-  groupId: string;
-  snapshot: Snapshot;
-  imageUrls: any; // imageUrls의 구조가 명확하지 않으므로 any
+  groupId: number;
+  snapshot?: Snapshot;
+  imageUrls?: any; // imageUrls의 구조가 명확하지 않으므로 any
   content: string;
   createdAt: string;
   updatedAt: string;
-  postType: string; // 고정된 문자열("post")로 보이나, 다른 값도 있을 수 있으므로 string
-  likeCount: number;
-  commentCount: number;
+  postType: 'post' | 'news'; // enum?
+  likeCount?: number;
+  commentCount?: number;
   author: Author;
-  isLiked: boolean;
+  isLiked?: boolean;
 };
 
 // api 응답용

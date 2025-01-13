@@ -6,6 +6,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Post as PostType } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
 import Image from 'next/image';
@@ -20,6 +21,8 @@ import UserProfile from '../atoms/UserProfile';
 // 아직 주소 못정해서 제거 로직 만들지 못했음.
 
 export default function Post({
+  groupId,
+  id,
   author,
   snapshot,
   imageUrls,
@@ -34,16 +37,23 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
 
+  const { plusLike, minusLike } = useCommunityApi();
+
   const handleLikeChange = async (newLikeState: boolean) => {
     try {
-      // API 연동 시 여기에 좋아요 요청 추가
-      // const response = await likePost(postId, newLikeState);
+      if (newLikeState) {
+        console.log('plusLike', groupId, id);
+        await plusLike(groupId, id);
+      } else {
+        console.log('minusLike', groupId, id);
+        await minusLike(groupId, id);
+      }
       setIsLiked(newLikeState);
-      setLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
+      setLikeCount((prev) => (newLikeState ? prev! + 1 : prev! - 1));
     } catch (error) {
       console.error('좋아요 처리 실패:', error);
       setIsLiked(!newLikeState);
-      setLikeCount((prev) => (!newLikeState ? prev + 1 : prev - 1));
+      setLikeCount((prev) => (!newLikeState ? prev! + 1 : prev! - 1));
     }
   };
 
@@ -120,10 +130,10 @@ export default function Post({
         </div>
 
         {/* 스냅샷이나 이미지가 있다면 표시 */}
-        {snapshot.bucketLists.length > 0 && (
+        {snapshot && snapshot.bucketLists.length > 0 && (
           <div className='mt-4'>{/* 버킷리스트 */}</div>
         )}
-        {snapshot.portfolioLists.length > 0 && (
+        {snapshot && snapshot.portfolioLists.length > 0 && (
           <div className='mt-4'>{/* 포트폴리오 */}</div>
         )}
         {imageUrls.length > 0 && (
@@ -145,8 +155,8 @@ export default function Post({
           </div>
         )}
         <LikeComment
-          initialIsLiked={isLiked}
-          likeCount={likeCount}
+          initialIsLiked={isLiked!}
+          likeCount={likeCount!}
           commentCount={commentCount}
           onLikeChange={handleLikeChange}
         />

@@ -1,8 +1,9 @@
+import { Post } from '@/types/Community';
 import Image from 'next/image';
 
-export default function NewEvent() {
+export default function NewEvent({ content, author }: Post) {
   return (
-    <div className='flex p-[10px] items-center justify-between w-full h-[80px] border border-y-primary-main'>
+    <div className='flex p-[10px] items-center justify-between w-full h-[80px] border-y border-y-primary-main'>
       <Image
         src='/image/popper.gif'
         alt='Animated GIF'
@@ -10,9 +11,9 @@ export default function NewEvent() {
         height={36}
       />
       <div className='flex '>
-        <span className='text-[15px] font-bold'>홍길동님 &quot;</span>
+        <span className='text-[15px] font-bold'>{author.name} &quot;</span>
         <span className='text-[16px] text-primary-main font-bold '>
-          크루즈 타기
+          {content}
         </span>
         <span className='text-[15px] font-bold'>&quot; 버킷리스트 달성!</span>
       </div>
