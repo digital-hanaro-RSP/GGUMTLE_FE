@@ -13,6 +13,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { useState } from 'react';
+import { PortfolioDetails } from './PortfolioDetails';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -80,9 +81,19 @@ export const PortfolioCard = ({
 }: PortfolioCardProps) => {
   // "상세항목" 표시 여부를 결정하는 state
   const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedPortfolio, setSelectedPortfolio] = useState<
+    'goal' | 'current'
+  >('goal');
 
   const handleToggleDetail = () => {
     setIsExpanded((prev) => !prev);
+  };
+
+  const handleChartClick = (type: 'goal' | 'current') => {
+    setSelectedPortfolio(type);
+    if (!isExpanded) {
+      setIsExpanded(true);
+    }
   };
 
   const getTotalAssets = () => {
@@ -149,7 +160,11 @@ export const PortfolioCard = ({
       </div>
 
       <div className='flex justify-between gap-4 mb-6'>
-        <div className='w-1/2'>
+        <div
+          className='w-1/2'
+          onClick={() => handleChartClick('goal')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className='h-64'>
             <Doughnut
               data={goalChartData}
@@ -158,7 +173,11 @@ export const PortfolioCard = ({
             />
           </div>
         </div>
-        <div className='w-1/2'>
+        <div
+          className='w-1/2'
+          onClick={() => handleChartClick('current')}
+          style={{ cursor: 'pointer' }}
+        >
           <div className='h-64'>
             <Doughnut
               data={currentChartData}
@@ -169,7 +188,6 @@ export const PortfolioCard = ({
         </div>
       </div>
 
-      {/* morebutton과 상세 항목 */}
       <div className='flex flex-col items-center'>
         <MoreButton
           size='xs'
@@ -177,10 +195,19 @@ export const PortfolioCard = ({
           onClick={handleToggleDetail}
           className='mb-2'
         />
-        {/* isExpanded 상태에 따라 "상세항목" 표시 */}
         {isExpanded && (
-          <div className='mt-2 text-gray-700'>
-            <p>상세항목</p>
+          <div className='mt-2 w-full'>
+            <p className='text-gray-700 mb-2'>
+              {selectedPortfolio === 'goal'
+                ? '목표 포트폴리오'
+                : '현재 포트폴리오'}
+            </p>
+            <PortfolioDetails
+              portfolio={
+                selectedPortfolio === 'goal' ? goalPortfolio : currentPortfolio
+              }
+              isGoal={selectedPortfolio === 'goal'}
+            />
           </div>
         )}
       </div>
