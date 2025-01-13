@@ -27,8 +27,10 @@ export interface BucketListCardProps {
   type: 'effort' | 'money';
   dataPercent: number;
   title: string;
-  how: 'have' | 'want' | 'become' | 'have' | 'visit' | 'learn';
+  how: 'have' | 'want' | 'become' | 'visit' | 'learn';
   balance?: number;
+  isSelectMode?: boolean; //커뮤니티 용인지 체크
+  bid: number;
 }
 
 export const BucketListCard = ({
@@ -37,6 +39,8 @@ export const BucketListCard = ({
   title,
   how,
   balance,
+  isSelectMode,
+  bid,
 }: BucketListCardProps) => {
   // 초기 진행률은 0으로 설정
   const [progress, setProgress] = useState<number>(0);
@@ -96,13 +100,11 @@ export const BucketListCard = ({
 
   const complete = async (bid: number) => {
     const data: completeBucketList = {
-      dreamAccountId: 123,
-      share: true,
-      groupId: 1,
+      status: 'done',
     };
-    router.push('/')
+    router.push('/');
     // await completeBucketList(bid, data).then((res) => {
-      
+    //   router.push('/completePage')
     // });
   };
 
@@ -125,25 +127,27 @@ export const BucketListCard = ({
           <div className='flex flex-row gap-1 w-full'>
             <ColorChip color='gray'>언제까지</ColorChip>
             <ColorChip color={how}>{howto(how)}</ColorChip>
-            <div className='flex-grow justify-end items-end flex'>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <BsThreeDots />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className='text-center w-10'>
-                  <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={()=>complete(1)}>
-                    완료하기
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>보류하기</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+            {isSelectMode !== true && (
+              <div className='flex-grow justify-end items-end flex'>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <BsThreeDots />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='text-center w-10'>
+                    <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => complete(bid)}>
+                      완료하기
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>보류하기</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
           <div className='p-1 flex flex-col font-bold'>
             <h1 className='truncate w-full'>{title}</h1>
-            {type === 'money' && (
+            {type === 'money' && isSelectMode === true && (
               <>
                 <div className='text-2xl truncate '>
                   {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}

@@ -1,5 +1,3 @@
 export type completeBucketList = {
-  dreamAccountId: number;
-  share: boolean;
-  groupId: number;
+  status: 'doing' | 'done' | 'hold'
 };
