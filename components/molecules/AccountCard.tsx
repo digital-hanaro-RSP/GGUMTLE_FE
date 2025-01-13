@@ -22,22 +22,6 @@ export default function AccountCard({
         <h1 className='font-semibold text-[18px] mb-[10px] h-[21px] text-[#272727]'>
           {title}
         </h1>
-
-        {/* 계좌 번호 및 복사 버튼
-        <div className='flex font-semibold text-[12px] mb-[10px] text-[#616161] '>
-          {accountNumber}
-          <button
-            className='font-semibold text-[12px] text-[#616161] ml-[5px]'
-            onClick={() => {
-              window.navigator.clipboard.writeText(accountNumber).then(() => {
-                alert('복사되었습니다.');
-              });
-            }}
-          >
-            복사
-          </button>
-        </div> */}
-
         {/* 잔액 및 숨김 버튼 */}
         <div className='flex items-center'>
           {/* 잔액 */}
