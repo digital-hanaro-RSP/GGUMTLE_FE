@@ -1,8 +1,20 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { completeBucketList } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { AiFillFire } from 'react-icons/ai';
+import { BsThreeDots } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import { PiMoneyFill } from 'react-icons/pi';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
@@ -15,8 +27,10 @@ export interface BucketListCardProps {
   type: 'effort' | 'money';
   dataPercent: number;
   title: string;
-  how: 'have' | 'want' | 'become' | 'have' | 'visit' | 'learn';
+  how: 'have' | 'want' | 'become' | 'visit' | 'learn';
   balance?: number;
+  isSelectMode?: boolean; //커뮤니티 용인지 체크
+  bid: number;
 }
 
 export const BucketListCard = ({
@@ -25,9 +39,13 @@ export const BucketListCard = ({
   title,
   how,
   balance,
+  isSelectMode,
+  bid,
 }: BucketListCardProps) => {
   // 초기 진행률은 0으로 설정
   const [progress, setProgress] = useState<number>(0);
+  const { completeBucketList } = useBucketListApi();
+  const router = useRouter();
 
   useEffect(() => {
     // 컴포넌트가 마운트된 후 일정 시간 뒤에 실제 진행률로 업데이트
@@ -80,6 +98,16 @@ export const BucketListCard = ({
     }
   };
 
+  const complete = async (bid: number) => {
+    const data: completeBucketList = {
+      status: 'done',
+    };
+    router.push('/');
+    // await completeBucketList(bid, data).then((res) => {
+    //   router.push('/completePage')
+    // });
+  };
+
   return (
     <>
       <Card className='flex-row'>
@@ -96,13 +124,30 @@ export const BucketListCard = ({
           </div>
         </div>
         <div className='w-[calc(100%-54px)] p-1'>
-          <div className='flex flex-row gap-1'>
+          <div className='flex flex-row gap-1 w-full'>
             <ColorChip color='gray'>언제까지</ColorChip>
             <ColorChip color={how}>{howto(how)}</ColorChip>
+            {isSelectMode !== true && (
+              <div className='flex-grow justify-end items-end flex'>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <BsThreeDots />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className='text-center w-10'>
+                    <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => complete(bid)}>
+                      완료하기
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>보류하기</DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )}
           </div>
           <div className='p-1 flex flex-col font-bold'>
             <h1 className='truncate w-full'>{title}</h1>
-            {type === 'money' && (
+            {type === 'money' && isSelectMode === true && (
               <>
                 <div className='text-2xl truncate '>
                   {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}
