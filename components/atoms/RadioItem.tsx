@@ -1,3 +1,5 @@
+'use client'
+
 import { InputHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -30,9 +32,9 @@ export const RadioItem = ({
         className={cn(
           className,
           'flex custom-radio transition-all duration-500 ease-in-out p-2 w-full',
-          contentDirection === 'vertical' && 'flex-col',
-          contentDirection === 'horizontal' && 'flex-row',
-          { ...props },
+          contentDirection === 'vertical' && 'flex-col justify-center items-center gap-2',
+          contentDirection === 'horizontal' && 'flex-row justify-start items-center border py-5 rounded-xl',
+        
           shape === 'box' && 'box-radio'
         )}
       >
@@ -42,6 +44,7 @@ export const RadioItem = ({
           name={name}
           value={value}
           className='peer hidden'
+          { ...props }
         />
 
         {shape === 'circle' && (
