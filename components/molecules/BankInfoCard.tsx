@@ -19,7 +19,7 @@ export const BankInfoCard = ({
     <>
       <div className='bg-gray-200 rounded-lg flex items-center p-3 gap-4'>
         <Image
-          src={'/images/Account/Hana.jpg'}
+          src={'/image/Account/Hana.jpg'}
           alt='bankImg'
           width={56}
           height={56}

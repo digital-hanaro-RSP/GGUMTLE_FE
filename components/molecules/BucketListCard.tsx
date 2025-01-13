@@ -20,6 +20,7 @@ import { formatNumberWithCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
+import Image from 'next/image';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -117,9 +118,19 @@ export const BucketListCard = ({
             {progress >= 100 ? (
               <FaCheckCircle size={30} />
             ) : type === 'effort' ? (
-              <AiFillFire size={30} />
+              <Image
+                src={'/image/icons/Fire.png'}
+                alt='img'
+                width={40}
+                height={40}
+              />
             ) : (
-              <PiMoneyFill size={30} />
+              <Image
+                src={'/image/icons/Money.png'}
+                alt='img'
+                width={40}
+                height={40}
+              />
             )}
           </div>
         </div>
@@ -147,7 +158,7 @@ export const BucketListCard = ({
           </div>
           <div className='p-1 flex flex-col font-bold'>
             <h1 className='truncate w-full'>{title}</h1>
-            {type === 'money' && isSelectMode === true && (
+            {type === 'money' && isSelectMode === false && (
               <>
                 <div className='text-2xl truncate '>
                   {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}
