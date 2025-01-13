@@ -31,22 +31,28 @@ export default function CommentCard({
 
   const { plusCommentLike, minusCommentLike } = useCommunityApi();
 
-  const handleLikeChange = async (newLikeState: boolean) => {
+  const handleLikeClick = async () => {
+    if (typeof tempGroupId !== 'string') return;
+    const newLikeState = !isLiked;
+    const groupId = parseInt(tempGroupId);
+
     try {
-      if (typeof tempGroupId === 'string') {
-        const groupId = parseInt(tempGroupId);
-        if (newLikeState) {
-          await plusCommentLike(groupId, postId, id);
-        } else {
-          await minusCommentLike(groupId, postId, id);
-        }
+      if (newLikeState) {
+        // 좋아요
+        console.log('plusCommentLike');
+        await plusCommentLike(groupId, postId, id);
+      } else {
+        // 좋아요 취소
+        console.log('minusCommentLike');
+        await minusCommentLike(groupId, postId, id);
       }
+
+      // API 성공 시에만 state 업데이트
       setIsLiked(newLikeState);
       setLikeCount((prev) => (newLikeState ? prev + 1 : prev - 1));
     } catch (error) {
       console.error('좋아요 처리 실패:', error);
-      setIsLiked(!newLikeState);
-      setLikeCount((prev) => (!newLikeState ? prev + 1 : prev - 1));
+      // API 실패 시에는 setState 하지 않음
     }
   };
 
@@ -85,10 +91,10 @@ export default function CommentCard({
 
         {/* 좋아요 */}
         <LikeComment
-          initialIsLiked={isLiked}
+          isLiked={isLiked}
           likeCount={likeCount}
           showComment={false}
-          onLikeChange={handleLikeChange}
+          onLikeClick={handleLikeClick}
         />
       </div>
     </Card>
