@@ -39,21 +39,21 @@ export default function Post({
 
   const { plusLike, minusLike } = useCommunityApi();
 
-  const handleLikeChange = async (newLikeState: boolean) => {
+  const handleLikeClick = async () => {
+    const newLikeState = !isLiked;
     try {
       if (newLikeState) {
-        console.log('plusLike', groupId, id);
+        console.log('plusLike');
         await plusLike(groupId, id);
       } else {
-        console.log('minusLike', groupId, id);
+        console.log('minusLike');
         await minusLike(groupId, id);
       }
+      // API 성공 시에만 state 업데이트
       setIsLiked(newLikeState);
       setLikeCount((prev) => (newLikeState ? prev! + 1 : prev! - 1));
     } catch (error) {
       console.error('좋아요 처리 실패:', error);
-      setIsLiked(!newLikeState);
-      setLikeCount((prev) => (!newLikeState ? prev! + 1 : prev! - 1));
     }
   };
 
@@ -155,10 +155,10 @@ export default function Post({
           </div>
         )}
         <LikeComment
-          initialIsLiked={isLiked!}
+          isLiked={isLiked!}
           likeCount={likeCount!}
           commentCount={commentCount}
-          onLikeChange={handleLikeChange}
+          onLikeClick={handleLikeClick}
         />
       </div>
     </Card>

@@ -10,7 +10,7 @@ const meta = {
   },
   tags: ['autodocs'],
   argTypes: {
-    initialIsLiked: {
+    isLiked: {
       control: 'boolean',
       description: '좋아요 초기 상태',
     },
@@ -22,8 +22,8 @@ const meta = {
       control: 'number',
       description: '댓글 개수',
     },
-    onLikeChange: {
-      description: '좋아요 상태 변경 시 호출되는 함수',
+    onLikeClick: {
+      description: '좋아요 클릭 시 호출되는 함수',
     },
   },
 } satisfies Meta<typeof LikeComment>;
@@ -44,7 +44,8 @@ const LikeCommentWithState = ({
   const [likeCount, setLikeCount] = useState<number>(initialLikeCount);
   const [isLiked, setIsLiked] = useState<boolean>(initialIsLiked);
 
-  const handleLikeChange = (newLikeState: boolean) => {
+  const handleLikeClick = () => {
+    const newLikeState = !isLiked;
     setIsLiked(newLikeState);
     setLikeCount((prev: number) => (newLikeState ? prev + 1 : prev - 1));
     console.log('좋아요 상태:', newLikeState);
@@ -52,10 +53,10 @@ const LikeCommentWithState = ({
 
   return (
     <LikeComment
-      initialIsLiked={isLiked}
+      isLiked={isLiked}
       likeCount={likeCount}
       commentCount={commentCount}
-      onLikeChange={handleLikeChange}
+      onLikeClick={handleLikeClick}
     />
   );
 };
