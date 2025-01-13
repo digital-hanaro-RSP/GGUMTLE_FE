@@ -12,6 +12,7 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
+  staticDirs: ['../public'], // Serve the public directory
   docs: {
     autodocs: true,
   },
