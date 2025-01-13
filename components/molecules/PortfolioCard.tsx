@@ -27,17 +27,27 @@ interface PortfolioCardProps {
   goalPortfolio: GoalPortfolio;
 }
 
+interface ChartData {
+  labels: string[];
+  datasets: {
+    data: number[];
+    backgroundColor: string[];
+  }[];
+}
+
 const CHART_COLORS = {
-  depositWithdrawal: '#FF6384',
-  savingTimeDeposit: '#36A2EB',
-  investment: '#FFCE56',
-  foreignCurrency: '#4BC0C0',
-  pension: '#9966FF',
-  etc: '#FF9F40',
+  depositWithdrawal: '#7D79FF',
+  savingTimeDeposit: '#3DC2C4',
+  investment: '#5395FF',
+  foreignCurrency: '#F16D8B',
+  pension: '#DBB18C',
+  etc: '#CACDED',
 };
 
+const LABELS = ['입출금', '예적금', '투자', '외화', '연금', '기타'];
+
 const chartOptions = (centerText: string): DoughnutOptions => ({
-  cutout: '60%',
+  cutout: '50%',
   plugins: {
     legend: {
       display: false,
@@ -75,15 +85,33 @@ const textCenter: Plugin<'doughnut'> = {
   },
 };
 
+const getBackgroundColors = (
+  colors: string[],
+  labels: string[],
+  hoveredSection: string | null,
+  isExpanded: boolean
+): string[] => {
+  if (!isExpanded) {
+    return colors;
+  }
+
+  return colors.map(
+    (color, index) =>
+      hoveredSection === labels[index]
+        ? color // 선택된 항목은 원래 색상
+        : '#E5E7EB' // 선택되지 않은 항목은 옅은 회색
+  );
+};
+
 export const PortfolioCard = ({
   currentPortfolio,
   goalPortfolio,
 }: PortfolioCardProps) => {
-  // "상세항목" 표시 여부를 결정하는 state
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedPortfolio, setSelectedPortfolio] = useState<
     'goal' | 'current'
   >('goal');
+  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
   const handleToggleDetail = () => {
     setIsExpanded((prev) => !prev);
@@ -119,8 +147,8 @@ export const PortfolioCard = ({
     return <Card className='p-6'>Loading...</Card>;
   }
 
-  const currentChartData = {
-    labels: ['입출금', '예적금', '투자', '외화', '연금', '기타'],
+  const currentChartData: ChartData = {
+    labels: LABELS,
     datasets: [
       {
         data: [
@@ -131,13 +159,18 @@ export const PortfolioCard = ({
           currentPortfolio.pension,
           currentPortfolio.etc,
         ],
-        backgroundColor: Object.values(CHART_COLORS),
+        backgroundColor: getBackgroundColors(
+          Object.values(CHART_COLORS),
+          LABELS,
+          hoveredSection,
+          isExpanded
+        ),
       },
     ],
   };
 
-  const goalChartData = {
-    labels: ['입출금', '예적금', '투자', '외화', '연금', '기타'],
+  const goalChartData: ChartData = {
+    labels: LABELS,
     datasets: [
       {
         data: [
@@ -148,7 +181,12 @@ export const PortfolioCard = ({
           goalPortfolio.pensionRatio * 100,
           goalPortfolio.etcRatio * 100,
         ],
-        backgroundColor: Object.values(CHART_COLORS),
+        backgroundColor: getBackgroundColors(
+          Object.values(CHART_COLORS),
+          LABELS,
+          hoveredSection,
+          isExpanded
+        ),
       },
     ],
   };
@@ -165,7 +203,7 @@ export const PortfolioCard = ({
           onClick={() => handleChartClick('goal')}
           style={{ cursor: 'pointer' }}
         >
-          <div className='h-64'>
+          <div className=''>
             <Doughnut
               data={goalChartData}
               options={chartOptions('목표')}
@@ -178,7 +216,7 @@ export const PortfolioCard = ({
           onClick={() => handleChartClick('current')}
           style={{ cursor: 'pointer' }}
         >
-          <div className='h-64'>
+          <div className=''>
             <Doughnut
               data={currentChartData}
               options={chartOptions('현재')}
@@ -197,7 +235,7 @@ export const PortfolioCard = ({
         />
         {isExpanded && (
           <div className='mt-2 w-full'>
-            <p className='text-gray-700 mb-2'>
+            <p className='text-gray-700 font-semibold mb-2 text-center'>
               {selectedPortfolio === 'goal'
                 ? '목표 포트폴리오'
                 : '현재 포트폴리오'}
@@ -207,6 +245,7 @@ export const PortfolioCard = ({
                 selectedPortfolio === 'goal' ? goalPortfolio : currentPortfolio
               }
               isGoal={selectedPortfolio === 'goal'}
+              onHover={setHoveredSection}
             />
           </div>
         )}
