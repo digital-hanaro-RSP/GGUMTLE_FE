@@ -1,4 +1,4 @@
-import { AddNewCard } from '@/components/molecules/AddNewCard';
+import { AddNewCard } from '@/components/atoms/AddNewCard';
 import type { Meta, StoryObj } from '@storybook/react';
 
 // Define metadata for the component

@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
-import { Card } from '../atoms/Card';
+import { Card } from './Card';
 
 export interface AddNewCardProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
