@@ -109,7 +109,7 @@ export const BucketListCard = ({
 
   return (
     <>
-      <Card className='flex-row'>
+      <Card className='flex-row py-1'>
         <div className='relative justify-center items-center flex'>
           <Doughnut className='w-14 h-14' data={data} options={options} />
           <div className='absolute top-[calc((100%-40px)/2)] left-2 w-10 h-10 justify-center items-center flex'>
