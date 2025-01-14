@@ -1,8 +1,10 @@
 'use client';
 
+import { PlusButton } from '@/components/atoms/Button';
 import CommunityHeader, { Tab } from '@/components/atoms/CommunityHeader';
 import Header from '@/components/atoms/Header';
 import { SearchInpuRef } from '@/components/atoms/Inputs';
+import { AddNewCard } from '@/components/molecules/AddNewCard';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,7 +16,7 @@ import {
 import { useCategoryStore } from '@/store/useCategoryStore';
 import { IoIosArrowDown } from 'react-icons/io';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 export default function CommunityMainLayout({
   children,
@@ -22,6 +24,7 @@ export default function CommunityMainLayout({
   children: React.ReactNode;
 }) {
   // const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [isAdd, setIsAdd] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const categories = ['전체', '여행', '재테크', '노후', '교육', '취미'];
   const router = useRouter();
@@ -40,7 +43,7 @@ export default function CommunityMainLayout({
   };
 
   return (
-    <div className='flex flex-col h-[calc(100vh-58px)] overflow-hidden'>
+    <div className='flex flex-col h-[calc(100vh-58px)] overflow-hidden relative'>
       <div className='flex flex-col gap-[20px] bg-white'>
         <Header text='커뮤니티' showActionButton={false} />
         <div className='px-[20px]'>
@@ -58,7 +61,7 @@ export default function CommunityMainLayout({
           onTabChange={handleTabChange}
         />
       </div>
-      <div className='flex flex-col w-full px-[20px] py-[10px]'>
+      <div className=' flex flex-col w-full px-[20px] py-[10px]'>
         <div className='flex w-full justify-end'>
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -93,6 +96,40 @@ export default function CommunityMainLayout({
       >
         {children}
       </div>
+      <PlusButton
+        className='absolute bottom-[20px] right-[20px]'
+        size='sm'
+        onClick={() => {
+          setIsAdd(true);
+        }}
+      />
+      {isAdd && (
+        <div
+          className='bg-black/70 absolute top-0 left-0 w-full h-full z-1 flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setIsAdd(false);
+            }
+          }}
+        >
+          <AddNewCard
+            usage='newPost'
+            size='md'
+            className='h-[100px]'
+            onClick={() => {
+              router.push('/community/create/post');
+            }}
+          />
+          <AddNewCard
+            usage='newGroup'
+            size='md'
+            className='h-[100px]'
+            onClick={() => {
+              router.push('/community/create/group');
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 }

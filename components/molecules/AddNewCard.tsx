@@ -75,8 +75,8 @@ export const AddNewCard = ({
   return (
     <>
       <button
+        {...props}
         className={cn(
-          { ...props },
           className,
           'h-24',
           size === 'lg' && 'w-full',
