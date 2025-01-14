@@ -11,20 +11,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import { IoIosArrowDown } from 'react-icons/io';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 export default function CommunityMainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [selectedCategory, setSelectedCategory] = useState('전체');
+  // const [selectedCategory, setSelectedCategory] = useState('전체');
   const searchInputRef = useRef<HTMLInputElement>(null);
   const categories = ['전체', '여행', '재테크', '노후', '교육', '취미'];
   const router = useRouter();
   const pathname = usePathname();
+  const { selectedCategory, setSelectedCategory } = useCategoryStore();
 
   const currentTab = (pathname.split('/').pop() as Tab) || 'popular';
 
