@@ -1,7 +1,7 @@
 // app/layout.tsx
 import Navigation from '@/components/atoms/NavigationBar';
 import type { Metadata } from 'next';
-import './globals.css';
+import '../globals.css';
 
 export const metadata: Metadata = {
   title: '꿈틀',
@@ -15,8 +15,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang='ko'>
-      <body className='bg-white min-h-screen text-black'>{children}</body>
-    </html>
+    <div className='relative mx-auto max-w-screen-md min-h-screen bg-background pb-[58px]'>
+      {children}
+      <Navigation />
+    </div>
   );
 }
