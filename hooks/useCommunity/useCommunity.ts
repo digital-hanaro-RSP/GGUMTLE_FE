@@ -4,8 +4,18 @@ import { CommentResponse, PostResponse } from '@/types/Community';
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
 
-  const getPosts = async (groupId: number): Promise<PostResponse> => {
-    const response = await fetchApi(`/community/group/${groupId}/post`);
+  const getPosts = async (
+    groupId: number,
+    category: string
+  ): Promise<PostResponse> => {
+    const response = await fetchApi(
+      `/community/group/${groupId}/post?category=${category}`
+    );
+    return response;
+  };
+
+  const getPopularPosts = async (category: string): Promise<PostResponse> => {
+    const response = await fetchApi(`/community/popular?category=${category}`);
     return response;
   };
 
@@ -75,5 +85,6 @@ export const useCommunityApi = () => {
     minusLike,
     plusCommentLike,
     minusCommentLike,
+    getPopularPosts,
   };
 };

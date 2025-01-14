@@ -40,7 +40,7 @@ export default function CommunityMainLayout({
   };
 
   return (
-    <div className='flex flex-col h-screen overflow-hidden'>
+    <div className='flex flex-col h-[calc(100vh-58px)] overflow-hidden'>
       <div className='flex flex-col gap-[20px] bg-white'>
         <Header text='커뮤니티' showActionButton={false} />
         <div className='px-[20px]'>
@@ -87,7 +87,7 @@ export default function CommunityMainLayout({
           flex-1
           overflow-y-auto
           pt-[10px]
-          pb-[78px]
+          pb-[20px]
           scrollbar-hide
         '
       >

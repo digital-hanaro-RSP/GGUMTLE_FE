@@ -18,7 +18,7 @@ export type Post = {
   content: string;
   createdAt: string;
   updatedAt: string;
-  postType: 'post' | 'news'; // enum?
+  postType: 'POST' | 'NEWS'; // enum?
   likeCount?: number;
   commentCount?: number;
   author: Author;
