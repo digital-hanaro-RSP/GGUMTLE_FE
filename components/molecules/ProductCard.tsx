@@ -23,7 +23,7 @@ const PRODUCT_TYPE_MAP = {
 const RISK_RATING_COLORS = {
   매우낮은위험: '#9997FD',
   매우높은위험: '#FF0000',
-  높은위험: '#F26100',
+  높은위험: '#f37021',
 } as const;
 
 export default function ProductCard({
@@ -47,13 +47,6 @@ export default function ProductCard({
     );
   };
 
-  const getYieldLabel = () => {
-    if (productType === 'savingTimeDeposit') {
-      return `금리 ${yieldValue}`;
-    }
-    return `수익률 12개월 ${yieldValue}`;
-  };
-
   const getRiskRatingColor = () => {
     return (
       RISK_RATING_COLORS[riskRating as keyof typeof RISK_RATING_COLORS] ||
@@ -62,51 +55,64 @@ export default function ProductCard({
   };
 
   return (
-    <Card
-      className='w-full cursor-pointer hover:shadow-lg transition-shadow p-4'
-      onClick={handleClick}
-    >
-      <div className='flex flex-col gap-3'>
-        <div className='flex items-center'>
-          <span className='text-lg font-bold text-gray-900'>{productName}</span>
-        </div>
+    <div className='px-5'>
+      {' '}
+      {/* 좌우 20px 패딩을 위한 컨테이너 */}
+      <Card
+        className='w-full cursor-pointer hover:shadow-lg transition-shadow p-4'
+        onClick={handleClick}
+      >
+        <div className='flex flex-col gap-3'>
+          <div className='flex items-center'>
+            <span className='text-md font-bold text-gray-900'>
+              {productName}
+            </span>
+          </div>
 
-        <div className='flex items-center gap-2'>
-          <GrLineChart className='w-4 h-4' />
-          <span>종목구분</span>
-          <span className='text-sm text-gray-500'>
-            {getDisplayProductType()}
-          </span>
-        </div>
+          <div className='flex items-center gap-4'>
+            <GrLineChart className='w-5 h-5' />
+            <div className='flex gap-2 items-end'>
+              <span className='text-sm text-gray-500'>종목구분</span>
+              <span className='text-md text-black font-bold'>
+                {getDisplayProductType()}
+              </span>
+            </div>
+          </div>
 
-        <div className='flex items-center gap-2'>
-          <IoWarningOutline
-            className='w-4 h-4'
-            style={{ color: getRiskRatingColor() }}
-          />
-          <span
-            className='text-sm rounded'
-            style={{ color: getRiskRatingColor() }}
-          >
-            {riskRating}
-          </span>
-        </div>
+          <div className='flex items-center gap-4'>
+            <IoWarningOutline className='w-5 h-5 text-black' />
+            <div className='flex gap-2 items-end'>
+              <span className='text-sm text-gray-500'>위험등급</span>
+              <span
+                className='text-md font-bold'
+                style={{ color: getRiskRatingColor() }}
+              >
+                {riskRating}
+              </span>
+            </div>
+          </div>
 
-        <div className='flex items-center gap-2'>
-          <LiaWonSignSolid className='w-4 h-4 text-blue-600' />
-          <span className='text-lg font-bold text-blue-600'>
-            {getYieldLabel()}
-          </span>
-        </div>
+          <div className='flex items-center gap-4'>
+            <LiaWonSignSolid className='w-5 h-5 text-black' />
+            <div className='flex gap-2 items-end'>
+              <span className='text-sm text-gray-500'>
+                {productType === 'savingTimeDeposit' ? '금리' : '수익률 12개월'}
+              </span>
+              <span className='text-md font-bold' style={{ color: '#069894' }}>
+                {yieldValue}
+              </span>
+            </div>
+          </div>
 
-        {bannerImageUrl && (
-          <Image
-            src={bannerImageUrl}
-            alt={productName}
-            className='w-full h-[120px] object-cover rounded-lg'
-          />
-        )}
-      </div>
-    </Card>
+          {bannerImageUrl && (
+            <Image
+              src={bannerImageUrl}
+              alt={productName}
+              className='w-full h-[120px] object-cover rounded-lg'
+            />
+          )}
+        </div>
+      </Card>
+    </div>
   );
 }
