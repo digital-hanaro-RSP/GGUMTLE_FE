@@ -10,7 +10,6 @@ export default function BucketListLayout({
       <Header
         text='버킷리스트'
         showActionButton={false}
-        showBackButton={false}
       />
       <div className='px-5'>{children}</div>
     </div>
