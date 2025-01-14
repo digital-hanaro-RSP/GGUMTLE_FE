@@ -2,7 +2,7 @@ import LoadingDot from '@/components/atoms/LoadingDot';
 import { Meta, StoryObj } from '@storybook/react';
 
 const meta: Meta = {
-  title: 'Components/Atoms/LoadingDot',
+  title: 'Atoms/LoadingDot',
   component: LoadingDot,
 	tags: ['autodocs'],
 };

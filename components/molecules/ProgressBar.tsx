@@ -11,11 +11,11 @@ export type ProgressBarProps = {
 
 export const ProgressBar = ({ dataPercent }: ProgressBarProps) => {
   const [progress, setProgress] = useState<number>(0);
-	useEffect(()=>{
-		setTimeout(() => {
-			setProgress(dataPercent)
-		}, 500);
-	},[])
+  useEffect(() => {
+    setTimeout(() => {
+      setProgress(dataPercent);
+    }, 500);
+  }, [dataPercent]);
   return (
     <>
       <div className='relative py-10'>
