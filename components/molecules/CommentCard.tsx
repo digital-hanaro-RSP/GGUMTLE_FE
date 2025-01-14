@@ -36,6 +36,10 @@ export default function CommentCard({
     const newLikeState = !isLiked;
     const groupId = parseInt(tempGroupId);
 
+    console.log('목서버 제한량 때문에 막았습니다. return문 해제하면 정상동작');
+    return;
+    console.log('이게 찍힐라나');
+
     try {
       if (newLikeState) {
         // 좋아요

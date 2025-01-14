@@ -47,6 +47,9 @@ export default function Post({
   const { plusLike, minusLike } = useCommunityApi();
 
   const handleLikeClick = async () => {
+    console.log('목서버 제한량 때문에 막았습니다. return문 해제하면 정상동작');
+    return;
+    console.log('이게 찍힐라나');
     const newLikeState = !isLiked;
     try {
       if (newLikeState) {

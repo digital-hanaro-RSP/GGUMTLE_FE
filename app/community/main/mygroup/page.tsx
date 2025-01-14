@@ -1,9 +1,12 @@
 'use client';
 
 import GroupCard from '@/components/molecules/GroupCard';
+import { useCategoryStore } from '@/store/useCategoryStore';
 import { Group } from '@/types/Community';
 
 export default function CommunityMainMyGroupPage() {
+  const { selectedCategory } = useCategoryStore();
+  console.log('selectedCategory :', selectedCategory);
   return (
     <div className='flex flex-col w-full gap-[20px]'>
       {MockGroups.map((group) => (
