@@ -1,6 +1,5 @@
 'use client';
 
-import { MoreButton } from '@/components/atoms/Button';
 import ColorChip from '@/components/atoms/ColorChips';
 import AccountCard from '@/components/molecules/AccountCard';
 import { AddNewCard } from '@/components/molecules/AddNewCard';
@@ -31,20 +30,22 @@ export default function BucketListPage() {
     '배우고 싶다',
   ];
   return (
-    <div className='gap-2 flex flex-col'>
+    <div className='gap-2 flex flex-col w-full'>
       <AccountCard title='꿈 모음 계좌' balance='100000' />
       <div className='flex flex-row w-full justify-between'>
-        <Tabs defaultValue='doing' className='w-[400px]'>
-          <TabsList className='grid w-full grid-cols-4 gap-2'>
+        <Tabs defaultValue='doing' className='w-full'>
+          <TabsList className='w-full'>
             <DropdownMenu onOpenChange={setIsOpen}>
-              <DropdownMenuTrigger>
+              <DropdownMenuTrigger className='w-36 mr-1'>
                 <ColorChip
                   color='default'
-                  className='py-1.5 bg-gray-400 text-white focus:outline-none rounded-md w-full'
+                  className='py-1 bg-gray-400 text-white focus:outline-none ring-0 text-sm rounded-md w-full'
                 >
                   <div className='flex flex-row'>
-                    <div className='flex-grow'>{categories[filter]}</div>
-                    <div className='flex justify-end items-center flex-grow'>
+                    <div className='flex-grow w-full flex justify-center items-center break-keep'>
+                      {categories[filter]}
+                    </div>
+                    <div className='flex justify-end items-center flex-grow '>
                       <IoIosArrowDown
                         className={cn(isOpen ? 'rotate-180' : '', 'transition')}
                       />
@@ -67,9 +68,11 @@ export default function BucketListPage() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            <TabsTrigger value='doing'>진행 중</TabsTrigger>
-            <TabsTrigger value='done'>완료</TabsTrigger>
-            <TabsTrigger value='hold'>보류</TabsTrigger>
+            <div className='grid grid-cols-3 w-full gap-1'>
+              <TabsTrigger value='doing'>진행 중</TabsTrigger>
+              <TabsTrigger value='done'>완료</TabsTrigger>
+              <TabsTrigger value='hold'>보류</TabsTrigger>
+            </div>
           </TabsList>
           <TabsContent value='doing'>
             <div className='flex flex-col gap-2'>

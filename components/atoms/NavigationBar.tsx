@@ -26,7 +26,7 @@ export default function Navigation({ currentPath }: NavigationProps) {
 
   return (
     <nav
-      className='fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-screen-md border-t bg-white bg-opacity-10 backdrop-blur-lg rounded-t-2xl flex items-center'
+      className='fixed -bottom-0.5 left-1/2 -translate-x-1/2 w-full max-w-screen-md bg-white bg-opacity-30 backdrop-blur-3xl flex items-center shadow-[0px_0px_8px_2px_rgba(136,137,157,0.30)]'
       style={{ height: '58px' }}
     >
       <div className='flex justify-around items-center w-full'>
