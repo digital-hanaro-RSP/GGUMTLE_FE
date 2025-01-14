@@ -78,13 +78,13 @@ export const DropCardItemList = ({
       {isOpen && (
         <>
           <div
+            onClick={close}
             className={cn(
               isBlur && 'bg-black opacity-70',
               'fixed top-0 left-0 w-screen h-screen'
             )}
           ></div>
           <div
-            onClick={close}
             className={cn(
               direction === 'down' && 'top-5',
               direction === 'up' && 'bottom-5 items-end justify-end',
