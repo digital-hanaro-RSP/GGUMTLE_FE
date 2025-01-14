@@ -9,7 +9,7 @@ interface ApiResponse {
   data: PortfolioResponse;
 }
 
-export const usePortfolio = () => {
+export const usePortfolioApi = () => {
   const { fetchApi } = useApi();
 
   const getPortfolio = useCallback(async (): Promise<PortfolioResponse> => {
