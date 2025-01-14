@@ -38,4 +38,4 @@ next-env.d.ts
 *storybook.log
 
 # components test
-/app/comptest
+/app/(main)/comptest
