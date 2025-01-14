@@ -1,6 +1,6 @@
 'use client';
 
-export type Tab = '인기게시물' | '꿈모임' | '내꿈모임';
+export type Tab = 'popular' | 'group' | 'mygroup';
 
 type CommunityHeaderProps = {
   selectedTab: Tab;
@@ -11,7 +11,13 @@ export default function CommunityHeader({
   selectedTab,
   onTabChange,
 }: CommunityHeaderProps) {
-  const tabs: Tab[] = ['인기게시물', '꿈모임', '내꿈모임'];
+  const tabs: Tab[] = ['popular', 'group', 'mygroup'];
+
+  const tabNameMap: Record<Tab, string> = {
+    popular: '인기게시물',
+    group: '꿈모임',
+    mygroup: '내꿈모임',
+  };
 
   return (
     <div className='w-full h-[50px] flex items-center'>
@@ -25,7 +31,7 @@ export default function CommunityHeader({
               : 'bg-white text-black'
           }`}
         >
-          {tab}
+          {tabNameMap[tab]}
         </div>
       ))}
     </div>

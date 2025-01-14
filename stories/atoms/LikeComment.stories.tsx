@@ -18,6 +18,10 @@ const meta = {
       control: 'number',
       description: '좋아요 개수',
     },
+    showComment: {
+      control: 'boolean',
+      description: '댓글 표시 여부',
+    },
     commentCount: {
       control: 'number',
       description: '댓글 개수',
@@ -61,7 +65,13 @@ const LikeCommentWithState = ({
   );
 };
 
-type Story = StoryObj<typeof LikeComment>;
+type Story = StoryObj<{
+  isLiked: boolean;
+  likeCount: number;
+  showComment?: boolean;
+  commentCount?: number;
+  onLikeClick?: () => void;
+}>;
 
 export const Default: Story = {
   render: () => (

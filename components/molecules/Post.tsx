@@ -9,7 +9,13 @@ import {
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Post as PostType } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import { Card } from '../atoms/Card';
@@ -36,6 +42,7 @@ export default function Post({
   const [isClamped, setIsClamped] = useState(false);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const router = useRouter();
 
   const { plusLike, minusLike } = useCommunityApi();
 
@@ -76,9 +83,22 @@ export default function Post({
     }
   }, []);
 
+  const handlePostClick = (e: React.MouseEvent) => {
+    // 이벤트가 발생한 요소가 특정 기능이 있는 버튼이나 영역이 아닌 경우에만 이동
+    const target = e.target as HTMLElement;
+    if (
+      !target.closest('button') && // 더보기 버튼
+      !target.closest('.swiper-container') && // 이미지 슬라이더
+      !target.closest('[role="menuitem"]') && // 드롭다운 메뉴 아이템
+      !target.closest('.like-comment-section') // 좋아요/댓글 섹션
+    ) {
+      router.push(`/community/group/${groupId}/post/${id}`);
+    }
+  };
+
   return (
     <Card>
-      <div className='flex flex-col gap-[20px]'>
+      <div className='flex flex-col gap-[20px]' onClick={handlePostClick}>
         {/* 상단 프로필 */}
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
@@ -137,29 +157,41 @@ export default function Post({
           <div className='mt-4'>{/* 포트폴리오 */}</div>
         )}
         {imageUrls.length > 0 && (
-          <div className='flex flex-col gap-[20px]'>
-            {imageUrls.map((imageUrl: any, idx: any) => (
-              <div key={idx} className='relative w-full aspect-auto'>
-                <Image
-                  src={imageUrl}
-                  alt={`게시물 이미지 ${idx + 1}`}
-                  className='object-contain'
-                  width={0}
-                  height={0}
-                  sizes='100vw'
-                  style={{ width: '100%', height: 'auto' }}
-                  priority={idx === 0}
-                />
-              </div>
-            ))}
+          <div className='w-full z-0'>
+            <Swiper
+              modules={[Pagination]}
+              pagination={{
+                clickable: true,
+              }}
+              spaceBetween={20}
+              slidesPerView={1}
+              className='w-full [&_.swiper-pagination-bullet]:bg-gray-300 [&_.swiper-pagination-bullet-active]:!bg-primary-main'
+            >
+              {imageUrls.map((imageUrl: string, idx: number) => (
+                <SwiperSlide key={idx}>
+                  <div className='relative w-full aspect-video'>
+                    <Image
+                      src={imageUrl}
+                      alt={`게시물 이미지 ${idx + 1}`}
+                      className='object-contain'
+                      fill
+                      priority={idx === 0}
+                    />
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         )}
-        <LikeComment
-          isLiked={isLiked!}
-          likeCount={likeCount!}
-          commentCount={commentCount}
-          onLikeClick={handleLikeClick}
-        />
+
+        <div className='like-comment-section'>
+          <LikeComment
+            isLiked={isLiked!}
+            likeCount={likeCount!}
+            commentCount={commentCount}
+            onLikeClick={handleLikeClick}
+          />
+        </div>
       </div>
     </Card>
   );

@@ -33,13 +33,13 @@ const CommunityHeaderWithHooks = ({ defaultTab }: { defaultTab: Tab }) => {
 };
 
 export const Default: Story = {
-  render: () => <CommunityHeaderWithHooks defaultTab='인기게시물' />,
+  render: () => <CommunityHeaderWithHooks defaultTab='popular' />,
 };
 
 export const DreamGroup: Story = {
-  render: () => <CommunityHeaderWithHooks defaultTab='꿈모임' />,
+  render: () => <CommunityHeaderWithHooks defaultTab='group' />,
 };
 
 export const MyDreamGroup: Story = {
-  render: () => <CommunityHeaderWithHooks defaultTab='내꿈모임' />,
+  render: () => <CommunityHeaderWithHooks defaultTab='mygroup' />,
 };
