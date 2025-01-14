@@ -29,7 +29,7 @@ export const SurveyCard = ({
           <div className=''></div>
         </div>
         <fieldset
-          className={cn('flex p-5 gap-2', direction === 'vertical' && 'flex-col')}
+          className={cn('flex p-3 gap-2 items-start break-keep', direction === 'vertical' && 'flex-col')}
         >
           {children}
         </fieldset>
