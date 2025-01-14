@@ -83,15 +83,15 @@ export const BucketListCard = ({
   const howto = (how: string) => {
     switch (how) {
       case 'want':
-        return '하고싶다';
+        return '해보고 싶다';
       case 'become':
-        return '되고싶다';
+        return '되고 싶다';
       case 'have':
-        return '하고싶다';
+        return '갖고 싶다';
       case 'visit':
-        return '가보고싶다';
+        return '가보고 싶다';
       case 'learn':
-        return '배우고싶다';
+        return '배우고 싶다';
       default:
         return '오류';
     }
@@ -109,7 +109,7 @@ export const BucketListCard = ({
 
   return (
     <>
-      <Card className='flex-row'>
+      <Card className='flex-row py-1'>
         <div className='relative justify-center items-center flex'>
           <Doughnut className='w-14 h-14' data={data} options={options} />
           <div className='absolute top-[calc((100%-40px)/2)] left-2 w-10 h-10 justify-center items-center flex'>
