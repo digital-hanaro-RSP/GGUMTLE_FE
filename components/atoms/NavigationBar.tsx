@@ -19,7 +19,7 @@ export default function Navigation({ currentPath }: NavigationProps) {
   const navigationItems = [
     { href: '/', label: '홈', Icon: GoHomeFill },
     { href: '/bucket-list', label: '버킷리스트', Icon: PiListChecksFill },
-    { href: '/community', label: '커뮤니티', Icon: RiGroup2Fill },
+    { href: '/community/main/popular', label: '커뮤니티', Icon: RiGroup2Fill },
     { href: '/support', label: '지원', Icon: GiGraduateCap },
     { href: '/mypage', label: '마이페이지', Icon: MdPerson },
   ];
