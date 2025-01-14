@@ -1,7 +1,7 @@
 // import { useSession } from 'next-auth/react';
 
 export const useApi = () => {
-	// jwt 연결 후 주석 제거하기
+  // jwt 연결 후 주석 제거하기
   // const { data: session } = useSession();
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -11,7 +11,7 @@ export const useApi = () => {
     //   throw new Error('No JWT token found');
     // }
 
-    const url = `${baseUrl}/be${apiRoute}`;
+    const url = `${baseUrl}/data${apiRoute}`;
 
     // 헤더 설정
     const headers = new Headers(options.headers);
