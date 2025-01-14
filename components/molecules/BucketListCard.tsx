@@ -12,13 +12,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
-import Image from 'next/image';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -41,24 +41,13 @@ export const BucketListCard = ({
   isSelectMode,
   bid,
 }: BucketListCardProps) => {
-  // 초기 진행률은 0으로 설정
-  const [progress, setProgress] = useState<number>(0);
   const { completeBucketList } = useBucketListApi();
   const router = useRouter();
-
-  useEffect(() => {
-    // 컴포넌트가 마운트된 후 일정 시간 뒤에 실제 진행률로 업데이트
-    const timeout = setTimeout(() => {
-      setProgress(dataPercent); // progress를 실제 데이터로 업데이트
-    }, 500); // 0.5초 지연 (원하는 시간으로 조정 가능)
-
-    return () => clearTimeout(timeout); // 컴포넌트 언마운트 시 타이머 정리
-  }, [dataPercent]);
 
   const data = {
     datasets: [
       {
-        data: [progress, 100 - progress], // progress를 사용하여 데이터 설정
+        data: [dataPercent, 100 - dataPercent], // progress를 사용하여 데이터 설정
         backgroundColor: ['rgb(6 152 148)', 'rgb(196 196 196)'],
         borderWidth: 0,
       },
@@ -74,9 +63,9 @@ export const BucketListCard = ({
         enabled: false, // 툴팁 비활성화
       },
     },
-    cutout: '80%', // 도넛 두께 조정
+    cutout: '70%', // 도넛 두께 조정
     animation: {
-      duration: 500, // 애니메이션 지속 시간 (ms)
+      duration: 1000, // 애니메이션 지속 시간 (ms)
     },
   };
 
@@ -111,9 +100,13 @@ export const BucketListCard = ({
     <>
       <Card className='flex-row py-1'>
         <div className='relative justify-center items-center flex'>
-          <Doughnut className='w-14 h-14' data={data} options={options} />
-          <div className='absolute top-[calc((100%-40px)/2)] left-2 w-10 h-10 justify-center items-center flex'>
-            {progress >= 100 ? (
+          <Doughnut
+            className='w-14 h-14 bg-[#c4c4c4] rounded-full'
+            data={data}
+            options={options}
+          />
+          <div className='absolute top-[calc((100%-44px)/2)] left-1.5 w-11 h-11 justify-center items-center flex bg-white rounded-full'>
+            {dataPercent >= 100 ? (
               <FaCheckCircle size={30} />
             ) : type === 'effort' ? (
               <Image
