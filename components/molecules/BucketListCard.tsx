@@ -83,15 +83,15 @@ export const BucketListCard = ({
   const howto = (how: string) => {
     switch (how) {
       case 'want':
-        return '하고싶다';
+        return '해보고 싶다';
       case 'become':
-        return '되고싶다';
+        return '되고 싶다';
       case 'have':
-        return '하고싶다';
+        return '갖고 싶다';
       case 'visit':
-        return '가보고싶다';
+        return '가보고 싶다';
       case 'learn':
-        return '배우고싶다';
+        return '배우고 싶다';
       default:
         return '오류';
     }
