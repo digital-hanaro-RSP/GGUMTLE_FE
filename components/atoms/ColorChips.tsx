@@ -1,10 +1,13 @@
 import { PropsWithChildren } from 'react';
+import { cn } from '@/lib/utils';
 
 type ColorChipProps = {
   color: keyof typeof colorMap;
+  className?: string;
 };
 
 const colorMap: Record<string, { bgColor: string; textColor: string }> = {
+  default: { bgColor: '', textColor: '' },
   gray: { bgColor: 'bg-bucket-gray', textColor: '#7B8894' },
   want: { bgColor: 'bg-bucket-want', textColor: '#D89B00' },
   become: { bgColor: 'bg-bucket-become', textColor: '#72B16D' },
@@ -16,11 +19,16 @@ const colorMap: Record<string, { bgColor: string; textColor: string }> = {
 export default function ColorChip({
   children,
   color,
+  className,
 }: PropsWithChildren<ColorChipProps>) {
   const { bgColor, textColor } = colorMap[color];
   return (
     <div
-      className={`items-center text-center rounded-3xl px-2 py-[2px] w-fit text-[11px] font-medium ${bgColor}`}
+      className={cn(
+        'items-center text-center rounded-3xl px-2 py-[2px] w-fit text-[11px] font-medium',
+        bgColor,
+        className
+      )}
       style={{ color: textColor }}
     >
       <span>{children}</span>
