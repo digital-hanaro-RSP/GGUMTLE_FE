@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import { useSignUpStore } from '@/store/useSignUpStore';
 import { RiPhoneFindLine } from 'react-icons/ri';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
 export default function PhonePage() {
@@ -12,6 +12,7 @@ export default function PhonePage() {
   const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
   const [timerExpired, setTimerExpired] = useState(false);
   const setPhoneInfo = useSignUpStore((state) => state.setPhoneInfo);
+  const router = useRouter();
 
   const formatPhoneNumber = (phoneNumber: string) => {
     const cleaned = phoneNumber.replace(/\D/g, '');
