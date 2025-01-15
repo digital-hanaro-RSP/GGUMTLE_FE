@@ -145,9 +145,6 @@
   .text-balance {
     text-wrap: balance;
   }
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-  }
   .zigzag-border {
     background: linear-gradient(-45deg, #b9b9b9 10px, transparent 0),
       linear-gradient(45deg, #b9b9b9 10px, transparent 0);
