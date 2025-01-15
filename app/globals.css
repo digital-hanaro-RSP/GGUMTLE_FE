@@ -2,18 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
+/* @font-face {
   font-family: 'Pretendard';
   src: url('/PretendardVariable.woff2') format('woff2');
   font-weight: 45 920;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @layer base {
-  html {
+  /* html {
     font-family: 'Pretendard', system-ui, sans-serif;
-  }
+  } */
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
@@ -66,6 +66,9 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+  }
+  html{
+    @apply font-pretendard
   }
 }
 

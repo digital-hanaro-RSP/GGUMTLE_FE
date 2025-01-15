@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +30,8 @@ export default function BucketListPage() {
     ['visit', '가보고 싶다'],
     ['learn', '배우고 싶다'],
   ]);
+
+  const router = useRouter();
 
   const [heightClass, setHeightClass] = useState(''); // 초기 높이 클래스
 
