@@ -5,12 +5,14 @@ type TagProps = PropsWithChildren & {
   content: string;
   isSelected?: boolean;
   onClick?: () => void;
+  isContentShow?: boolean;
 };
 
 export default function CategoryTag({
   content,
   isSelected,
   onClick,
+  isContentShow = true,
 }: TagProps) {
   const getIconPath = () => {
     switch (content) {
@@ -33,7 +35,7 @@ export default function CategoryTag({
 
   return (
     <div
-      className={`flex flex-col items-center gap-[4px] justify-center font-semibold cursor-pointer transition-colors duration-300 h-[100px] ${
+      className={`flex flex-col items-center gap-[4px] justify-center font-semibold cursor-pointer transition-colors duration-300 h-[90px] ${
         isSelected ? 'text-primary-main text-[18px]' : 'text-black'
       }`}
       onClick={onClick}
@@ -50,7 +52,7 @@ export default function CategoryTag({
           height={isSelected ? 50 : 40}
         />
       </div>
-      <p>{content}</p>
+      {isContentShow && <p>{content}</p>}
     </div>
   );
 }
