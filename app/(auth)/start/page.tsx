@@ -9,7 +9,7 @@ export default function StartPage() {
   const router = useRouter();
 
   return (
-    <div className='fixed inset-0 flex flex-col items-center justify-center p-4 gap-40'>
+    <div className='fixed inset-0 flex flex-col items-center justify-center p-4 gap-32'>
       {/* 상단 컨텐츠 그룹 */}
       <div className='flex flex-col items-center gap-4'>
         {/* 이름 섹션 */}
@@ -27,7 +27,7 @@ export default function StartPage() {
         </p>
 
         {/* GIF 섹션 */}
-        <div className='relative w-60 h-60 translate-y-32'>
+        <div className='relative w-60 h-60 translate-y-20'>
           <Image
             src='/gif/img8.gif'
             alt='Start page animation'
