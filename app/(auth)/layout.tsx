@@ -1,4 +1,7 @@
-export default function AuthLayout({
+import '../globals.css';
+
+// app/layout.tsx
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
