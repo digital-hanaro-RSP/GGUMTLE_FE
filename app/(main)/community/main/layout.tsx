@@ -75,7 +75,7 @@ export default function CommunityMainLayout({
           }`}
         >
           <div className='mx-auto max-w-screen-md'>
-            <div className='flex flex-col gap-[20px] bg-white bg-opacity-30 backdrop-blur-3xl'>
+            <div className='flex flex-col gap-[20px] '>
               <div className='px-[20px]'>
                 <SearchInpuRef
                   ref={searchInputRef}

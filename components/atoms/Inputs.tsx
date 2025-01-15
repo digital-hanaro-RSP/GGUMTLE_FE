@@ -180,7 +180,7 @@ function SearchInput(
       <form onSubmit={SearchHandler} className='input-box'>
         <input
           className={cn(
-            'border border-hanaPrimary px-4 rounded-xl h-11 text-hanaPrimary',
+            'border border-hanaPrimary px-4 rounded-xl h-11 text-hanaPrimary bg-white bg-opacity-30 backdrop-blur-3xl ',
 
             className
           )}
