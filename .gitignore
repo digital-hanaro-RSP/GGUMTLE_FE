@@ -39,3 +39,4 @@ next-env.d.ts
 
 # components test
 /app/(main)/comptest
+/app/comptest

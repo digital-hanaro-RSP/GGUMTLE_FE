@@ -57,7 +57,7 @@ export default function CommunityMainLayout({
       <div
         className={`fixed mx-auto max-w-screen-md inset-0 ${
           isSearchVisible ? 'h-[262px]' : 'h-[134px]'
-        } bg-white bg-opacity-30 backdrop-blur-3xl z-10 transform transition-transform duration-300 ease-in-out`}
+        } bg-white bg-opacity-30 backdrop-blur-3xl z-10 transform transition-all duration-300 ease-in-out`}
       />
 
       {/* 상단 헤더 */}
@@ -124,16 +124,18 @@ export default function CommunityMainLayout({
       <div className='flex-1 pt-[220px] pb-[20px]'>{children}</div>
 
       {/* 플러스 버튼 */}
-      <PlusButton
-        className='fixed bottom-[68px] right-[20px]'
-        size='sm'
-        onClick={() => setIsAdd(true)}
-      />
+      <div className='fixed left-0 right-0 bottom-[68px] max-w-screen-md mx-auto pointer-events-none'>
+        <PlusButton
+          className='absolute bottom-[20px] right-[20px] pointer-events-auto'
+          size='sm'
+          onClick={() => setIsAdd(true)}
+        />
+      </div>
 
       {/* 추가 카드 모달 */}
       {isAdd && (
         <div
-          className='bg-black/70 fixed top-0 left-0 w-full h-full z-[12345678] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
+          className='bg-black/70 fixed top-0 left-0 w-full h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsAdd(false);
           }}

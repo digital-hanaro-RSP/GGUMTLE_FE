@@ -17,7 +17,7 @@ export default function CategoryTag({
   const getIconPath = () => {
     switch (content) {
       case '전체':
-        return '/image/icons/Whole.png';
+        return '/image/icons/Whole2.png';
       case '여행':
         return '/image/icons/Airplane.png';
       case '재테크':

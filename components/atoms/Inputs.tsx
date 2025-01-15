@@ -2,6 +2,7 @@
 
 import { IoSearch } from 'react-icons/io5';
 import { TiDelete } from 'react-icons/ti';
+import Image from 'next/image';
 import {
   ChangeEvent,
   ForwardedRef,
@@ -203,4 +204,48 @@ function SearchInput(
 }
 const SearchInpuRef = forwardRef(SearchInput);
 
-export { DefaultInputRef, MoneyInputRef, SearchInpuRef };
+/** ------------------------------------------ */
+type ImageInputProps = {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  imageUrl?: string;
+  width?: number;
+  height?: number;
+  className?: string;
+};
+
+function ImageInput(
+  { onChange, width = 100, height = 100, className }: ImageInputProps,
+  ref: ForwardedRef<HTMLInputElement>
+) {
+  return (
+    <label
+      className={cn(
+        'flex flex-col items-center justify-center border-2 border-dashed border-primary-placeholder rounded-[10px] cursor-pointer',
+        `w-[${width}px] h-[${height}px]`,
+        className
+      )}
+    >
+      <input
+        type='file'
+        accept='image/*'
+        onChange={onChange}
+        className='hidden'
+        ref={ref}
+      />
+      <Image
+        src={'/image/icons/Image.png'}
+        alt='image'
+        width={60}
+        height={60}
+      />
+      <p className='text-[14px] font-medium text-primary-placeholder'>
+        이미지 추가
+      </p>
+    </label>
+  );
+}
+
+const ImageInputRef = forwardRef(ImageInput);
+ImageInputRef.displayName = 'ImageInputRef';
+
+export { DefaultInputRef, MoneyInputRef, SearchInpuRef, ImageInputRef };
