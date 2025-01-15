@@ -1,16 +1,21 @@
 import { PropsWithChildren } from 'react';
 
-interface TagProps extends PropsWithChildren {
+type TagProps = PropsWithChildren & {
   isSelected?: boolean;
-}
+  onClick?: () => void;
+};
 
-export default function Tag({ children, isSelected }: TagProps) {
-  return isSelected ? (
-    <div className='text-[11px] p-[5px] rounded-[10px] bg-primary-main text-white'>
-      {children}
-    </div>
-  ) : (
-    <div className='text-[11px] font-medium border border-primary-main rounded-[10px] p-[5px]'>
+export default function Tag({ children, isSelected, onClick }: TagProps) {
+  return (
+    <div
+      onClick={onClick}
+      className={` flex items-center justify-center text-[14px] sm:text-[16px] w-fit sm:w-[100px] px-[20px] py-[10px] rounded-[20px] cursor-pointer transition-colors whitespace-nowrap
+        ${
+          isSelected
+            ? 'bg-primary-main text-white font-semibold'
+            : 'border border-primary-placeholder text-primary-placeholder font-medium'
+        }`}
+    >
       {children}
     </div>
   );

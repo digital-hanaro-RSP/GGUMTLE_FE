@@ -1,20 +1,12 @@
 'use client';
 
 import { PlusButton } from '@/components/atoms/Button';
+import CategoryTag from '@/components/atoms/CategoryTag';
 import CommunityHeader, { Tab } from '@/components/atoms/CommunityHeader';
 import Header from '@/components/atoms/Header';
 import { SearchInpuRef } from '@/components/atoms/Inputs';
 import { AddNewCard } from '@/components/molecules/AddNewCard';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { useCategoryStore } from '@/store/useCategoryStore';
-import { IoIosArrowDown } from 'react-icons/io';
 import { usePathname, useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
@@ -37,11 +29,6 @@ export default function CommunityMainLayout({
     router.push(`/community/main/${tab}`);
   };
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    console.log('선택된 카테고리 :', category);
-  };
-
   return (
     <div className='flex flex-col h-[calc(100vh-58px)] overflow-hidden relative'>
       <div className='flex flex-col gap-[20px] bg-white'>
@@ -61,28 +48,16 @@ export default function CommunityMainLayout({
           onTabChange={handleTabChange}
         />
       </div>
-      <div className=' flex flex-col w-full px-[20px] py-[10px]'>
-        <div className='flex w-full justify-end'>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className='flex items-center w-[100px] p-[10px] gap-[20px] justify-between bg-white rounded-[10px] border border-primary-placeholder'>
-                <span>{selectedCategory}</span>
-                <IoIosArrowDown />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
-              <DropdownMenuLabel>카테고리</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {categories.map((category) => (
-                <DropdownMenuItem
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  {category}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
+      <div className='flex flex-col w-full px-[20px] py-[10px]'>
+        <div className='flex justify-between gap-[20px] overflow-x-scroll scrollbar-hide '>
+          {categories.map((category) => (
+            <CategoryTag
+              key={category}
+              content={category}
+              isSelected={selectedCategory === category}
+              onClick={() => setSelectedCategory(category)}
+            />
+          ))}
         </div>
       </div>
       <div
