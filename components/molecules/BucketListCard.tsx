@@ -14,7 +14,6 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
 import { formatNumberWithCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
@@ -117,7 +116,7 @@ export const BucketListCard = ({
               />
             ) : (
               <Image
-                src={'/image/icons/Money.png'}
+                src={'/image/icons/Money_Won2.png'}
                 alt='img'
                 width={40}
                 height={40}
@@ -155,10 +154,7 @@ export const BucketListCard = ({
                   {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}
                 </div>
                 <div className='flex flex-row gap-2'>
-                  <Button
-                    size='sm'
-                    className='bg-primary-placeholder text-black'
-                  >
+                  <Button size='sm' className='bg-[#EFF0F4] text-black'>
                     꺼내기
                   </Button>
                   <Button size='sm'>채우기</Button>

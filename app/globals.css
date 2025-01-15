@@ -357,6 +357,9 @@
   .floating {
     animation: floatUpDown 3s ease-in-out infinite;
   }
+  .floating-once {
+    animation: floatUpDown 2s ease-in-out;
+  }
 
   @keyframes floatUpDown {
     0% {
