@@ -2,8 +2,10 @@
 
 import { FaArrowLeft } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 
 type HeaderProps = {
+  className?: string;
   text: string;
   showBackButton?: boolean;
   onBack?: () => void;
@@ -13,6 +15,7 @@ type HeaderProps = {
 };
 
 export default function Header({
+  className,
   text = '',
   showBackButton = true,
   onBack,
@@ -28,7 +31,12 @@ export default function Header({
   };
 
   return (
-    <div className='flex justify-center items-center bg-white px-[20px] py-[11.5px] max-h-[44px]'>
+    <div
+      className={cn(
+        'flex justify-center items-center bg-white px-[20px] py-[11.5px] max-h-[44px] max-w-screen-md',
+        className
+      )}
+    >
       {/* 뒤로 가기 버튼 */}
       {showBackButton && (
         <button className='pr-[8px]' onClick={handleOnBack}>
