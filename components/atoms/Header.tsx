@@ -2,7 +2,6 @@
 
 import { FaArrowLeft } from 'react-icons/fa6';
 import { useRouter } from 'next/navigation';
-import { cn } from '@/lib/utils';
 
 type HeaderProps = {
   className?: string;
@@ -12,16 +11,18 @@ type HeaderProps = {
   showActionButton?: boolean;
   actionLabel?: string;
   onAction?: () => void;
+  bgNone?: boolean;
 };
 
 export default function Header({
-  className,
   text = '',
   showBackButton = true,
   onBack,
   showActionButton = true,
   actionLabel = '완료',
   onAction,
+  className = '',
+  bgNone = false,
 }: HeaderProps) {
   // Back 버튼 default값
   const router = useRouter();
@@ -32,10 +33,7 @@ export default function Header({
 
   return (
     <div
-      className={cn(
-        'flex justify-center items-center bg-white px-[20px] py-[11.5px] max-h-[44px] max-w-screen-md',
-        className
-      )}
+      className={`flex justify-center items-center text-[#8297AC] ${bgNone ? 'bg-none' : 'bg-white bg-opacity-30 backdrop-blur-3xl'}  px-[20px] py-[11.5px] max-h-[44px] ${className}`}
     >
       {/* 뒤로 가기 버튼 */}
       {showBackButton && (

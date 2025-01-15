@@ -1,28 +1,26 @@
 'use client';
 
+import { PlusButton } from '@/components/atoms/Button';
+import CategoryTag from '@/components/atoms/CategoryTag';
 import CommunityHeader, { Tab } from '@/components/atoms/CommunityHeader';
 import Header from '@/components/atoms/Header';
 import { SearchInpuRef } from '@/components/atoms/Inputs';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { AddNewCard } from '@/components/molecules/AddNewCard';
 import { useCategoryStore } from '@/store/useCategoryStore';
-import { IoIosArrowDown } from 'react-icons/io';
 import { usePathname, useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function CommunityMainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [isAdd, setIsAdd] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
   const categories = ['전체', '여행', '재테크', '노후', '교육', '취미'];
   const router = useRouter();
   const pathname = usePathname();
@@ -30,69 +28,130 @@ export default function CommunityMainLayout({
 
   const currentTab = (pathname.split('/').pop() as Tab) || 'popular';
 
-  const handleTabChange = (tab: Tab) => {
-    router.push(`/community/main/${tab}`);
-  };
+  const handleTabChange = (tab: Tab) => router.push(`/community/main/${tab}`);
 
-  const handleCategoryChange = (category: string) => {
-    setSelectedCategory(category);
-    console.log('선택된 카테고리 :', category);
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!ticking.current) {
+        window.requestAnimationFrame(() => {
+          const currentScrollY = window.scrollY;
+          if (currentScrollY > lastScrollY.current && currentScrollY > 20) {
+            setIsSearchVisible(false);
+          } else if (currentScrollY < lastScrollY.current) {
+            setIsSearchVisible(true);
+          }
+          lastScrollY.current = currentScrollY;
+          ticking.current = false;
+        });
+        ticking.current = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className='flex flex-col h-[calc(100vh-58px)] overflow-hidden'>
-      <div className='flex flex-col gap-[20px] bg-white'>
-        <Header text='커뮤니티' showActionButton={false} />
-        <div className='px-[20px]'>
-          <SearchInpuRef
-            ref={searchInputRef}
-            onSubmit={(e) => {
-              e.preventDefault();
-              const searchValue = searchInputRef.current?.value || '';
-              console.log('검색어:', searchValue);
-            }}
+    <div className='flex flex-col min-h-[calc(100vh-58px)] relative'>
+      {/* 배경 영역 */}
+      <div
+        className={`fixed mx-auto max-w-screen-md inset-0 ${
+          isSearchVisible ? 'h-[262px]' : 'h-[134px]'
+        } bg-white bg-opacity-30 backdrop-blur-3xl z-10 transform transition-transform duration-300 ease-in-out`}
+      />
+
+      {/* 상단 헤더 */}
+      <div className='fixed top-0 left-0 right-0 z-10'>
+        <div className='mx-auto max-w-screen-md'>
+          <Header text='커뮤니티' showActionButton={false} bgNone={true} />
+        </div>
+      </div>
+
+      <div className='mt-[44px]'>
+        {/* 검색 및 탭 영역 */}
+        <div
+          className={`fixed top-[44px] left-0 right-0 z-10 ${
+            isSearchVisible ? 'slide-animation' : 'slide-animation-out'
+          }`}
+        >
+          <div className='mx-auto max-w-screen-md'>
+            <div className='flex flex-col gap-[20px] bg-white bg-opacity-30 backdrop-blur-3xl'>
+              <div className='px-[20px]'>
+                <SearchInpuRef
+                  ref={searchInputRef}
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const searchValue = searchInputRef.current?.value || '';
+                    console.log('검색어:', searchValue);
+                  }}
+                />
+              </div>
+              <CommunityHeader
+                selectedTab={currentTab}
+                onTabChange={handleTabChange}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* 카테고리 태그 영역 */}
+        <div
+          className={`fixed top-[154px] left-0 right-0 z-10 transform transition-transform duration-300 ease-in-out ${
+            isSearchVisible ? 'translate-y-0' : '-translate-y-[111px]'
+          }`}
+        >
+          <div className='mx-auto max-w-screen-md'>
+            <div
+              className={`flex flex-col w-full px-[20px] ${isSearchVisible ? 'py-[10px]' : ''} `}
+            >
+              <div className='flex items-center justify-between gap-[20px] overflow-x-scroll scrollbar-hide'>
+                {categories.map((category) => (
+                  <CategoryTag
+                    key={category}
+                    content={category}
+                    isContentShow={isSearchVisible}
+                    isSelected={selectedCategory === category}
+                    onClick={() => setSelectedCategory(category)}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 메인 콘텐츠 */}
+      <div className='flex-1 pt-[220px] pb-[20px]'>{children}</div>
+
+      {/* 플러스 버튼 */}
+      <PlusButton
+        className='fixed bottom-[68px] right-[20px]'
+        size='sm'
+        onClick={() => setIsAdd(true)}
+      />
+
+      {/* 추가 카드 모달 */}
+      {isAdd && (
+        <div
+          className='bg-black/70 fixed top-0 left-0 w-full h-full z-[12345678] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsAdd(false);
+          }}
+        >
+          <AddNewCard
+            usage='newPost'
+            size='md'
+            className='h-[100px]'
+            onClick={() => router.push('/community/create/post')}
+          />
+          <AddNewCard
+            usage='newGroup'
+            size='md'
+            className='h-[100px]'
+            onClick={() => router.push('/community/create/group')}
           />
         </div>
-        <CommunityHeader
-          selectedTab={currentTab}
-          onTabChange={handleTabChange}
-        />
-      </div>
-      <div className='flex flex-col w-full px-[20px] py-[10px]'>
-        <div className='flex w-full justify-end'>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <div className='flex items-center w-[100px] p-[10px] gap-[20px] justify-between bg-white rounded-[10px] border border-primary-placeholder'>
-                <span>{selectedCategory}</span>
-                <IoIosArrowDown />
-              </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
-              <DropdownMenuLabel>카테고리</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {categories.map((category) => (
-                <DropdownMenuItem
-                  key={category}
-                  onClick={() => handleCategoryChange(category)}
-                >
-                  {category}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </div>
-      <div
-        className='
-          flex-1
-          overflow-y-auto
-          pt-[10px]
-          pb-[20px]
-          scrollbar-hide
-        '
-      >
-        {children}
-      </div>
+      )}
     </div>
   );
 }
