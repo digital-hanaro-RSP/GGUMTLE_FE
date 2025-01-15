@@ -1,21 +1,26 @@
 'use client';
 
 import { useState } from 'react';
+import { cn } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 
 type AccountCardProps = {
   title: string;
   balance: string;
+  className?: string;
 };
 
 export default function AccountCard({
   title,
   balance,
+  className,
 }: AccountCardProps) {
   const [isHide, setIsHide] = useState(false);
   return (
-    <Card className='flex flex-col w-full p-[20px] justify-between'>
+    <Card
+      className={cn('flex flex-col w-full p-[20px] justify-between', className)}
+    >
       {/* 제목 및 계좌 번호 및 잔액 */}
       <div className='flex flex-col justify-between'>
         {/* 제목 */}
