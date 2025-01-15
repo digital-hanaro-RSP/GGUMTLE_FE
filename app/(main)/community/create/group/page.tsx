@@ -46,6 +46,7 @@ export default function CreateGroupPage() {
 
   const handleSubmit = () => {
     console.log(name, selectedCategory, selectedImage, description);
+    console.log('comptest 폴더 지우기위해 추가');
     // 만약 이전 페이지가 main 이면 main/popular로 이동, 아니라면 이전 groupId로 이동.
     // 일단 메인으로 이동시켰음
     router.push('/community/main/popular');
