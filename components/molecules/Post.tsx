@@ -26,6 +26,10 @@ import UserProfile from '../atoms/UserProfile';
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
 // 아직 주소 못정해서 제거 로직 만들지 못했음.
 
+type PostProps = PostType & {
+  isDetailPage?: boolean;
+};
+
 export default function Post({
   groupId,
   id,
@@ -37,8 +41,9 @@ export default function Post({
   likeCount: initialLikeCount,
   commentCount,
   isLiked: initialIsLiked,
-}: PostType) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  isDetailPage = false,
+}: PostProps) {
+  const [isExpanded, setIsExpanded] = useState(isDetailPage);
   const [isClamped, setIsClamped] = useState(false);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -135,14 +140,14 @@ export default function Post({
           <p
             ref={textRef}
             className={`whitespace-pre-wrap ${
-              !isExpanded ? 'line-clamp-4' : ''
+              !isExpanded && !isDetailPage ? 'line-clamp-4' : ''
             }`}
           >
             {content}
           </p>
 
           {/* 실제 4줄 초과일 때만 "더보기" 버튼 노출 */}
-          {isClamped && !isExpanded && (
+          {!isDetailPage && isClamped && !isExpanded && (
             <button
               onClick={() => setIsExpanded(true)}
               className='text-primary-main text-sm mt-2'
