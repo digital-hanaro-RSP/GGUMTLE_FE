@@ -220,8 +220,8 @@ function ImageInput(
   return (
     <label
       className={cn(
-        'flex flex-col items-center justify-center border-2 border-dashed border-primary-placeholder rounded-[10px] cursor-pointer',
         `w-[${width}px] h-[${height}px]`,
+        'flex flex-col items-center justify-center border-2 border-dashed border-primary-placeholder rounded-[10px] cursor-pointer md:w-[140px] md:h-[140px]',
         className
       )}
     >
