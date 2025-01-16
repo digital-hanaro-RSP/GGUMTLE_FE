@@ -1,7 +1,7 @@
 import '../globals.css';
 
 // app/layout.tsx
-export default function AuthLayout({
+export default function MydataLayout({
   children,
 }: {
   children: React.ReactNode;

@@ -33,7 +33,7 @@ export default function SignInPage() {
 
       // 로그인 성공
       alert('로그인 성공! 환영합니다!');
-      router.push('/'); // 로그인 후 리다이렉트할 페이지
+      router.push('/mydata/consent'); // 로그인 후 리다이렉트할 페이지
       router.refresh(); // 세션 상태 업데이트를 위한 새로고침
     } catch (error) {
       console.error('Login error:', error);
