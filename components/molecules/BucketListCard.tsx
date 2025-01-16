@@ -91,7 +91,10 @@ export const BucketListCard = ({
     }
   };
 
-  const complete = async (e: MouseEvent, bid: number) => {
+  const complete = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    bid: number
+  ) => {
     e.stopPropagation();
     const data: completeBucketList = {
       status: 'done',
