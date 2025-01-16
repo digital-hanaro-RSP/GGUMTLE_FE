@@ -2,10 +2,17 @@
 
 import { Button } from '@/components/atoms/Button';
 import { BucketListCard } from '@/components/molecules/BucketListCard';
+import {
+  DropCard,
+  DropCardItem,
+  DropCardItemList,
+  DropDownTrigger,
+} from '@/components/molecules/DropCard';
 import { ProgressBar } from '@/components/molecules/ProgressBar';
-import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function BucketListDetail() {
+  const router = useRouter();
   return (
     <>
       <div>
@@ -53,9 +60,47 @@ export default function BucketListDetail() {
               />
             </div>
           </div>
+          <div className='bg-[#F4F6F8]'>
+            <small className='text-left '>
+              <h3 className='text-lg'>메모</h3>
+              <div className='bg-white py-3 px-5 mx-2 mt-2 rounded-lg border-2 min-h-40 text-base'>
+                메모 내용
+              </div>
+            </small>
+          </div>
           <div className='bg-[#F4F6F8] flex justify-center py-4 rounded-md flex-col items-center gap-2'>
-            <Button size='lg'>편집하기</Button>
-            <Button size='lg'>완료하기</Button>
+            <DropCard className='flex flex-col justify-center relative'>
+              <DropDownTrigger>
+                <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                  편집하기
+                </div>
+              </DropDownTrigger>
+              <DropCardItemList
+                isBlur={true}
+                direction='up'
+                className='items-center gap-3 bottom-16'
+              >
+                <DropCardItem>
+                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                    수정하기
+                  </div>
+                </DropCardItem>
+                <DropCardItem>
+                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                    완료하기
+                  </div>
+                </DropCardItem>
+                <DropCardItem>
+                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                    보류하기
+                  </div>
+                </DropCardItem>
+              </DropCardItemList>
+            </DropCard>
+
+            <Button onClick={() => router.push('/bucket-list')} size='lg'>
+              뒤로가기
+            </Button>
           </div>
         </BucketListCard>
       </div>

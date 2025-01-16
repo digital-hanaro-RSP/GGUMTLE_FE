@@ -91,7 +91,8 @@ export const BucketListCard = ({
     }
   };
 
-  const complete = async (bid: number) => {
+  const complete = async (e: MouseEvent, bid: number) => {
+    e.stopPropagation();
     const data: completeBucketList = {
       status: 'done',
     };
@@ -101,12 +102,13 @@ export const BucketListCard = ({
     // });
   };
 
+  const handleClick = () => {
+    if (showPercent) router.push(`/bucket-list/${bid}`);
+  };
+
   return (
     <>
-      <Card
-        className={cn('flex-col', className)}
-        onClick={() => router.push(`/bucket-list/${bid}`)}
-      >
+      <Card className={cn('flex-col', className)} onClick={handleClick}>
         <div className='flex-row flex'>
           {showPercent && (
             <div className='relative justify-center items-center flex w-14 h-14 mt-2'>
@@ -155,7 +157,7 @@ export const BucketListCard = ({
                     <DropdownMenuContent className='text-center w-10'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={() => complete(bid)}>
+                      <DropdownMenuItem onClick={(e) => complete(e, bid)}>
                         완료하기
                       </DropdownMenuItem>
                       <DropdownMenuItem>보류하기</DropdownMenuItem>
