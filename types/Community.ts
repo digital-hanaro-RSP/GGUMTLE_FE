@@ -20,7 +20,6 @@ export type Post = {
   snapshot?: Snapshot;
   imageUrls: string[];
   content: string;
-  bucketId?: number;
   createdAt: string;
   updatedAt: string;
   postType: 'POST' | 'NEWS';
