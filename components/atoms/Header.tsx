@@ -1,6 +1,6 @@
 'use client';
 
-import { FaArrowLeft } from 'react-icons/fa6';
+import { FaArrowLeft } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 
 type HeaderProps = {
@@ -12,6 +12,7 @@ type HeaderProps = {
   actionLabel?: string;
   onAction?: () => void;
   bgNone?: boolean;
+  actionTextColor?: string;
 };
 
 export default function Header({
@@ -23,6 +24,7 @@ export default function Header({
   onAction,
   className = '',
   bgNone = false,
+  actionTextColor = 'text-light',
 }: HeaderProps) {
   // Back 버튼 default값
   const router = useRouter();
@@ -49,7 +51,7 @@ export default function Header({
       {showActionButton && (
         <button
           onClick={onAction}
-          className='text-[18px] font-medium  text-right'
+          className={`text-[18px] font-medium text-${actionTextColor}`}
         >
           {actionLabel}
         </button>

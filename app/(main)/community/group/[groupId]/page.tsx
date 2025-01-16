@@ -18,6 +18,7 @@ export default function GroupIdPage() {
             text='꿈그룹'
             showActionButton={true}
             actionLabel={isMember ? '그룹 탈퇴' : '그룹 가입'}
+            actionTextColor={isMember ? 'primary-error' : 'primary-main'}
           />
         </div>
       </div>

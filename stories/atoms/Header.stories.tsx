@@ -45,6 +45,16 @@ export const ActionBtn: Story = {
     text: '완료 버튼',
     showBackButton: false,
     showActionButton: true,
+    actionTextColor: 'primary',
+  },
+};
+
+export const ActionBtnCustomColor: Story = {
+  args: {
+    text: '커스텀 색상 버튼',
+    showBackButton: false,
+    showActionButton: true,
+    actionTextColor: 'primary-error',
   },
 };
 
@@ -53,5 +63,6 @@ export const BothBtn: Story = {
     text: '모두 적용',
     showBackButton: true,
     showActionButton: true,
+    actionTextColor: 'primary',
   },
 };
