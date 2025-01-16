@@ -21,7 +21,7 @@ export default function CommentCard({
   content,
   createdAt,
   isLiked: initialIsLiked,
-  author,
+  userBriefInfo,
   likeCount: initialLikeCount,
 }: Comment) {
   const params = useParams();
@@ -66,10 +66,12 @@ export default function CommentCard({
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
             <UserProfile
-              imageUrl={author?.profileImage || 'https://picsum.photos/36/36'}
+              imageUrl={
+                userBriefInfo?.profileImage || 'https://picsum.photos/36/36'
+              }
             />
             <div className='flex flex-col gap-[2px]'>
-              <p className='text-[14px] md:text-[16px]'>{author.name}</p>
+              <p className='text-[14px] md:text-[16px]'>{userBriefInfo.name}</p>
               <p className='text-[10px] md:text-[12px] text-primary-placeholder'>
                 {getRelativeTimeString(createdAt)}
               </p>

@@ -1,7 +1,7 @@
 import { Group } from '@/types/Community';
 import { IoPeople } from 'react-icons/io5';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { Card } from '../atoms/Card';
 
 // 필요한 요소
@@ -11,6 +11,10 @@ import { Card } from '../atoms/Card';
 // 그룹 인원
 // 그룹 카테고리
 
+type GroupCardProps = Group & {
+  onClick?: () => void;
+};
+
 export default function GroupCard({
   id,
   name,
@@ -18,11 +22,14 @@ export default function GroupCard({
   description,
   imageUrl,
   memberCount,
-}: Group) {
-  const router = useRouter();
+  onClick,
+}: GroupCardProps) {
+  // const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/community/group/${id}`);
+    onClick?.();
+    console.log(id);
+    // router.push(`/community/group/${id}`);
   };
 
   return (

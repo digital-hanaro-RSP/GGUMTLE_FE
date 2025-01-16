@@ -33,7 +33,7 @@ type PostProps = PostType & {
 export default function Post({
   groupId,
   id,
-  author,
+  userBriefInfo,
   snapshot,
   imageUrls,
   content,
@@ -111,10 +111,14 @@ export default function Post({
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
             <UserProfile
-              imageUrl={author?.profileImage || 'https://picsum.photos/36/36'}
+              imageUrl={
+                userBriefInfo?.profileImage || 'https://picsum.photos/36/36'
+              }
             />
             <div className='flex flex-col gap-[2px]'>
-              <p className='text-[14px] md:text-[16px]'>{author.name}</p>
+              <p className='text-[14px] md:text-[16px]'>
+                {userBriefInfo.nickname}
+              </p>
               <p className='text-[10px] md:text-[12px] text-primary-placeholder'>
                 {getRelativeTimeString(createdAt)}
               </p>
@@ -158,12 +162,17 @@ export default function Post({
         </div>
 
         {/* 스냅샷이나 이미지가 있다면 표시 */}
+
+        {/* 버킷리스트 와 포트폴리오는 추후 api 연동시 수정 */}
+
         {snapshot && snapshot.bucketLists.length > 0 && (
           <div className='mt-4'>{/* 버킷리스트 */}</div>
         )}
-        {snapshot && snapshot.portfolioLists.length > 0 && (
+
+        {snapshot && snapshot.goalPortfolio && snapshot.currentPortfolio && (
           <div className='mt-4'>{/* 포트폴리오 */}</div>
         )}
+
         {imageUrls.length > 0 && (
           <div className='w-full z-0'>
             <Swiper

@@ -21,11 +21,7 @@ const postMockData = {
   id: 1,
   userId: '058140b5-4688-4290-8387-e6aafa655416',
   groupId: 1,
-  snapshot: {
-    bucketLists: [],
-    portfolioLists: [],
-  },
-  imageUrls: {},
+  imageUrls: [],
   content:
     '안녕하세요!\n\n오늘 처음으로 꿈틀 서비스를 시작했어요.\n버킷리스트도 작성해보고, 자산 관리도 시작했네요.\n\n앞으로 열심히 모으면서 제 버킷리스트를 하나씩 이뤄나가고 싶어요!\n다들 화이팅하세요 😊',
   createdAt: '2025-01-10 16:30',
@@ -33,9 +29,10 @@ const postMockData = {
   postType: 'POST' as const,
   likeCount: 5,
   commentCount: 3,
-  author: {
+  userBriefInfo: {
     name: '김꿈틀',
     profileImage: 'https://picsum.photos/36/36',
+    nickname: '김꿈틀',
   },
   isLiked: true,
 };
@@ -49,9 +46,10 @@ const commentMockDatas = [
     createdAt: '2025-01-10 16:31',
     updatedAt: '2025-01-10 16:31',
     isLiked: false,
-    author: {
+    userBriefInfo: {
       name: '김꿈틀',
       profileImage: 'https://picsum.photos/36/36',
+      nickname: '김꿈틀',
     },
     likeCount: 1,
   },
@@ -63,9 +61,10 @@ const commentMockDatas = [
     createdAt: '2025-01-10 16:32',
     updatedAt: '2025-01-10 16:32',
     isLiked: true,
-    author: {
+    userBriefInfo: {
       name: '김꿈틀',
       profileImage: 'https://picsum.photos/36/36',
+      nickname: '김꿈틀',
     },
     likeCount: 3,
   },
@@ -77,9 +76,10 @@ const commentMockDatas = [
     createdAt: '2025-01-10 16:33',
     updatedAt: '2025-01-10 16:33',
     isLiked: false,
-    author: {
+    userBriefInfo: {
       name: '김꿈틀',
       profileImage: 'https://picsum.photos/36/36',
+      nickname: '김꿈틀',
     },
     likeCount: 5,
   },
