@@ -133,7 +133,13 @@ export default function Post({
             </DropdownMenuTrigger>
             <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>수정</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(`/community/edit/post/${id}`);
+                }}
+              >
+                수정
+              </DropdownMenuItem>
               <DropdownMenuItem>삭제</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
