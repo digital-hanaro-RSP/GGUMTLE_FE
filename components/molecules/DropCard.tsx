@@ -81,14 +81,14 @@ export const DropCardItemList = ({
             onClick={close}
             className={cn(
               isBlur && 'bg-black opacity-70',
-              'fixed top-0 left-0 w-screen h-screen'
+              'fixed top-0 left-0 w-screen h-screen z-[2]'
             )}
           ></div>
           <div
             className={cn(
               direction === 'down' && 'top-5',
               direction === 'up' && 'bottom-5 items-end justify-end',
-              'flex flex-col absolute w-full h-screen',
+              'flex flex-col absolute w-full h-screen z-[5]',
               className
             )}
             {...props}

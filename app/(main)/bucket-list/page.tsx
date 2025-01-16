@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
@@ -29,6 +30,8 @@ export default function BucketListPage() {
     ['visit', '가보고 싶다'],
     ['learn', '배우고 싶다'],
   ]);
+
+  const router = useRouter();
 
   const [heightClass, setHeightClass] = useState(''); // 초기 높이 클래스
 
@@ -58,7 +61,7 @@ export default function BucketListPage() {
         balance='100000'
         className={cn(
           // 'bg-opacity-30 w-[calc(100%-40px)] max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-1000 ',
-          'bg-opacity-30  max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
+          'bg-opacity-30 max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
           // heightClass
         )}
       />
