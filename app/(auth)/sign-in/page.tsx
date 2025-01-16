@@ -1,17 +1,56 @@
+'use client';
+
 import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
 
 export default function SignInPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData(e.currentTarget);
+      const tel = formData.get('phone') as string;
+      const password = formData.get('password') as string;
+
+      const result = await signIn('credentials', {
+        tel,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        alert('로그인 에러! 전화번호와 비밀번호를 확인해주세요');
+        return;
+      }
+
+      // 로그인 성공
+      alert('로그인 성공! 환영합니다!');
+      router.push('/'); // 로그인 후 리다이렉트할 페이지
+      router.refresh(); // 세션 상태 업데이트를 위한 새로고침
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className='p-4'>
+    <form onSubmit={handleSubmit} className='p-4'>
       <div className='flex flex-col items-center gap-14'>
         <div className='flex flex-col items-center mt-3'>
           <Image
             src={'/image/icons/Id_Card.png'}
             width={80}
             height={80}
-            alt={''}
+            alt={'로그인 아이콘'}
             className='mb-3'
           />
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-2'>
@@ -26,6 +65,8 @@ export default function SignInPage() {
               placeHolder='전화번호를 입력해주세요'
               required
               error='전화번호를 입력해주세요'
+              disabled={isLoading}
+              autoComplete='tel'
             />
           </div>
           <div>
@@ -36,13 +77,17 @@ export default function SignInPage() {
               placeHolder='비밀번호를 입력하세요'
               required
               error='비밀번호를 입력해주세요'
+              disabled={isLoading}
+              autoComplete='current-password'
             />
           </div>
           <div className='flex flex-col items-center mt-2'>
-            <Button size='lg'>로그인</Button>
+            <Button type='submit' size='lg' disabled={isLoading}>
+              {isLoading ? '로그인 중...' : '로그인'}
+            </Button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 }
