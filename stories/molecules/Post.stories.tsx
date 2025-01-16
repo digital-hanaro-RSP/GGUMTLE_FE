@@ -22,23 +22,23 @@ type Story = StoryObj<typeof Post>;
 
 // 기본 게시물 데이터
 const basePost = {
-  groupId: 1,
   id: 1,
-  author: {
-    name: '김철수',
-    profileImage: 'https://picsum.photos/36/36',
-  },
+  userId: 'user123',
+  groupId: 1,
+  imageUrls: [],
   content:
     '안녕하세요! 오늘은 정말 좋은 날씨네요.\n여러분은 어떻게 지내시나요?',
   createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
+  postType: 'POST' as const,
   likeCount: 5,
   commentCount: 3,
-  isLiked: false,
-  imageUrls: [],
-  snapshot: {
-    bucketLists: [],
-    portfolioLists: [],
+  userBriefInfo: {
+    name: '김철수',
+    profileImage: 'https://picsum.photos/36/36',
+    nickname: '김철수',
   },
+  isLiked: false,
 };
 
 // 기본 게시물

@@ -10,7 +10,7 @@ const meta: Meta<typeof CommentCard> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='w-[700px]  relative flex flex-col gap-[20px]'>
+      <div className='w-[700px] relative flex flex-col gap-[20px]'>
         <Story />
       </div>
     ),
@@ -29,9 +29,10 @@ export const Default: Story = {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     isLiked: false,
-    author: {
+    userBriefInfo: {
       name: '홍길동',
       profileImage: 'https://picsum.photos/36/36',
+      nickname: '길동이',
     },
     likeCount: 5,
   },
@@ -56,9 +57,10 @@ export const LongContent: Story = {
 export const NoProfileImage: Story = {
   args: {
     ...Default.args,
-    author: {
+    userBriefInfo: {
       name: '프로필 없음',
       profileImage: '',
+      nickname: '무프로필',
     },
   },
 };

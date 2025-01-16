@@ -135,7 +135,7 @@ export default function CommunityMainLayout({
       {/* 추가 카드 모달 */}
       {isAdd && (
         <div
-          className='bg-black/70 fixed top-0 left-0 w-full h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
+          className='bg-black/70 fixed mx-auto w-full md:w-[768px] h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsAdd(false);
           }}

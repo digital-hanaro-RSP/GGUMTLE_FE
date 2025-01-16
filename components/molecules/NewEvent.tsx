@@ -1,7 +1,7 @@
 import { Post } from '@/types/Community';
 import Image from 'next/image';
 
-export default function NewEvent({ content, author }: Post) {
+export default function NewEvent({ content, userBriefInfo }: Post) {
   return (
     <div className='flex p-[10px] items-center justify-between w-full h-[80px] border-y border-y-primary-main'>
       <Image
@@ -11,7 +11,9 @@ export default function NewEvent({ content, author }: Post) {
         height={36}
       />
       <div className='flex '>
-        <span className='text-[15px] font-bold'>{author.name} &quot;</span>
+        <span className='text-[15px] font-bold'>
+          {userBriefInfo.nickname} &quot;
+        </span>
         <span className='text-[16px] text-primary-main font-bold '>
           {content}
         </span>

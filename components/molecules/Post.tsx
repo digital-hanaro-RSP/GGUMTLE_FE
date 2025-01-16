@@ -26,10 +26,14 @@ import UserProfile from '../atoms/UserProfile';
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
 // 아직 주소 못정해서 제거 로직 만들지 못했음.
 
+type PostProps = PostType & {
+  isDetailPage?: boolean;
+};
+
 export default function Post({
   groupId,
   id,
-  author,
+  userBriefInfo,
   snapshot,
   imageUrls,
   content,
@@ -37,8 +41,9 @@ export default function Post({
   likeCount: initialLikeCount,
   commentCount,
   isLiked: initialIsLiked,
-}: PostType) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  isDetailPage = false,
+}: PostProps) {
+  const [isExpanded, setIsExpanded] = useState(isDetailPage);
   const [isClamped, setIsClamped] = useState(false);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -106,10 +111,14 @@ export default function Post({
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
             <UserProfile
-              imageUrl={author?.profileImage || 'https://picsum.photos/36/36'}
+              imageUrl={
+                userBriefInfo?.profileImage || 'https://picsum.photos/36/36'
+              }
             />
             <div className='flex flex-col gap-[2px]'>
-              <p className='text-[14px] md:text-[16px]'>{author.name}</p>
+              <p className='text-[14px] md:text-[16px]'>
+                {userBriefInfo.nickname}
+              </p>
               <p className='text-[10px] md:text-[12px] text-primary-placeholder'>
                 {getRelativeTimeString(createdAt)}
               </p>
@@ -124,7 +133,13 @@ export default function Post({
             </DropdownMenuTrigger>
             <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>수정</DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  router.push(`/community/edit/post/${id}`);
+                }}
+              >
+                수정
+              </DropdownMenuItem>
               <DropdownMenuItem>삭제</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -135,14 +150,14 @@ export default function Post({
           <p
             ref={textRef}
             className={`whitespace-pre-wrap ${
-              !isExpanded ? 'line-clamp-4' : ''
+              !isExpanded && !isDetailPage ? 'line-clamp-4' : ''
             }`}
           >
             {content}
           </p>
 
           {/* 실제 4줄 초과일 때만 "더보기" 버튼 노출 */}
-          {isClamped && !isExpanded && (
+          {!isDetailPage && isClamped && !isExpanded && (
             <button
               onClick={() => setIsExpanded(true)}
               className='text-primary-main text-sm mt-2'
@@ -153,12 +168,17 @@ export default function Post({
         </div>
 
         {/* 스냅샷이나 이미지가 있다면 표시 */}
+
+        {/* 버킷리스트 와 포트폴리오는 추후 api 연동시 수정 */}
+
         {snapshot && snapshot.bucketLists.length > 0 && (
           <div className='mt-4'>{/* 버킷리스트 */}</div>
         )}
-        {snapshot && snapshot.portfolioLists.length > 0 && (
+
+        {snapshot && snapshot.goalPortfolio && snapshot.currentPortfolio && (
           <div className='mt-4'>{/* 포트폴리오 */}</div>
         )}
+
         {imageUrls.length > 0 && (
           <div className='w-full z-0'>
             <Swiper

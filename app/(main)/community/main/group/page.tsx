@@ -3,14 +3,24 @@
 import GroupCard from '@/components/molecules/GroupCard';
 import { useCategoryStore } from '@/store/useCategoryStore';
 import { Group } from '@/types/Community';
+import { useRouter } from 'next/navigation';
 
 export default function CommunityMainGroupPage() {
+  const router = useRouter();
   const { selectedCategory } = useCategoryStore();
   console.log('selectedCategory :', selectedCategory);
   return (
     <div className='flex flex-col w-full gap-[20px] '>
       {MockGroups.map((group) => (
-        <GroupCard key={group.id} {...group} />
+        <div
+          key={group.id}
+          onClick={() => {
+            router.push(`/community/group/${group.id}`);
+          }}
+          className='cursor-pointer'
+        >
+          <GroupCard {...group} />
+        </div>
       ))}
     </div>
   );

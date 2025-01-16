@@ -21,6 +21,20 @@ export const Default: Story = {
     description: '함께 책을 읽고 이야기를 나누는 모임입니다.',
     imageUrl: 'https://picsum.photos/200',
     memberCount: 42,
+    rightIcon: true,
+    onClick: () => console.log('clicked'),
+  },
+};
+
+export const WithoutRightIcon: Story = {
+  args: {
+    id: 4,
+    name: '운동 모임',
+    category: '운동',
+    description: '함께 운동하는 모임입니다.',
+    imageUrl: 'https://picsum.photos/200',
+    memberCount: 25,
+    rightIcon: false,
   },
 };
 

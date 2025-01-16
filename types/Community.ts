@@ -1,12 +1,16 @@
+import { CurrentPortfolio, GoalPortfolio } from './Portfolio';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type Author = {
+export type UserBriefInfo = {
   name: string;
   profileImage: string;
+  nickname: string;
 };
 
 export type Snapshot = {
   bucketLists: any[]; // bucketLists의 구체적 타입을 알 수 없으므로 any[]
-  portfolioLists: any[]; // portfolioLists의 구체적 타입을 알 수 없으므로 any[]
+  goalPortfolio: GoalPortfolio;
+  currentPortfolio: CurrentPortfolio;
 };
 
 export type Post = {
@@ -14,14 +18,14 @@ export type Post = {
   userId: string;
   groupId: number;
   snapshot?: Snapshot;
-  imageUrls?: any; // imageUrls의 구조가 명확하지 않으므로 any
+  imageUrls: string[];
   content: string;
   createdAt: string;
   updatedAt: string;
-  postType: 'POST' | 'NEWS'; // enum?
+  postType: 'POST' | 'NEWS';
   likeCount?: number;
   commentCount?: number;
-  author: Author;
+  userBriefInfo: UserBriefInfo;
   isLiked?: boolean;
 };
 
@@ -38,7 +42,7 @@ export type Comment = {
   createdAt: string;
   updatedAt: string;
   isLiked: boolean;
-  author: Author;
+  userBriefInfo: UserBriefInfo;
   likeCount: number;
 };
 
