@@ -47,7 +47,7 @@ export default function AccountCard({
 
           {/* 숨김 버튼 */}
           <button
-            className='rounded-lg w-[30px] h-[20px] bg-[#EAE9EE] text-[#6F6F6F] text-[10px] font-bold'
+            className='rounded-lg w-[30px] h-[20px] bg-[#EAE9EE] text-[#6F6F6F] text-[10px] font-bold z-[0]'
             onClick={() => {
               setIsHide((pre) => !pre);
             }}

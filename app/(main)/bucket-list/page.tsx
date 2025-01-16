@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 export default function BucketListPage() {
   const [filter, setFilter] = useState<string>('default');
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isAdd, setIsAdd] = useState<boolean>(false);
   const lastScrollY = useRef(0);
   const categories = new Map([
     ['default', '전체'],
@@ -34,6 +35,11 @@ export default function BucketListPage() {
   const router = useRouter();
 
   const [heightClass, setHeightClass] = useState(''); // 초기 높이 클래스
+
+  const onAddClick = () => {
+    document.body.classList.add('no-scroll');
+    setIsAdd(!isAdd);
+  };
 
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -69,7 +75,7 @@ export default function BucketListPage() {
         <Tabs defaultValue='doing' className='w-full'>
           <TabsList
             className={cn(
-              'w-full sticky top-10 z-[99] transition duration-500 ease-in-out',
+              'w-full sticky top-10 z-[5] transition duration-500 ease-in-out',
               heightClass
             )}
           >
@@ -165,7 +171,36 @@ export default function BucketListPage() {
                 how='want'
                 bid={1}
               />
-              <AddNewCard usage='createBucket' size='lg' />
+              <div className='relative flex flex-row w-full pb-32 '>
+                <div
+                  onClick={onAddClick}
+                  className={cn(
+                    'bg-black fixed top-0 left-0 h-screen w-screen duration-1000',
+                    isAdd ? 'opacity-50 z-[100]' : 'opacity-0 z-[0]'
+                  )}
+                />
+                <AddNewCard
+                  onClick={
+                    isAdd
+                      ? () => router.push('/bucket-list/create')
+                      : onAddClick
+                  }
+                  usage='createBucket'
+                  size={isAdd ? 'md' : 'lg'}
+                  className={cn(
+                    'transition-all absolute duration-1000 z-[102]'
+                  )}
+                />
+                <AddNewCard
+                  onClick={() => router.push('/bucket-list/create')}
+                  usage='recommendBucket'
+                  size='md'
+                  className={cn(
+                    isAdd ? 'opacity-100' : 'opacity-0',
+                    'absolute  transition-all duration-1000 right-0 z-[101]'
+                  )}
+                />
+              </div>
             </div>
           </TabsContent>
           <TabsContent value='done'>
