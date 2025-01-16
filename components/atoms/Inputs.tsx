@@ -112,10 +112,11 @@ type MoneyInputProps = {
   onFocus?: () => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeHolder?: string;
+  disable?: boolean;
 };
 
 const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
-  ({ onChange, onFocus, onBlur, placeHolder }, ref) => {
+  ({ onChange, onFocus, onBlur, placeHolder, disable }, ref) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value.replace(/[^\d]/g, '');
       const numericValue = parseInt(inputValue, 10);
@@ -136,8 +137,9 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
     };
 
     return (
-      <div className='flex items-center w-full text-2xl text-primary-main'>
+      <div className='flex items-center w-full text-2xl text-primary-main border rounded-[10px] bg-white overflow-hidden px-[20px]'>
         <input
+          disabled={disable}
           type='text'
           ref={ref}
           onChange={handleChange}
@@ -145,12 +147,9 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
           onBlur={onBlur}
           placeholder={placeHolder}
           max={Number.MAX_VALUE}
-          className='flex w-full text-2xl font-semibold p-[20px] rounded-[10px] border border-[#C0C0C0] placeholder:text-primary-placeholder '
+          className='flex w-full text-2xl font-semibold py-1 border-none text-right placeholder:text-primary-placeholder focus:outline-none'
         />
-        {ref &&
-          'current' in ref &&
-          ref.current &&
-          parseInt(ref.current.value, 10) > 0 && <span>원</span>}
+        <span className='ml-1'>원</span>
       </div>
     );
   }

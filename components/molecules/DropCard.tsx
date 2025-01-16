@@ -48,10 +48,18 @@ export const DropDownTrigger = ({
   ...props
 }: DropCardTriggerProps) => {
   const { toggle } = useDropCard();
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    toggle();
+  };
 
   return (
     <>
-      <button onClick={toggle} className={cn(className, '')} {...props}>
+      <button
+        onClick={(e) => handleClick(e)}
+        className={cn(className, '')}
+        {...props}
+      >
         {children}
       </button>
     </>
@@ -80,7 +88,7 @@ export const DropCardItemList = ({
           <div
             onClick={close}
             className={cn(
-              isBlur && 'bg-black opacity-70',
+              isBlur && 'bg-black opacity-40',
               'fixed top-0 left-0 w-screen h-screen z-[2]'
             )}
           ></div>
@@ -88,7 +96,7 @@ export const DropCardItemList = ({
             className={cn(
               direction === 'down' && 'top-5',
               direction === 'up' && 'bottom-5 items-end justify-end',
-              'flex flex-col absolute w-full h-screen z-[5]',
+              'flex flex-col absolute w-full h-fit z-[5]',
               className
             )}
             {...props}

@@ -176,7 +176,7 @@ export default function BucketListPage() {
                   onClick={onAddClick}
                   className={cn(
                     'bg-black fixed top-0 left-0 h-screen w-screen duration-1000',
-                    isAdd ? 'opacity-50 z-[100]' : 'opacity-0 z-[0]'
+                    isAdd ? 'opacity-50 z-[100]' : 'opacity-0 z-[0] hidden'
                   )}
                 />
                 <AddNewCard
