@@ -26,7 +26,7 @@ export default function CommentInput() {
   };
 
   return (
-    <div className='fixed bottom-0 left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] pb-[58px] w-full h-[208px] bg-white border-t border-[#B9B9B9] z-10'>
+    <div className='fixed bottom-[58px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] pb-[58px] w-full h-[158px] bg-white border-t border-[#B9B9B9] z-10'>
       <div className='flex gap-[10px] w-full'>
         <UserProfile imageUrl={'https://picsum.photos/36/36'} />
         <div className='flex-1'>
