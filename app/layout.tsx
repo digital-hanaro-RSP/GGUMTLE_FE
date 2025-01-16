@@ -1,5 +1,7 @@
 // app/layout.tsx
+import { SessionProvider } from 'next-auth/react';
 import type { Metadata } from 'next';
+import { auth } from '@/lib/auth';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -8,14 +10,17 @@ export const metadata: Metadata = {
 };
 
 // app/layout.tsx
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
-    <html lang='ko'>
-      <body className='bg-white min-h-screen text-black'>{children}</body>
-    </html>
+    <SessionProvider session={session}>
+      <html lang='ko'>
+        <body className='bg-white min-h-screen text-black'>{children}</body>
+      </html>
+    </SessionProvider>
   );
 }
