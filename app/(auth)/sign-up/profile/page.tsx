@@ -2,12 +2,17 @@
 
 import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
+import { useAuthApi } from '@/hooks/useAuth/useAuth';
 import { useSignUpStore } from '@/store/useSignUpStore';
+import { SignUpData } from '@/types/Auth';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 export default function ProfilePage() {
   const { formData, setFinalInfo } = useSignUpStore();
+  const { signUp } = useAuthApi();
+  const router = useRouter();
 
   useEffect(() => {
     if (formData.password && formData.nickname) {
@@ -15,7 +20,7 @@ export default function ProfilePage() {
     }
   }, [formData]);
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     const passwordInput = document.querySelector(
       "input[name='password']"
     ) as HTMLInputElement;
@@ -24,7 +29,29 @@ export default function ProfilePage() {
     ) as HTMLInputElement;
 
     if (passwordInput?.value && nicknameInput?.value) {
+      // 먼저 상태를 업데이트
       setFinalInfo(passwordInput.value, nicknameInput.value);
+
+      // 새로운 SignUpData 객체 생성
+      const signUpData: SignUpData = {
+        name: formData.name,
+        birthDate: formData.birthDate,
+        gender: formData.gender as 'm' | 'f',
+        tel: formData.tel,
+        password: passwordInput.value, // 직접 input 값 사용
+        nickname: nicknameInput.value, // 직접 input 값 사용
+      };
+
+      try {
+        const response = await signUp(signUpData);
+        if (response.code == 200) {
+          alert('회원가입이 성공적으로 완료되었습니다.');
+          router.push('/sign-in');
+        }
+      } catch (error) {
+        console.error('회원가입 실패:', error);
+        // 에러 처리
+      }
     } else {
       console.error('모든 필수 항목을 입력해주세요');
     }
