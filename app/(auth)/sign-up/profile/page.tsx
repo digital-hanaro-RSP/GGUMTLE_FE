@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
-import { useAuthApi } from '@/hooks/useAuth/useAuth';
 import { useSignUpStore } from '@/store/useSignUpStore';
 import { SignUpData } from '@/types/Auth';
 import Image from 'next/image';
@@ -11,7 +10,6 @@ import { useEffect } from 'react';
 
 export default function ProfilePage() {
   const { formData, setFinalInfo } = useSignUpStore();
-  const { signUp } = useAuthApi();
   const router = useRouter();
 
   useEffect(() => {
@@ -29,31 +27,43 @@ export default function ProfilePage() {
     ) as HTMLInputElement;
 
     if (passwordInput?.value && nicknameInput?.value) {
-      // 먼저 상태를 업데이트
       setFinalInfo(passwordInput.value, nicknameInput.value);
 
-      // 새로운 SignUpData 객체 생성
       const signUpData: SignUpData = {
         name: formData.name,
         birthDate: formData.birthDate,
         gender: formData.gender as 'm' | 'f',
         tel: formData.tel,
-        password: passwordInput.value, // 직접 input 값 사용
-        nickname: nicknameInput.value, // 직접 input 값 사용
+        password: passwordInput.value,
+        nickname: nicknameInput.value,
       };
 
       try {
-        const response = await signUp(signUpData);
-        if (response.code == 200) {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/data/user`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(signUpData),
+          }
+        );
+
+        const data = await response.json();
+
+        if (data.code === 200) {
           alert('회원가입이 성공적으로 완료되었습니다.');
           router.push('/sign-in');
+        } else {
+          throw new Error(data.message || '회원가입에 실패했습니다.');
         }
       } catch (error) {
         console.error('회원가입 실패:', error);
-        // 에러 처리
+        alert('회원가입 중 오류가 발생했습니다.');
       }
     } else {
-      console.error('모든 필수 항목을 입력해주세요');
+      alert('모든 필수 항목을 입력해주세요');
     }
   };
 

@@ -1,21 +1,21 @@
-// import { useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 
 export const useApi = () => {
   // jwt 연결 후 주석 제거하기
-  // const { data: session } = useSession();
+  const { data: session } = useSession();
 
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchApi = async (apiRoute: string, options: RequestInit = {}) => {
-    // if (!session?.user?.jwt) {
-    //   throw new Error('No JWT token found');
-    // }
+    if (!session?.user?.jwt) {
+      throw new Error('No JWT token found');
+    }
 
     const url = `${baseUrl}/data${apiRoute}`;
 
     // 헤더 설정
     const headers = new Headers(options.headers);
-    // headers.set('Authorization', `Bearer ${session.user.jwt}`);
+    headers.set('Authorization', `Bearer ${session.user.jwt}`);
     headers.set('Content-Type', 'application/json');
 
     // 요청 실행
