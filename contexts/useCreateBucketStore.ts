@@ -27,7 +27,7 @@ type CreateBucketStore = {
 };
 
 const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
-  title: undefined,
+  title: '',
   tagType: 'Default',
   date: undefined,
   isDueDate: undefined,

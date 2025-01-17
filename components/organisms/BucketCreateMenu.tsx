@@ -67,7 +67,6 @@ export const CreateBucketTitle = () => {
   const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
-  console.log(title);
   return (
     <div className='flex flex-col gap-2'>
       <h1 className='text-xl font-bold'>버킷리스트가 무엇인가요?</h1>
