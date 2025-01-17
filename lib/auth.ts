@@ -1,4 +1,3 @@
-// app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth';
 import type { User } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
@@ -62,7 +61,39 @@ export const {
         token.permission = user.permission;
         token.refreshToken = user.refreshToken;
       }
-      return token;
+
+      const shouldRefreshTime = token.exp ? Math.round(token.exp - 60 * 5) : 0;
+      if (shouldRefreshTime > 0) return token;
+
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/data/auth/refresh`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              refreshToken: token.refreshToken,
+            }),
+          }
+        );
+
+        const data = await response.json();
+
+        if (response.ok && data.code === 200) {
+          return {
+            ...token,
+            jwt: data.data.accessToken,
+            refreshToken: data.data.refreshToken,
+          };
+        }
+
+        return token;
+      } catch (error) {
+        console.error('Token refresh error:', error);
+        return token;
+      }
     },
     async session({ session, token }) {
       session.user = {
@@ -79,6 +110,6 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1 hour
+    maxAge: 60 * 60, // 1시간
   },
 });
