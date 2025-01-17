@@ -18,7 +18,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
-import { Card } from '../atoms/Card';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 
@@ -105,7 +104,7 @@ export default function Post({
   };
 
   return (
-    <Card>
+    <div className='p-[20px] bg-white/80'>
       <div className='flex flex-col gap-[20px]' onClick={handlePostClick}>
         {/* 상단 프로필 */}
         <div className='flex justify-between items-center'>
@@ -196,7 +195,7 @@ export default function Post({
                     <Image
                       src={imageUrl}
                       alt={`게시물 이미지 ${idx + 1}`}
-                      className='object-contain'
+                      className='w-full'
                       fill
                       priority={idx === 0}
                     />
@@ -216,6 +215,6 @@ export default function Post({
           />
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

@@ -1,3 +1,4 @@
+import { IoIosSend } from 'react-icons/io';
 import { useState } from 'react';
 import { Button } from '../atoms/Button';
 import TextArea from '../atoms/TextArea';
@@ -23,30 +24,38 @@ export default function CommentInput() {
 
   const handleSubmit = () => {
     // 댓글 작성 로직 추가
+    if (!comment.trim()) {
+      console.log('댓글 작성 실패');
+      return;
+    }
     console.log('댓글', comment);
   };
 
   return (
-    <div className='fixed bottom-[58px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] w-full h-[158px] bg-white border-t border-[#B9B9B9] z-10'>
-      <div className='flex gap-[10px] w-full'>
+    <div className='fixed bottom-[48px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] w-full h-[90px] bg-white border-t border-[#D9D9D9] z-10'>
+      <div className='flex gap-[10px] w-full items-center'>
         <UserProfile imageUrl={'https://picsum.photos/36/36'} />
-        <div className='flex-1'>
+
+        <div className='flex-1 '>
           <TextArea
             type='comment'
             value={comment}
             onChange={handleCommentChange}
           />
         </div>
-      </div>
-      <div className='flex justify-end'>
-        <Button
-          size='sm'
-          isDisabled={!comment.trim()}
-          className='opacity-70 hover:opacity-100'
+
+        <div
+          className='flex items-center justify-center'
           onClick={handleSubmit}
         >
-          작성
-        </Button>
+          <div
+            className={` ${
+              comment.trim() ? 'text-primary-main' : 'text-primary-placeholder'
+            }`}
+          >
+            <IoIosSend size={34} />
+          </div>
+        </div>
       </div>
     </div>
   );

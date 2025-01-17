@@ -61,8 +61,8 @@ export default function CommentCard({
   };
 
   return (
-    <Card>
-      <div className='flex flex-col gap-[20px]'>
+    <div className='px-[40px]'>
+      <div className='flex flex-col gap-[10px]'>
         <div className='flex justify-between items-center'>
           <div className='flex gap-[20px] items-center'>
             <UserProfile
@@ -103,6 +103,6 @@ export default function CommentCard({
           onLikeClick={handleLikeClick}
         />
       </div>
-    </Card>
+    </div>
   );
 }

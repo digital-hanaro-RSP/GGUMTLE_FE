@@ -2,17 +2,34 @@
 
 import CommentCard from '@/components/molecules/CommentCard';
 import Post from '@/components/molecules/Post';
+import { LazyMotion, domAnimation, m } from 'motion/react';
 
 export default function PostIdPage() {
   return (
     <div className='flex flex-col gap-[20px] w-full'>
       <Post {...postMockData} isDetailPage={true} />
-      <div className='flex flex-col gap-[20px] pb-[200px]'>
-        <p className='ml-[20px]'>{commentMockDatas.length}개의 댓글</p>
-        {commentMockDatas.map((comment) => (
-          <CommentCard key={comment.id} {...comment} />
-        ))}
-      </div>
+      <p className='ml-[20px]'>{commentMockDatas.length}개의 댓글</p>
+      <LazyMotion features={domAnimation}>
+        <div className='flex flex-col gap-[25px] pb-[200px] pt-[20px] bg-white'>
+          {commentMockDatas.map((comment, index) => (
+            <m.div
+              key={comment.id}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+              }}
+            >
+              <CommentCard {...comment} />
+              {index !== commentMockDatas.length - 1 && (
+                <div className='h-[1px] w-[calc(100%-80px)] bg-[#D9D9D9] mx-auto mt-[25px]'></div>
+              )}
+            </m.div>
+          ))}
+        </div>
+      </LazyMotion>
     </div>
   );
 }
