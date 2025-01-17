@@ -7,7 +7,7 @@ import { useMyDataApi } from '@/hooks/useMyData/useMyData';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function ProfilePage() {
+export default function ConsentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const { updatePermission } = useMyDataApi();

@@ -13,11 +13,27 @@ const config: Config = {
     extend: {
       animation: {
         fadeIn: 'fadeIn 0.6s ease-out forwards',
+        fadeOut: 'fadeOut 1.5s ease-out forwards',
+        'bounce-slow': 'bounce-slow 1.5s infinite',
       },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(20px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeOut: {
+          '0%': { opacity: '1', transform: 'translateY(0)' },
+          '100%': { opacity: '0', transform: 'translateY(-20px)' },
+        },
+        'bounce-slow': {
+          '0%, 100%': {
+            transform: 'translateY(-10%)',
+            animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)',
+          },
+          '50%': {
+            transform: 'translateY(0)',
+            animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
+          },
         },
       },
       colors: {
