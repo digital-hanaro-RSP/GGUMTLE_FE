@@ -8,11 +8,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { useState } from 'react';
+import { FiPlusCircle } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 const data = [
   {
-    bucketType: 'Go',
+    bucketType: 'Do',
     recommendations: [
       { title: '하와이 여행', followers: 1500 },
       { title: '프랑스 와인 투어', followers: 1200 },
@@ -20,7 +23,31 @@ const data = [
     ],
   },
   {
-    bucketType: 'Do',
+    bucketType: 'Be',
+    recommendations: [
+      { title: '하와이 여행', followers: 1500 },
+      { title: '프랑스 와인 투어', followers: 1200 },
+      { title: '제주도 한 달 살기', followers: 950 },
+    ],
+  },
+  {
+    bucketType: 'Have',
+    recommendations: [
+      { title: '스카이다이빙', followers: 2000 },
+      { title: '클래식 피아노 배우기', followers: 1800 },
+      { title: '서핑 배우기', followers: 1100 },
+    ],
+  },
+  {
+    bucketType: 'Go',
+    recommendations: [
+      { title: '스카이다이빙', followers: 2000 },
+      { title: '클래식 피아노 배우기', followers: 1800 },
+      { title: '서핑 배우기', followers: 1100 },
+    ],
+  },
+  {
+    bucketType: 'Learn',
     recommendations: [
       { title: '스카이다이빙', followers: 2000 },
       { title: '클래식 피아노 배우기', followers: 1800 },
@@ -30,10 +57,12 @@ const data = [
 ];
 
 export default function RecommendBucketPage() {
+  const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState<number>(0);
 
   const bgColor = (type: string) => {
-    switch (type) {
+    switch (type.toLowerCase()) {
       case 'do':
         return '#FFF89F';
       case 'be':
@@ -49,62 +78,103 @@ export default function RecommendBucketPage() {
     }
   };
 
+  const bucketType = [
+    '인기',
+    '해보고싶다',
+    '되고 싶다',
+    '갖고 싶다',
+    '가보고 싶다',
+    '배우고 싶다',
+  ];
+
+  console.log(api?.selectedScrollSnap());
+
+  useEffect(() => {
+    if (!api) return;
+    setCurrent(api.selectedScrollSnap());
+
+    api.on('select', () => {
+      setCurrent(api.selectedScrollSnap());
+    });
+  }, [api]);
+
+  const allRecommendations = data.flatMap((bucket) =>
+    bucket.recommendations.map((item) => ({
+      ...item,
+      bucketType: bucket.bucketType,
+    }))
+  );
+
+  // followers 기준으로 정렬
+  const sortedRecommendations = allRecommendations.sort(
+    (a, b) => b.followers - a.followers
+  );
+
+  const onClickMenuBar = (index: number) => {
+    if (!api) return;
+    api.scrollTo(index);
+  };
+
   return (
     <>
-      <div className='overflow-x-hidden overflow-y-hidden'>
+      <div className='overflow-x-hidden'>
         <h1 className='text-xl font-bold'>버킷리스트 추천</h1>
         <div className='w-screen overflow-x-scroll scrollbar-hide'>
-          <div className='flex flex-row gap-5 w-[650px]'>
-            <button
-              onClick={() => api?.scrollTo(0)}
-              className='w-20 justify-center flex'
-            >
-              인기
-            </button>
-            <button
-              onClick={() => api?.scrollTo(1)}
-              className='w-20 justify-center flex'
-            >
-              해보고 싶다
-            </button>
-            <button
-              onClick={() => api?.scrollTo(2)}
-              className='w-20 justify-center flex'
-            >
-              되고 싶다
-            </button>
-            <button
-              onClick={() => api?.scrollTo(3)}
-              className='w-20 justify-center flex'
-            >
-              갖고 싶다
-            </button>
-            <button
-              onClick={() => api?.scrollTo(4)}
-              className='w-20 justify-center flex'
-            >
-              가보고 싶다
-            </button>
-            <button
-              onClick={() => api?.scrollTo(5)}
-              className='w-20 justify-center flex'
-            >
-              배우고 싶다
-            </button>
+          <div className='flex flex-row gap-5 w-[650px] pt-3 relative'>
+            {bucketType.map((type, index) => (
+              <button
+                key={index}
+                onClick={() => onClickMenuBar(index)}
+                className={cn('w-20 justify-center flex relative py-3')}
+              >
+                <h3
+                  className={cn(
+                    'animate-underline',
+                    current === index ? 'animate-underline-click' : ''
+                  )}
+                >
+                  {type}
+                </h3>
+              </button>
+            ))}
           </div>
         </div>
         <Carousel setApi={setApi}>
           <CarouselContent>
+            <CarouselItem>
+              <div className='flex flex-col gap-3 pt-3'>
+                {sortedRecommendations.map((item, index) => (
+                  <button
+                    onClick={() => router.push('/')}
+                    key={index}
+                    className='py-3 px-4 rounded-lg flex flex-row items-center'
+                    style={{ backgroundColor: bgColor(item.bucketType) }}
+                  >
+                    <FiPlusCircle className='mr-2 bg-gray-200 rounded-full' />
+                    {item.title}
+                    <small className='ml-2 text-gray-500'>
+                      {item.followers}명
+                    </small>
+                  </button>
+                ))}
+              </div>
+            </CarouselItem>
             {data.map((tag) => (
               <CarouselItem key={tag.bucketType}>
-                <div>
+                <div className='flex flex-col gap-3 pt-3'>
                   {tag.recommendations.map((recommend, index) => (
-                    <div
+                    <button
+                      onClick={() => router.push('/')}
                       key={index}
+                      className='py-3 px-4 rounded-lg flex flex-row items-center'
                       style={{ backgroundColor: bgColor(tag.bucketType) }}
                     >
+                      <FiPlusCircle className='mr-2 bg-gray-200 rounded-full' />
                       {recommend.title}
-                    </div>
+                      <small className='ml-2 text-gray-500'>
+                        {recommend.followers}명
+                      </small>
+                    </button>
                   ))}
                 </div>
               </CarouselItem>
