@@ -3,14 +3,36 @@
 import { Button } from '@/components/atoms/Button';
 import { AgreementBox } from '@/components/molecules/AgreementBox';
 import { TermsModal } from '@/components/molecules/TermsModal';
+import { useMyDataApi } from '@/hooks/useMyData/useMyData';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 export default function ProfilePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const { updatePermission } = useMyDataApi();
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
-  const [isChecked, setIsChecked] = useState(false);
+
+  const handleConsentSuccess = async () => {
+    if (!isChecked) {
+      alert('모든 항목에 동의해주세요.');
+      return;
+    }
+
+    try {
+      const response = await updatePermission();
+      if (response.permission === 1) {
+        router.push('/mydata/sync');
+      } else {
+        alert('마이데이터 권한 설정에 실패했습니다.');
+      }
+    } catch (error) {
+      alert(error);
+    }
+  };
 
   return (
     <div className='p-4 bg-[#F2F5F6]'>
@@ -32,7 +54,7 @@ export default function ProfilePage() {
           <p className='text-[#7D8B8A] font-semibold text-center text-md translate-y-12'>
             약관 동의하시면
             <br />
-            소중한 꿈을 이루는데 도움을 드릴 수 있어요
+            소중한 꿈을 이루는데 도움을 드릴 수 있어요!
           </p>
         </div>
         <div className='flex flex-col items-center mt-16'>
@@ -53,7 +75,13 @@ export default function ProfilePage() {
             title='전체 동의하기'
             checked={isChecked}
             onChange={setIsChecked}
+            isOpen={isModalOpen}
           />
+        </div>
+        <div className='flex flex-col items-center mt-2'>
+          <Button size='lg' onClick={handleConsentSuccess}>
+            확인
+          </Button>
         </div>
       </TermsModal>
     </div>

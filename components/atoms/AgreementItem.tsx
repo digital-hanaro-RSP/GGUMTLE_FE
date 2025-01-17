@@ -27,7 +27,7 @@ export const AgreementItem = ({
       {subItems && subItems.length > 0 && (
         <div className='ml-8'>
           {subItems.map((item, index) => (
-            <div key={index} className='text-sm text-[#B9B9B9] ml-2'>
+            <div key={index} className='text-xs text-[#B9B9B9] ml-2'>
               ⦁ {item}
             </div>
           ))}
