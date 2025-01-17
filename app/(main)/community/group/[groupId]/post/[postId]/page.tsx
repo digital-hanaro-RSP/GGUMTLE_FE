@@ -7,10 +7,15 @@ export default function PostIdPage() {
   return (
     <div className='flex flex-col gap-[20px] w-full'>
       <Post {...postMockData} isDetailPage={true} />
-      <div className='flex flex-col gap-[20px] pb-[200px]'>
-        <p className='ml-[20px]'>{commentMockDatas.length}개의 댓글</p>
-        {commentMockDatas.map((comment) => (
-          <CommentCard key={comment.id} {...comment} />
+      <p className='ml-[20px]'>{commentMockDatas.length}개의 댓글</p>
+      <div className='flex flex-col gap-[25px] pb-[200px] pt-[20px] bg-white'>
+        {commentMockDatas.map((comment, index) => (
+          <>
+            <CommentCard key={comment.id} {...comment} />
+            {index !== commentMockDatas.length - 1 && (
+              <div className='h-[1px] w-[calc(100%-80px)] bg-[#D9D9D9] mx-auto'></div>
+            )}
+          </>
         ))}
       </div>
     </div>

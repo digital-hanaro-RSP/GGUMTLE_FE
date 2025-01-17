@@ -30,12 +30,13 @@ export default function CommentInput() {
     <div className='fixed bottom-[58px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] w-full h-[158px] bg-white border-t border-[#B9B9B9] z-10'>
       <div className='flex gap-[10px] w-full'>
         <UserProfile imageUrl={'https://picsum.photos/36/36'} />
-        <div className='flex-1'>
+        <div className='flex-3'>
           <TextArea
             type='comment'
             value={comment}
             onChange={handleCommentChange}
           />
+          <div className='flex-1'>aa</div>
         </div>
       </div>
       <div className='flex justify-end'>
