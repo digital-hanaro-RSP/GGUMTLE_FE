@@ -35,7 +35,7 @@ import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
@@ -48,15 +48,6 @@ export default function BucketListRegisterPage() {
   const [autoAllocate, setAutoAllocate] = useState<boolean>(false);
   const [memo, setMemo] = useState<string>('');
   console.log('🚀 ~ BucketListRegisterPage ~ memo:', memo);
-  const colorMap: Record<string, { bgColor: string; textColor: string }> = {
-    default: { bgColor: '', textColor: '' },
-    gray: { bgColor: 'bg-bucket-gray', textColor: '#7B8894' },
-    want: { bgColor: 'bg-bucket-want', textColor: '#D89B00' },
-    become: { bgColor: 'bg-bucket-become', textColor: '#72B16D' },
-    have: { bgColor: 'bg-bucket-have', textColor: '#4DABF7' },
-    visit: { bgColor: 'bg-bucket-visit', textColor: '#F06595' },
-    learn: { bgColor: 'bg-bucket-learn', textColor: '#FF9100' },
-  };
 
   const { cycleOpt1 } = useCreateBucketStore();
 
@@ -69,6 +60,23 @@ export default function BucketListRegisterPage() {
     ['learn', '배우고 싶다'],
   ]);
 
+  const bgColor = (type: string) => {
+    switch (type) {
+      case 'want':
+        return '#FFF89F';
+      case 'become':
+        return '#CDF5D8';
+      case 'have':
+        return '#CDF7F7';
+      case 'visit':
+        return '#F5CFF6';
+      case 'learn':
+        return '#F3D0CE';
+      default:
+        return '#FFF';
+    }
+  };
+
   const clickIsDueDate = (tf: boolean) => {
     setIsDueDate(tf);
   };
@@ -80,16 +88,10 @@ export default function BucketListRegisterPage() {
   };
 
   const CycleMoneyinputRef = useRef<HTMLInputElement>(null);
-  console.log(
-    '🚀 ~ BucketListRegisterPage ~ CycleMoneyinputRef:',
-    CycleMoneyinputRef
-  );
+  console.log(CycleMoneyinputRef);
 
   const GoalMoneyinputRef = useRef<HTMLInputElement>(null);
-  console.log(
-    '🚀 ~ BucketListRegisterPage ~ GoalMoneyinputRef:',
-    GoalMoneyinputRef
-  );
+  console.log(GoalMoneyinputRef);
 
   return (
     <div className='p-4'>
@@ -104,12 +106,17 @@ export default function BucketListRegisterPage() {
           <DropDownTrigger>
             <div
               className={cn(
-                'bg-white text-[#9CA3AF] btn-lg py-3 px-4 font-normal text-left rounded-xl text-[16px] w-full border flex flex-row justify-between items-center',
-                `after:content-[' '] after:bg-bucket-${bucketType} after:border after:px-3 after:absolute after:right-10 after:rounded-md after:top-2 after:h-2/3`
+                'bg-white text-[#9CA3AF] btn-lg py-3 px-4 font-normal text-left rounded-xl text-[16px] w-full border flex flex-row justify-between items-center'
               )}
             >
               <p>{categories.get(bucketType)}</p>
               <IoIosArrowDown className={cn('-rotate-90')} />
+              <div
+                className={cn(
+                  'border px-3 absolute right-10 rounded-md top-2 h-2/3'
+                )}
+                style={{ backgroundColor: bgColor(bucketType) }}
+              ></div>
             </div>
           </DropDownTrigger>
           <DropCardItemList
@@ -123,11 +130,16 @@ export default function BucketListRegisterPage() {
                 <DropCardItem key={key} onClick={() => setBucketType(key)}>
                   <div
                     className={cn(
-                      'bg-white text-black btn-lg py-3 px-4 text-left rounded-xl text-[15px] w-full relative',
-                      `after:content-[' '] after:bg-bucket-${key} after:border after:px-3 after:absolute after:right-10 after:rounded-md after:top-2 after:h-2/3`
+                      'bg-white text-black btn-lg py-3 px-4 text-left rounded-xl text-[15px] w-full relative'
                     )}
                   >
                     {value}
+                    <div
+                      className={cn(
+                        'border px-3 absolute right-10 rounded-md top-2 h-2/3'
+                      )}
+                      style={{ backgroundColor: bgColor(key) }}
+                    ></div>
                   </div>
                 </DropCardItem>
               ))}
