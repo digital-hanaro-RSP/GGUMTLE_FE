@@ -7,7 +7,7 @@ import { useMyDataApi } from '@/hooks/useMyData/useMyData';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function ProfilePage() {
+export default function ConsentPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
   const { updatePermission } = useMyDataApi();
@@ -52,7 +52,7 @@ export default function ProfilePage() {
             />
           </div>
           <p className='text-[#7D8B8A] font-semibold text-center text-md translate-y-12'>
-            약관 동의하시면
+            약관동의하시면
             <br />
             소중한 꿈을 이루는데 도움을 드릴 수 있어요!
           </p>
