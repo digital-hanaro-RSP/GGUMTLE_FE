@@ -192,7 +192,7 @@ export default function BucketListPage() {
                   )}
                 />
                 <AddNewCard
-                  onClick={() => router.push('/bucket-list/create')}
+                  onClick={() => router.push('/bucket-list/create/recommend')}
                   usage='recommendBucket'
                   size='md'
                   className={cn(

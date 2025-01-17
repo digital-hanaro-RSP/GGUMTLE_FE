@@ -8,10 +8,16 @@ import {
   CreateBucketTitle,
 } from '@/components/organisms/BucketCreateMenu';
 import useCreateBucketStore from '@/contexts/useCreateBucketStore';
+import { useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function BucketListRegisterPage() {
+  const searchParams = useSearchParams();
+
   const {
+    setTitle,
+    setTagType,
     title,
     tagType,
     date,
@@ -24,6 +30,15 @@ export default function BucketListRegisterPage() {
     goalAmount,
     memo,
   } = useCreateBucketStore();
+
+  useEffect(() => {
+    const getTag = searchParams.get('tagType');
+    console.log('🚀 ~ useEffect ~ getTag:', getTag);
+    const getTitle = searchParams.get('title');
+    console.log('🚀 ~ useEffect ~ getTitle:', getTitle);
+    setTagType(getTag ?? 'Default');
+    setTitle(getTitle ?? '');
+  }, []);
 
   const activateButton = () => {
     const requiredDefaultVars = [title, tagType, isDueDate, howTo];

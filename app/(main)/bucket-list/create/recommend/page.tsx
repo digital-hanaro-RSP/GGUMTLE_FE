@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import useCreateBucketStore from '@/contexts/useCreateBucketStore';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -115,6 +116,12 @@ export default function RecommendBucketPage() {
     api.scrollTo(index);
   };
 
+  const onClickRecommend = (title: string, bucketType: string) => {
+    router.push(
+      `/bucket-list/create?title=${title}&tagType=${bucketType.toLowerCase()}`
+    );
+  };
+
   return (
     <>
       <div className='overflow-x-hidden'>
@@ -130,7 +137,9 @@ export default function RecommendBucketPage() {
                 <h3
                   className={cn(
                     'animate-underline',
-                    current === index ? 'animate-underline-click' : ''
+                    current === index
+                      ? 'animate-underline-click text-primary-main font-bold'
+                      : ''
                   )}
                 >
                   {type}
@@ -145,7 +154,9 @@ export default function RecommendBucketPage() {
               <div className='flex flex-col gap-3 pt-3'>
                 {sortedRecommendations.map((item, index) => (
                   <button
-                    onClick={() => router.push('/')}
+                    onClick={() =>
+                      onClickRecommend(item.title, item.bucketType)
+                    }
                     key={index}
                     className='py-3 px-4 rounded-lg flex flex-row items-center'
                     style={{ backgroundColor: bgColor(item.bucketType) }}
@@ -164,7 +175,9 @@ export default function RecommendBucketPage() {
                 <div className='flex flex-col gap-3 pt-3'>
                   {tag.recommendations.map((recommend, index) => (
                     <button
-                      onClick={() => router.push('/')}
+                      onClick={() =>
+                        onClickRecommend(recommend.title, tag.bucketType)
+                      }
                       key={index}
                       className='py-3 px-4 rounded-lg flex flex-row items-center'
                       style={{ backgroundColor: bgColor(tag.bucketType) }}

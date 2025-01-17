@@ -38,7 +38,7 @@ import {
 } from '../molecules/DropCard';
 
 export const CreateBucketTitle = () => {
-  const { tagType, setTagType, setTitle } = useCreateBucketStore();
+  const { title, tagType, setTagType, setTitle } = useCreateBucketStore();
   const bucketTitleRef = useRef<HTMLInputElement>(null);
   const categories = new Map([
     ['Default', '버킷리스트 타입을 선택해주세요.'],
@@ -64,9 +64,10 @@ export const CreateBucketTitle = () => {
         return '#FFF';
     }
   };
-  const onTitleChange = () => {
-    setTitle(bucketTitleRef.current?.value ?? '');
+  const onTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
   };
+  console.log(title);
   return (
     <div className='flex flex-col gap-2'>
       <h1 className='text-xl font-bold'>버킷리스트가 무엇인가요?</h1>
@@ -74,7 +75,8 @@ export const CreateBucketTitle = () => {
         placeHolder='버킷리스트를 입력해주세요.'
         ref={bucketTitleRef}
         required
-        onChange={onTitleChange}
+        value={title}
+        onChange={(e) => onTitleChange(e)}
       />
       <DropCard className='flex flex-col justify-center relative'>
         <DropDownTrigger>
