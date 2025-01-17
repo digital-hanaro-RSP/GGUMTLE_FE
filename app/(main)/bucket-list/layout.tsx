@@ -8,7 +8,7 @@ export default function BucketListLayout({
   return (
     <div>
       <Header
-        className='z-[1] backdrop-blur-md bg-opacity-30 w-screen max-w-screen-md fixed'
+        className='z-[6] backdrop-blur-md bg-opacity-30 w-screen max-w-screen-md fixed'
         text='버킷리스트'
         showActionButton={false}
       />

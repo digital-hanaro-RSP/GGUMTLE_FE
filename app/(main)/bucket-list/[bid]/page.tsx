@@ -81,17 +81,17 @@ export default function BucketListDetail() {
                 className='items-center gap-3 bottom-16'
               >
                 <DropCardItem>
-                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                  <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                     수정하기
                   </div>
                 </DropCardItem>
                 <DropCardItem>
-                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                  <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                     완료하기
                   </div>
                 </DropCardItem>
                 <DropCardItem>
-                  <div className='bg-primary-disable text-black btn-lg p-4 rounded-xl text-[15px]'>
+                  <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                     보류하기
                   </div>
                 </DropCardItem>

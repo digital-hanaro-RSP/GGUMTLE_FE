@@ -35,13 +35,13 @@ const TextArea: React.FC<TextAreaProps> = ({ type, value, onChange }) => {
   const sizeClasses = {
     post: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
     dream: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
-    memo: 'w-[335px] h-[120px] sm:w-[90%] sm:h-[150px] md:w-[80%]',
+    memo: 'w-full h-[120px] sm:w-[90%] sm:h-[150px] md:w-[100%]',
     // comment: 'w-[309px] h-[55px] sm:w-[85%] sm:h-[60px] md:w-[75%]',
     comment: 'w-full',
   };
 
   return (
-    <div className='relative'>
+    <div className='relative w-full'>
       <textarea
         value={value}
         onChange={onChange}
