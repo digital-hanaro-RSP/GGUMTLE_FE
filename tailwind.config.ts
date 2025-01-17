@@ -32,10 +32,10 @@ const config: Config = {
           foreground: 'hsl(var(--primary-foreground))',
         },
         bucket: {
-          want: '#FFF89F',
-          become: '#CDF5D8',
+          do: '#FFF89F',
+          be: '#CDF5D8',
           have: '#CDF7F7',
-          visit: '#F5CFF6',
+          go: '#F5CFF6',
           learn: '#F3D0CE',
           gray: '#F4F5F6',
         },

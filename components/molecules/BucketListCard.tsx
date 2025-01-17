@@ -25,7 +25,7 @@ export interface BucketListCardProps {
   type: 'effort' | 'money';
   dataPercent: number;
   title: string;
-  how: 'have' | 'want' | 'become' | 'visit' | 'learn';
+  how: 'have' | 'do' | 'be' | 'go' | 'learn';
   balance?: number;
   isSelectMode?: boolean; //커뮤니티 용인지 체크
   bid: number;
@@ -76,13 +76,13 @@ export const BucketListCard = ({
 
   const howto = (how: string) => {
     switch (how) {
-      case 'want':
+      case 'do':
         return '해보고 싶다';
-      case 'become':
+      case 'be':
         return '되고 싶다';
       case 'have':
         return '갖고 싶다';
-      case 'visit':
+      case 'go':
         return '가보고 싶다';
       case 'learn':
         return '배우고 싶다';

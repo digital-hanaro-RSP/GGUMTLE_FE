@@ -12,7 +12,7 @@ const meta: Meta<typeof BucketListCard> = {
     },
     how: {
       control: { type: 'select' },
-      options: ['have', 'want', 'become', 'visit', 'learn'], // 선택 가능한 옵션
+      options: ['have', 'do', 'be', 'go', 'learn'], // 선택 가능한 옵션
     },
     dataPercent: {
       control: { type: 'number' },
@@ -34,7 +34,7 @@ export const Default: Story = {
     type: 'effort',
     dataPercent: 50,
     title: '운동하기',
-    how: 'want',
+    how: 'do',
   },
 };
 

@@ -9,10 +9,10 @@ type ColorChipProps = {
 const colorMap: Record<string, { bgColor: string; textColor: string }> = {
   default: { bgColor: '', textColor: '' },
   gray: { bgColor: 'bg-bucket-gray', textColor: '#7B8894' },
-  want: { bgColor: 'bg-bucket-want', textColor: '#D89B00' },
-  become: { bgColor: 'bg-bucket-become', textColor: '#72B16D' },
+  do: { bgColor: 'bg-bucket-do', textColor: '#D89B00' },
+  be: { bgColor: 'bg-bucket-be', textColor: '#72B16D' },
   have: { bgColor: 'bg-bucket-have', textColor: '#4DABF7' },
-  visit: { bgColor: 'bg-bucket-visit', textColor: '#F06595' },
+  go: { bgColor: 'bg-bucket-go', textColor: '#F06595' },
   learn: { bgColor: 'bg-bucket-learn', textColor: '#FF9100' },
 };
 

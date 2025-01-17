@@ -24,7 +24,7 @@ export default function BucketListDetail() {
           type='money'
           dataPercent={80}
           title='예시'
-          how='want'
+          how='do'
           bid={1}
         >
           <div className='pt-10'>
