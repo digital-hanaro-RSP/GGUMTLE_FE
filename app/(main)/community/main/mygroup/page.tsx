@@ -3,16 +3,33 @@
 import GroupCard from '@/components/molecules/GroupCard';
 import { useCategoryStore } from '@/store/useCategoryStore';
 import { Group } from '@/types/Community';
+import { domAnimation, LazyMotion, m } from 'motion/react';
+import { useRouter } from 'next/navigation';
 
 export default function CommunityMainMyGroupPage() {
+  const router = useRouter();
   const { selectedCategory } = useCategoryStore();
   console.log('selectedCategory :', selectedCategory);
   return (
-    <div className='flex flex-col w-full gap-[20px]'>
-      {MockGroups.map((group) => (
-        <GroupCard key={group.id} {...group} />
-      ))}
-    </div>
+    <LazyMotion features={domAnimation}>
+      <div className='flex flex-col w-full gap-[20px]'>
+        {MockGroups.map((group, index) => (
+          <m.div
+            key={group.id}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: index * 0.1 }} // index 사라지면 조금 위험
+            onClick={() => {
+              router.push(`/community/group/${group.id}`);
+            }}
+            className='cursor-pointer'
+          >
+            <GroupCard key={group.id} {...group} />
+          </m.div>
+        ))}
+      </div>
+    </LazyMotion>
   );
 }
 

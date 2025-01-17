@@ -195,7 +195,7 @@ export default function Post({
                     <Image
                       src={imageUrl}
                       alt={`게시물 이미지 ${idx + 1}`}
-                      className='object-contain'
+                      className='w-full'
                       fill
                       priority={idx === 0}
                     />

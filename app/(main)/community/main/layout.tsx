@@ -127,7 +127,7 @@ export default function CommunityMainLayout({
       <div className='fixed left-0 right-0 bottom-[68px] max-w-screen-md mx-auto pointer-events-none'>
         <PlusButton
           className='absolute bottom-[20px] right-[20px] pointer-events-auto'
-          size='xs'
+          size='sm'
           onClick={() => setIsAdd(true)}
         />
       </div>
