@@ -1,14 +1,9 @@
 'use client';
 
-import { DefaultInputRef, MoneyInputRef } from '@/components/atoms/Inputs';
+import { MoneyInputRef } from '@/components/atoms/Inputs';
 import { RadioItem } from '@/components/atoms/RadioItem';
 import TextArea from '@/components/atoms/TextArea';
-import {
-  DropCard,
-  DropCardItem,
-  DropCardItemList,
-  DropDownTrigger,
-} from '@/components/molecules/DropCard';
+import { CreateBucketTitle } from '@/components/organisms/BucketCreateMenu';
 import {
   CycleDropDown,
   DefaultDropDown,
@@ -34,7 +29,6 @@ import useCreateBucketStore from '@/contexts/useCreateBucketStore';
 import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
-import { IoIosArrowDown } from 'react-icons/io';
 import { useRef, useState } from 'react';
 import * as React from 'react';
 import { cn } from '@/lib/utils';
@@ -49,33 +43,7 @@ export default function BucketListRegisterPage() {
   const [memo, setMemo] = useState<string>('');
   console.log('🚀 ~ BucketListRegisterPage ~ memo:', memo);
 
-  const { cycleOpt1 } = useCreateBucketStore();
-
-  const categories = new Map([
-    ['default', '버킷리스트 타입을 선택해주세요.'],
-    ['want', '해보고 싶다'],
-    ['become', '되고 싶다'],
-    ['have', '갖고 싶다'],
-    ['visit', '가보고 싶다'],
-    ['learn', '배우고 싶다'],
-  ]);
-
-  const bgColor = (type: string) => {
-    switch (type) {
-      case 'want':
-        return '#FFF89F';
-      case 'become':
-        return '#CDF5D8';
-      case 'have':
-        return '#CDF7F7';
-      case 'visit':
-        return '#F5CFF6';
-      case 'learn':
-        return '#F3D0CE';
-      default:
-        return '#FFF';
-    }
-  };
+  const { title, tagType, cycleOpt1 } = useCreateBucketStore();
 
   const clickIsDueDate = (tf: boolean) => {
     setIsDueDate(tf);
@@ -95,63 +63,11 @@ export default function BucketListRegisterPage() {
 
   return (
     <div className='p-4'>
-      <div className='flex flex-col gap-2'>
-        <h1 className='text-xl font-bold'>버킷리스트가 무엇인가요?</h1>
-        <DefaultInputRef
-          placeHolder='버킷리스트를 입력해주세요.'
-          ref={bucketTitleRef}
-          required
-        />
-        <DropCard className='flex flex-col justify-center relative'>
-          <DropDownTrigger>
-            <div
-              className={cn(
-                'bg-white text-[#9CA3AF] btn-lg py-3 px-4 font-normal text-left rounded-xl text-[16px] w-full border flex flex-row justify-between items-center'
-              )}
-            >
-              <p>{categories.get(bucketType)}</p>
-              <IoIosArrowDown className={cn('-rotate-90')} />
-              <div
-                className={cn(
-                  'border px-3 absolute right-10 rounded-md top-2 h-2/3'
-                )}
-                style={{ backgroundColor: bgColor(bucketType) }}
-              ></div>
-            </div>
-          </DropDownTrigger>
-          <DropCardItemList
-            isBlur={true}
-            direction='down'
-            className='items-center gap-2 top-[52px]'
-          >
-            {Array.from(categories)
-              .filter(([key]) => key !== 'default')
-              .map(([key, value]) => (
-                <DropCardItem key={key} onClick={() => setBucketType(key)}>
-                  <div
-                    className={cn(
-                      'bg-white text-black btn-lg py-3 px-4 text-left rounded-xl text-[15px] w-full relative'
-                    )}
-                  >
-                    {value}
-                    <div
-                      className={cn(
-                        'border px-3 absolute right-10 rounded-md top-2 h-2/3'
-                      )}
-                      style={{ backgroundColor: bgColor(key) }}
-                    ></div>
-                  </div>
-                </DropCardItem>
-              ))}
-          </DropCardItemList>
-        </DropCard>
-      </div>
+      <CreateBucketTitle />
       <div
         className={cn(
           'pt-3 flex flex-col gap-2',
-          bucketType === 'default' || !bucketTitleRef
-            ? 'hidden'
-            : 'animate-fadeIn'
+          tagType === 'Default' || !bucketTitleRef ? 'hidden' : 'animate-fadeIn'
         )}
       >
         <h1 className='text-xl font-bold'>언제까지 이루고 싶나요?</h1>
