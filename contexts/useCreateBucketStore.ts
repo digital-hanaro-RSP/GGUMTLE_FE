@@ -11,6 +11,7 @@ type CreateBucketStore = {
   cycleOpt2: string;
   allocateAmount: number | undefined;
   goalAmount: number | undefined;
+  memo: string | undefined;
 
   setTitle: (value: string) => void;
   setTagType: (value: string) => void;
@@ -22,6 +23,7 @@ type CreateBucketStore = {
   setCycleOpt2: (value: string) => void;
   setAllocateAmount: (value: number) => void;
   setGoalAmount: (value: number) => void;
+  setMemo: (value: string) => void;
 };
 
 const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
@@ -35,6 +37,7 @@ const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
   cycleOpt2: 'Default',
   allocateAmount: undefined,
   goalAmount: undefined,
+  memo: undefined,
 
   setTitle: (value) => set({ title: value }),
   setTagType: (value) => set({ tagType: value }),
@@ -46,6 +49,7 @@ const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
   setCycleOpt2: (value) => set({ cycleOpt2: value }),
   setAllocateAmount: (value) => set({ allocateAmount: value }),
   setGoalAmount: (value) => set({ goalAmount: value }),
+  setMemo: (value) => set({ memo: value }),
 }));
 
 export default useCreateBucketStore;

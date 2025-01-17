@@ -29,6 +29,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { DefaultInputRef } from '../atoms/Inputs';
 import { RadioItem } from '../atoms/RadioItem';
+import TextArea from '../atoms/TextArea';
 import {
   DropCard,
   DropCardItem,
@@ -309,3 +310,47 @@ export const CreateBucketHowTo = () => {
   );
 };
 
+export const CreateBucketMemo = () => {
+  const {
+    cycleOpt1,
+    cycleOpt2,
+    autoAllocate,
+    allocateAmount,
+    goalAmount,
+    howTo,
+  } = useCreateBucketStore();
+  const [memo, setMemo] = useState<string>('');
+  const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMemo(e.target.value);
+  };
+  const showMemo = () => {
+    if (!howTo) {
+      return false;
+    }
+    if (howTo !== 'MONEY') {
+      return true;
+    }
+    if (autoAllocate) {
+      if (cycleOpt1 === 'Daily' && allocateAmount !== undefined) return true;
+      if (cycleOpt1 === 'Default' || cycleOpt2 === 'Default' || !allocateAmount)
+        return false;
+    }
+    if (goalAmount === undefined) return false;
+    console.log('passed');
+    return true;
+  };
+
+  return (
+    <div
+      className={cn(
+        'pt-3 flex flex-col gap-3 w-full',
+        showMemo() ? 'animate-fadeIn' : 'hidden'
+      )}
+    >
+      <h1 className='text-xl font-bold'>메모</h1>
+      <div className='flex w-full justify-center items-center'>
+        <TextArea type='memo' value={memo} onChange={handleMemoChange} />
+      </div>
+    </div>
+  );
+};
