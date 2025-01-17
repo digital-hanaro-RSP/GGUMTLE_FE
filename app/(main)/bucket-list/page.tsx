@@ -25,10 +25,10 @@ export default function BucketListPage() {
   const lastScrollY = useRef(0);
   const categories = new Map([
     ['default', '전체'],
-    ['want', '해보고 싶다'],
-    ['become', '되고 싶다'],
+    ['do', '해보고 싶다'],
+    ['be', '되고 싶다'],
     ['have', '갖고 싶다'],
-    ['visit', '가보고 싶다'],
+    ['go', '가보고 싶다'],
     ['learn', '배우고 싶다'],
   ]);
 
@@ -123,7 +123,7 @@ export default function BucketListPage() {
                 type='effort'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <BucketListCard
@@ -132,7 +132,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <BucketListCard
@@ -141,7 +141,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <BucketListCard
@@ -150,7 +150,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <BucketListCard
@@ -159,7 +159,7 @@ export default function BucketListPage() {
                 type='effort'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <BucketListCard
@@ -168,7 +168,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='do'
                 bid={1}
               />
               <div className='relative flex flex-row w-full pb-32 '>
@@ -192,7 +192,7 @@ export default function BucketListPage() {
                   )}
                 />
                 <AddNewCard
-                  onClick={() => router.push('/bucket-list/create')}
+                  onClick={() => router.push('/bucket-list/create/recommend')}
                   usage='recommendBucket'
                   size='md'
                   className={cn(
@@ -211,7 +211,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='be'
                 bid={1}
               />
             </div>
@@ -224,7 +224,7 @@ export default function BucketListPage() {
                 type='money'
                 dataPercent={80}
                 title='예시'
-                how='want'
+                how='be'
                 bid={1}
               />
             </div>

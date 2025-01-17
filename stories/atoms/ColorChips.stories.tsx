@@ -17,16 +17,16 @@ export const Gray: Story = {
   },
 };
 
-export const Want: Story = {
+export const Do: Story = {
   args: {
-    color: 'want',
+    color: 'do',
     children: '하고 싶어요',
   },
 };
 
-export const Become: Story = {
+export const Be: Story = {
   args: {
-    color: 'become',
+    color: 'be',
     children: '되고 싶어요',
   },
 };
@@ -38,9 +38,9 @@ export const Have: Story = {
   },
 };
 
-export const Visit: Story = {
+export const Go: Story = {
   args: {
-    color: 'visit',
+    color: 'go',
     children: '가보고 싶어요',
   },
 };

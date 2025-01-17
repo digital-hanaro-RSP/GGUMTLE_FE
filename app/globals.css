@@ -95,8 +95,14 @@
     @apply text-[11px] text-errorRed border-errorRed bg-white border-[0.5px];
   }
   /* L->R white underline animation*/
+  .hover-animate-underline {
+    @apply after:transform-left after:absolute after:left-auto after:right-0 after:block after:w-0 after:transform after:border-b-2 after:border-primary-main after:duration-300 after:ease-out hover:after:left-0 hover:after:right-auto hover:after:w-full;
+  }
   .animate-underline {
-    @apply after:transform-left after:absolute after:left-auto after:right-0 after:block after:w-0 after:transform after:border-b-2 after:border-white after:duration-300 after:ease-out hover:after:left-0 hover:after:right-auto hover:after:w-full;
+    @apply after:transform-left after:absolute after:left-auto after:right-0 after:block after:w-0 after:transform after:border-b-2 after:border-primary-main after:duration-300 after:ease-out;
+  }
+  .animate-underline-click {
+    @apply after:left-0 after:right-auto after:w-full;
   }
   /* L->R white background animation*/
   .animate-bg {

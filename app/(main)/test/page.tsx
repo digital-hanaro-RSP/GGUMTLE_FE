@@ -24,10 +24,10 @@ export default function TestPage() {
       <div className='mt-8'>
         <h2 className='text-xl font-bold mb-4 text-black'>버킷리스트 태그</h2>
         <div className='space-y-2 text-slate-400'>
-          <div className='bg-bucket-want p-2 rounded '>해보고 싶다</div>
-          <div className='bg-bucket-become p-2 rounded'>되고 싶다</div>
+          <div className='bg-bucket-do p-2 rounded '>해보고 싶다</div>
+          <div className='bg-bucket-be p-2 rounded'>되고 싶다</div>
           <div className='bg-bucket-have p-2 rounded'>갖고 싶다</div>
-          <div className='bg-bucket-visit p-2 rounded'>가보고 싶다</div>
+          <div className='bg-bucket-go p-2 rounded'>가보고 싶다</div>
           <div className='bg-bucket-learn p-2 rounded'>배우고 싶다</div>
         </div>
       </div>
