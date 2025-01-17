@@ -99,7 +99,7 @@ export const CreateBucketTitle = () => {
           className='items-center gap-2 top-[52px]'
         >
           {Array.from(categories)
-            .filter(([key]) => key !== 'default')
+            .filter(([key]) => key !== 'Default')
             .map(([key, value]) => (
               <DropCardItem key={key} onClick={() => setTagType(key)}>
                 <div
@@ -347,7 +347,7 @@ export const CreateBucketMemo = () => {
         showMemo() ? 'animate-fadeIn' : 'hidden'
       )}
     >
-      <h1 className='text-xl font-bold'>메모</h1>
+      <h1 className='text-xl font-bold'>메모(선택)</h1>
       <div className='flex w-full justify-center items-center'>
         <TextArea type='memo' value={memo} onChange={handleMemoChange} />
       </div>
