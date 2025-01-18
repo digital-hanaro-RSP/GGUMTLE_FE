@@ -6,6 +6,7 @@ import { DefaultInputRef, ImageInputRef } from '@/components/atoms/Inputs';
 import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
 import Tag from '@/components/atoms/Tag';
 import TextArea from '@/components/atoms/TextArea';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -16,6 +17,7 @@ export default function CreateGroupPage() {
   const [description, setDescription] = useState('');
   const router = useRouter();
 
+  const { createGroup } = useCommunityApi();
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -26,7 +28,14 @@ export default function CreateGroupPage() {
     setDescription(e.target.value);
   };
 
-  const categories = ['여행', '재테크', '노후', '교육', '취미'];
+  const categories = ['여행', '재테크', '노후', '교육', '취미']; // TRAVEL, HOBBY, INVESTMENT, AFTER_RETIREMENT, EDUCATION
+  const categoryMap: { [key: string]: string } = {
+    여행: 'TRAVEL',
+    재테크: 'INVESTMENT',
+    노후: 'AFTER_RETIREMENT',
+    교육: 'EDUCATION',
+    취미: 'HOBBY',
+  };
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -46,10 +55,16 @@ export default function CreateGroupPage() {
 
   const handleSubmit = () => {
     console.log(name, selectedCategory, selectedImage, description);
-    console.log('comptest 폴더 지우기위해 추가');
-    // 만약 이전 페이지가 main 이면 main/popular로 이동, 아니라면 이전 groupId로 이동.
-    // 일단 메인으로 이동시켰음
-    router.push('/community/main/popular');
+    createGroup(
+      name,
+      categoryMap[selectedCategory],
+      description,
+      selectedImage
+    ).then((res) => {
+      console.log(res);
+      // 꿈모임 생성 후 내 꿈모임 페이지로 이동
+      router.push('/community/main/mygroup');
+    });
   };
 
   return (

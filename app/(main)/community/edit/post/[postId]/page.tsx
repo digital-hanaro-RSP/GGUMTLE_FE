@@ -183,6 +183,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/699/699',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 2,
@@ -192,6 +193,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/698/698',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 3,
@@ -201,6 +203,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/697/697',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 4,
@@ -210,6 +213,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/695/695',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 5,
@@ -219,6 +223,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/700/700',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 6,
@@ -228,6 +233,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/700/700',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 7,
@@ -237,6 +243,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/700/700',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 8,
@@ -246,6 +253,7 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/700/700',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
   {
     id: 9,
@@ -255,5 +263,6 @@ const MockGroups: Group[] = [
     imageUrl: 'https://picsum.photos/700/700',
     memberCount: 10,
     createdAt: '2021-01-01',
+    updatedAt: '2021-01-01',
   },
 ];

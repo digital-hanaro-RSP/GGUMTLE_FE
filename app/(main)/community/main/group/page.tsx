@@ -1,118 +1,111 @@
 'use client';
 
+// 백업
 import GroupCard from '@/components/molecules/GroupCard';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useCategoryStore } from '@/store/useCategoryStore';
+import { useSearchStore } from '@/store/useSearchStore';
 import { Group } from '@/types/Community';
 import { domAnimation, LazyMotion, m } from 'motion/react';
 import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { convertCategoryToCode } from '@/lib/utils';
 
 export default function CommunityMainGroupPage() {
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const router = useRouter();
   const { selectedCategory } = useCategoryStore();
+  const { searchInput } = useSearchStore();
+  const [offset, setOffSet] = useState(0);
   console.log('selectedCategory :', selectedCategory);
+  const { getGroups } = useCommunityApi();
+  const observerRef = useRef<IntersectionObserver>();
+
+  const fetchGetGroups = async (isInitial: boolean = false) => {
+    if (!isInitial && (isLoading || !hasMore)) return;
+
+    setIsLoading(true);
+
+    const category = convertCategoryToCode(selectedCategory);
+    const limit = 10;
+    const search = searchInput;
+    const currentOffset = isInitial ? 0 : offset;
+
+    try {
+      const res = await getGroups(limit, currentOffset, category, search);
+      console.log('데이터 패칭 완료, 데이터 ' + res.length + '개');
+      for (let i = 0; i < res.length; i++) {
+        console.log(res[i]);
+      }
+      if (res.length < limit) {
+        setHasMore(false);
+      }
+      setGroups((prev) => (isInitial ? res : [...prev, ...res]));
+      setOffSet(currentOffset + limit);
+    } catch (err) {
+      console.log('데이터 fetch중 에러 :', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const lastElementObserver = useCallback(
+    (node: HTMLDivElement) => {
+      if (isLoading) return;
+
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          fetchGetGroups();
+        }
+      });
+
+      if (node) {
+        observerRef.current.observe(node);
+      }
+    },
+    [isLoading, hasMore]
+  );
+
+  useEffect(() => {
+    setOffSet(0); // 처음 렌더링, 카테고리 변경, 검색 입력 은 처음부터 로드
+    setHasMore(true);
+    fetchGetGroups(true);
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, [searchInput, selectedCategory]);
+
   return (
     <LazyMotion features={domAnimation}>
       <div className='flex flex-col w-full gap-[20px] '>
-        {MockGroups.map((group, index) => (
-          <m.div
-            key={group.id}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            onClick={() => {
-              router.push(`/community/group/${group.id}`);
-            }}
-            className='cursor-pointer'
-          >
-            <GroupCard {...group} />
-          </m.div>
-        ))}
+        {groups &&
+          groups.map((group, index) => (
+            <m.div
+              key={group.id}
+              ref={index === groups.length - 1 ? lastElementObserver : null}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              onClick={() => {
+                router.push(`/community/group/${group.id}`);
+              }}
+              className='cursor-pointer'
+            >
+              <GroupCard {...group} />
+            </m.div>
+          ))}
+        {isLoading && <div className='w-full text-center py-4'>로딩 중...</div>}
       </div>
     </LazyMotion>
   );
 }
-
-const MockGroups: Group[] = [
-  {
-    id: 1,
-    name: '그룹 1',
-    category: '여행',
-    description: '그룹 1 설명',
-    imageUrl: 'https://picsum.photos/699/699',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 2,
-    name: '그룹 2',
-    category: '재테크',
-    description: '그룹 2 설명',
-    imageUrl: 'https://picsum.photos/698/698',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 3,
-    name: '그룹 3',
-    category: '노후',
-    description: '그룹 3 설명',
-    imageUrl: 'https://picsum.photos/697/697',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 4,
-    name: '그룹 4',
-    category: '교육',
-    description: '그룹 4 설명',
-    imageUrl: 'https://picsum.photos/695/695',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 5,
-    name: '그룹 5',
-    category: '취미',
-    description: '그룹 5 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 6,
-    name: '그룹 6',
-    category: '취미',
-    description: '그룹 6 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 7,
-    name: '그룹 7',
-    category: '취미',
-    description: '그룹 7 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 8,
-    name: '그룹 8',
-    category: '취미',
-    description: '그룹 8 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-  {
-    id: 9,
-    name: '그룹 9',
-    category: '취미',
-    description: '그룹 9 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-  },
-];
