@@ -148,7 +148,7 @@ export default function CreatePostPage() {
   );
 }
 
-const MockGroups: Group[] = [
+export const MockGroups: Group[] = [
   {
     id: 1,
     name: '그룹 1',
