@@ -29,6 +29,7 @@ export default function BucketListCompletePage() {
     }, 3000);
 
     return () => clearInterval(interval); // Cleanup interval on unmount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>

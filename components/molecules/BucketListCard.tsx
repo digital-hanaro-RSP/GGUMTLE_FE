@@ -22,7 +22,7 @@ import ColorChip from '../atoms/ColorChips';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
-  type: 'effort' | 'money';
+  type: 'EFFORT' | 'MONEY';
   dataPercent: number;
   title: string;
   how: 'have' | 'do' | 'be' | 'go' | 'learn';
@@ -99,7 +99,7 @@ export const BucketListCard = ({
     const data: completeBucketList = {
       status: 'done',
     };
-    router.push('/');
+    router.push(`/bucket-list/complete?howto=${type}`);
     // await completeBucketList(bid, data).then((res) => {
     //   router.push('/completePage')
     // });
@@ -123,7 +123,7 @@ export const BucketListCard = ({
               <div className='absolute top-[calc((100%-44px)/2)] left-1.5 w-11 h-11 justify-center items-center flex bg-white rounded-full'>
                 {dataPercent >= 100 ? (
                   <FaCheckCircle size={30} />
-                ) : type === 'effort' ? (
+                ) : type === 'EFFORT' ? (
                   <Image
                     src={'/image/icons/Fire.png'}
                     alt='img'
@@ -173,7 +173,7 @@ export const BucketListCard = ({
               <h1 className='truncate w-full'>
                 <span className='ml-2 text-xl'>{title}</span>
               </h1>
-              {type === 'money' && isSelectMode === false && (
+              {type === 'MONEY' && isSelectMode === false && (
                 <>
                   <div className='text-2xl truncate ml-2'>
                     {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}

@@ -8,7 +8,7 @@ const meta: Meta<typeof BucketListCard> = {
   argTypes: {
     type: {
       control: { type: 'select' },
-      options: ['effort', 'money'], // 선택 가능한 옵션
+      options: ['EFFORT', 'MONEY'], // 선택 가능한 옵션
     },
     how: {
       control: { type: 'select' },
@@ -31,7 +31,7 @@ type Story = StoryObj<typeof BucketListCard>;
 // Default 스토리
 export const Default: Story = {
   args: {
-    type: 'effort',
+    type: 'EFFORT',
     dataPercent: 50,
     title: '운동하기',
     how: 'do',
@@ -41,7 +41,7 @@ export const Default: Story = {
 // MoneyGoal 스토리
 export const MoneyGoal: Story = {
   args: {
-    type: 'money',
+    type: 'MONEY',
     dataPercent: 75,
     title: '여행 자금 모으기',
     how: 'have',
@@ -52,7 +52,7 @@ export const MoneyGoal: Story = {
 // Goal 완성
 export const CompleteGoal: Story = {
   args: {
-    type: 'money',
+    type: 'MONEY',
     dataPercent: 100,
     title: '스카이다이빙 배우기',
     how: 'learn',

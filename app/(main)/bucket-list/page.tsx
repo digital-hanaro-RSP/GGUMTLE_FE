@@ -120,7 +120,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='effort'
+                type='EFFORT'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -129,7 +129,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -138,7 +138,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -147,7 +147,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -156,7 +156,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='effort'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -165,7 +165,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='do'
@@ -208,7 +208,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='be'
@@ -221,7 +221,7 @@ export default function BucketListPage() {
               <BucketListCard
                 isSelectMode={false}
                 balance={40000}
-                type='money'
+                type='MONEY'
                 dataPercent={80}
                 title='예시'
                 how='be'

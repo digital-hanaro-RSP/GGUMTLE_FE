@@ -2,6 +2,7 @@ import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
 import { IoPeople } from 'react-icons/io5';
 import Image from 'next/image';
+import { cn } from '@/lib/utils';
 // import { useRouter } from 'next/navigation';
 import { Card } from '../atoms/Card';
 
@@ -15,6 +16,7 @@ import { Card } from '../atoms/Card';
 type GroupCardProps = Group & {
   onClick?: () => void;
   rightIcon?: boolean;
+  className?: string;
 };
 
 export default function GroupCard({
@@ -26,6 +28,7 @@ export default function GroupCard({
   memberCount,
   onClick,
   rightIcon = true,
+  className = '',
 }: GroupCardProps) {
   // const router = useRouter();
 
@@ -36,7 +39,7 @@ export default function GroupCard({
   };
 
   return (
-    <Card onClick={handleClick}>
+    <Card onClick={handleClick} className={cn(className)}>
       <div className='flex gap-[20px] height-[80px] items-center justify-between'>
         <div className='flex gap-[20px] items-center'>
           <div className='w-[80px] h-[80px] rounded-[10px] overflow-hidden'>

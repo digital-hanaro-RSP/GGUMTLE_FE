@@ -21,7 +21,7 @@ export default function BucketListDetail() {
           showPercent={false}
           isSelectMode={false}
           balance={40000}
-          type='money'
+          type='MONEY'
           dataPercent={80}
           title='예시'
           how='do'

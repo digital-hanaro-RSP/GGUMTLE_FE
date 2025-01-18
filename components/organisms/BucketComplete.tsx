@@ -1,4 +1,15 @@
 import { MockGroups } from '@/app/(main)/community/create/post/page';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Group } from '@/types/Community';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -9,10 +20,11 @@ import { Card } from '../atoms/Card';
 import GroupCard from '../molecules/GroupCard';
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
+  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from '../ui/drawer';
 
 export const CompleteClapping = () => {
@@ -67,6 +79,7 @@ export const ShareToGroup = () => {
     }, 2000);
     return () => clearTimeout(timer);
   }, []);
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   return (
     <>
@@ -103,7 +116,10 @@ export const ShareToGroup = () => {
               unoptimized
             />
           </div>
-          <GroupListDrawer />
+          <GroupListDrawer
+            selectedGroup={selectedGroup}
+            setSelectedGroup={setSelectedGroup}
+          />
         </Card>
         <Button
           onClick={() => router.push('/bucket-list')}
@@ -117,37 +133,124 @@ export const ShareToGroup = () => {
   );
 };
 
-export const GroupListDrawer = () => {
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
+type GroupListDrawerProps = {
+  selectedGroup: Group | null;
+  setSelectedGroup: (group: Group | null) => void;
+};
+
+export const GroupListDrawer = ({
+  selectedGroup,
+  setSelectedGroup,
+}: GroupListDrawerProps) => {
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
+  const [isCompleteSharing, setIsCompleteSharing] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+  const onClickShare = () => {
+    if (selectedGroup !== null) {
+      setIsCompleteSharing(true);
+      return;
+    }
+    setIsModalOpen(true);
+    return;
+  };
   return (
     <Drawer
       open={isOpenGroupDrawer}
       onOpenChange={(open) => setIsOpenGroupDrawer(open)}
     >
-      <DrawerTrigger>
-        <div className='py-3'>
-          <Button>공유하기</Button>
-        </div>
-      </DrawerTrigger>
-      <DrawerContent className='h-[60%] max-h-[60%] max-w-screen-md mx-auto flex flex-col gap-[20px] px-[10px] pb-[60px] overflow-hidden'>
-        <DrawerHeader>
-          <DrawerTitle>공유할 꿈모임을 선택해주세요</DrawerTitle>
-        </DrawerHeader>
-        {/* 스크롤 영역 */}
-        <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-          {MockGroups.map((group) => (
-            <GroupCard
-              key={group.id}
-              {...group}
-              onClick={() => {
-                setSelectedGroup(group);
-                setIsOpenGroupDrawer(false);
-              }}
-              rightIcon={false}
-            />
-          ))}
-        </div>
+      <div
+        className='p-4 rounded-xl text-[15px] btn-md bg-primary-main text-white mt-3'
+        onClick={() => setIsOpenGroupDrawer(true)}
+      >
+        공유하기
+      </div>
+      <DrawerContent className='h-[80%] max-h-[80%] max-w-screen-md mx-auto flex flex-col gap-[0px] px-[10px] pb-[60px] overflow-hidden'>
+        {!isCompleteSharing ? (
+          <>
+            <DrawerHeader>
+              <DrawerTitle>글을 공유할 꿈모임을 선택해주세요</DrawerTitle>
+            </DrawerHeader>
+            {/* 스크롤 영역 */}
+            <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
+              {MockGroups.map((group) => (
+                <GroupCard
+                  key={group.id}
+                  {...group}
+                  onClick={() => {
+                    setSelectedGroup(group);
+                  }}
+                  rightIcon={false}
+                  className={cn(
+                    'transition-all duration-700',
+                    selectedGroup?.id === group.id
+                      ? 'bg-primary-main text-white'
+                      : ''
+                  )}
+                />
+              ))}
+            </div>
+            <DrawerFooter className='flex flex-col justify-center items-center gap-0 py-0'>
+              <AlertDialog
+                open={isModalOpen}
+                onOpenChange={(open) => setIsModalOpen(open)}
+              >
+                <AlertDialogContent className='bg-white'>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>꿈 모임을 선택해주세요.</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      공유하기 위해서는 꿈 모임 1개를 꼭 선택해주셔야 해요.
+                      <Image
+                        src={'/image/gif/noData.gif'}
+                        alt=''
+                        width={150}
+                        height={150}
+                        className='mx-auto'
+                      />
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>확인했어요</AlertDialogCancel>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button
+                onClick={onClickShare}
+                className='p-4 rounded-xl text-[15px] btn-lg bg-primary-main text-white mt-3'
+              >
+                공유하기
+              </Button>
+              <DrawerClose className='p-4 rounded-xl text-[15px] btn-lg bg-primary-disable text-white mt-3'>
+                취소하기
+              </DrawerClose>
+            </DrawerFooter>
+          </>
+        ) : (
+          <div className='animate-fadeIn flex-col flex h-full'>
+            <DrawerHeader className='flex justify-center pt-20'>
+              <DrawerTitle className='text-3xl font-bold'>
+                공유하기가 완료되었어요.
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className='flex-1 overflow-y-auto flex flex-col h-full justify-center items-center'>
+              <Image
+                src={'/image/popper.gif'}
+                alt=''
+                width={150}
+                height={150}
+                className='mx-auto'
+              />
+            </div>
+            <DrawerFooter className='flex flex-col justify-center items-center gap-0 py-0'>
+              <Button
+                onClick={() => router.push('/bucket-list')}
+                className='p-4 rounded-xl text-[15px] btn-lg bg-primary-main text-white mt-3'
+              >
+                완료하기
+              </Button>
+            </DrawerFooter>
+          </div>
+        )}
       </DrawerContent>
     </Drawer>
   );
