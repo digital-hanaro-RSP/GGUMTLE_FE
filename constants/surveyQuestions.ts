@@ -3,6 +3,7 @@ import { SurveyQuestions } from '@/types/Survey';
 export const surveyQuestions: SurveyQuestions = {
   1: {
     question: '귀하의 나이대가 어떻게 되시나요?',
+    isMultiple: false,
     options: [
       { id: 'op1', value: 2.5, label: '19세 이하' },
       { id: 'op2', value: 2.5, label: '20~29세' },
@@ -14,6 +15,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   2: {
     question: '1년 동안 버는 돈이 얼마나 되시나요?',
+    isMultiple: false,
     options: [
       { id: 'op1', value: 1.0, label: '3천만원 이하' },
       { id: 'op2', value: 2.0, label: '5천만원 이하' },
@@ -25,6 +27,7 @@ export const surveyQuestions: SurveyQuestions = {
   3: {
     question:
       '가지고 계신 전체 재산 중에서 금융상품(예금, 주식 등)이 차지하는 비율이 얼마나 되시나요?',
+    isMultiple: false,
     options: [
       {
         id: 'op1',
@@ -55,6 +58,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   4: {
     question: '앞으로의 수입이 어떻게 될 것 같으신가요?',
+    isMultiple: false,
     options: [
       {
         id: 'op1',
@@ -75,6 +79,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   5: {
     question: '지금까지 어떤 금융상품에 투자해보셨나요?',
+    isMultiple: true,
     options: [
       {
         id: 'op1',
@@ -105,6 +110,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   6: {
     question: '금융상품에 대해 얼마나 알고 계신가요?',
+    isMultiple: false,
     options: [
       {
         id: 'op1',
@@ -130,6 +136,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   7: {
     question: '투자하실 때 어떤 것을 더 중요하게 생각하시나요?',
+    isMultiple: false,
     options: [
       {
         id: 'op1',
@@ -150,6 +157,7 @@ export const surveyQuestions: SurveyQuestions = {
   },
   8: {
     question: '투자로 인한 손실을 어느 정도까지 견딜 수 있으신가요?',
+    isMultiple: false,
     options: [
       {
         id: 'op1',

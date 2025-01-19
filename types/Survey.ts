@@ -7,6 +7,7 @@ export interface SurveyOption {
 export interface SurveyQuestion {
   question: string;
   options: SurveyOption[];
+  isMultiple?: boolean;
 }
 
 export interface SurveyQuestions {

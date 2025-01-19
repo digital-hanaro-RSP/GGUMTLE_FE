@@ -29,7 +29,6 @@ export default function ResultsPage() {
       <div className='max-w-2xl mx-auto px-4'>
         <div className='bg-white rounded-lg shadow-md p-6'>
           <h2 className='text-2xl font-bold mb-6'>설문조사 결과</h2>
-
           <div className='mb-8'>
             <p className='text-xl mb-4'>
               총점:{' '}
@@ -37,18 +36,25 @@ export default function ResultsPage() {
                 {totalScore.toFixed(1)}점
               </span>
             </p>
+
             <div className='space-y-2'>
-              {Object.entries(answers).map(([questionId, value]) => (
-                <div
-                  key={questionId}
-                  className='flex justify-between items-center'
-                >
-                  <span className='text-gray-600'>
-                    문항 {questionId.replace('q', '')}
-                  </span>
-                  <span className='font-medium'>{value.toFixed(1)}점</span>
-                </div>
-              ))}
+              {Object.entries(answers).map(([questionId, values]) => {
+                // values는 number[]
+                const sumOfThisQuestion = values.reduce((acc, v) => acc + v, 0);
+                return (
+                  <div
+                    key={questionId}
+                    className='flex justify-between items-center'
+                  >
+                    <span className='text-gray-600'>
+                      문항 {questionId.replace('q', '')}
+                    </span>
+                    <span className='font-medium'>
+                      {sumOfThisQuestion.toFixed(1)}점
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div className='flex items-center justify-center'>
