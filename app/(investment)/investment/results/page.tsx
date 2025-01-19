@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/atoms/Button';
 import { useSurveyStore } from '@/store/surveyStore';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -32,7 +33,7 @@ export default function ResultsPage() {
           <div className='mb-8'>
             <p className='text-xl mb-4'>
               총점:{' '}
-              <span className='font-bold text-blue-600'>
+              <span className='font-bold text-primary-main'>
                 {totalScore.toFixed(1)}점
               </span>
             </p>
@@ -50,14 +51,11 @@ export default function ResultsPage() {
               ))}
             </div>
           </div>
-
-          <button
-            onClick={handleRestart}
-            className='w-full px-6 py-2 bg-blue-600 text-white rounded-lg
-                      hover:bg-blue-700 transition-colors duration-200'
-          >
-            다시 시작하기
-          </button>
+          <div className='flex items-center justify-center'>
+            <Button size='lg' onClick={handleRestart} className='px-6 py-2'>
+              다시 테스트하기
+            </Button>
+          </div>
         </div>
       </div>
     </div>

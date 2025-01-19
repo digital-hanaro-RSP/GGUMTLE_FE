@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/atoms/Button';
 import { RadioItem } from '@/components/atoms/RadioItem';
 import { StatusBar } from '@/components/atoms/StatusBar';
 import { SurveyCard } from '@/components/molecules/SurveyCard';
@@ -98,24 +99,24 @@ export default function SurveyStepPage({
 
           <div className='flex justify-between mt-8'>
             {currentStep > 1 && (
-              <button
+              <Button
+                size='sm'
                 onClick={() => router.push(`/investment/${currentStep - 1}`)}
-                className='px-6 py-2 bg-gray-200 hover:bg-gray-300 
-                          rounded-lg transition-colors duration-200'
+                className='px-6 py-2 bg-gray-300 transition-colors duration-200'
               >
                 이전
-              </button>
+              </Button>
             )}
-            <button
+            <Button
+              size='sm'
               onClick={handleNext}
-              disabled={selectedId === null} // selectedValue를 selectedId로 변경
-              className='px-6 py-2 bg-blue-600 text-white rounded-lg
-                      hover:bg-blue-700 transition-colors duration-200
+              disabled={selectedId === null}
+              className='px-6 py-2 transition-colors duration-200
                       disabled:opacity-50 disabled:cursor-not-allowed
                       ml-auto'
             >
               {currentStep === 8 ? '완료' : '다음'}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
