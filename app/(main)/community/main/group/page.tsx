@@ -18,7 +18,7 @@ export default function CommunityMainGroupPage() {
   const router = useRouter();
   const { selectedCategory } = useCategoryStore();
   const { searchInput } = useSearchStore();
-  const [offset, setOffSet] = useState(0);
+  const [offset, setOffset] = useState(0);
   console.log('selectedCategory :', selectedCategory);
   const { getGroups } = useCommunityApi();
   const observerRef = useRef<IntersectionObserver>();
@@ -43,7 +43,7 @@ export default function CommunityMainGroupPage() {
         setHasMore(false);
       }
       setGroups((prev) => (isInitial ? res : [...prev, ...res]));
-      setOffSet(currentOffset + limit);
+      setOffset(currentOffset + limit);
     } catch (err) {
       console.log('데이터 fetch중 에러 :', err);
     } finally {
@@ -73,7 +73,7 @@ export default function CommunityMainGroupPage() {
   );
 
   useEffect(() => {
-    setOffSet(0); // 처음 렌더링, 카테고리 변경, 검색 입력 은 처음부터 로드
+    setOffset(0); // 처음 렌더링, 카테고리 변경, 검색 입력 은 처음부터 로드
     setHasMore(true);
     fetchGetGroups(true);
 
@@ -86,7 +86,7 @@ export default function CommunityMainGroupPage() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className='flex flex-col w-full gap-[20px] '>
+      <div className='flex flex-col w-full gap-[20px]'>
         {groups &&
           groups.map((group, index) => (
             <m.div

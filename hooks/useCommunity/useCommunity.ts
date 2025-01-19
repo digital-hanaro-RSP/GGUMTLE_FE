@@ -106,7 +106,19 @@ export const useCommunityApi = () => {
       `/community/group?${category !== '' ? `category=${category}&` : ''}${search !== '' ? `search=${search}&` : ''}${`limit=${limit}&`}${`offset=${offset}`}`
     );
 
-    return response.content;
+    return response.data.content;
+  };
+
+  const getMyGroups = async (
+    limit: number,
+    offset: number,
+    category: string,
+    search: string
+  ): Promise<Group[]> => {
+    const response = await fetchApi(
+      `/community/group/my-group?${category !== '' ? `category=${category}&` : ''}${search !== '' ? `search=${search}&` : ''}${`limit=${limit}&`}${`offset=${offset}`}`
+    );
+    return response.data.content;
   };
 
   const joinGroup = async (groupId: number) => {
@@ -165,6 +177,7 @@ export const useCommunityApi = () => {
     getPopularPosts,
     createGroup,
     getGroups,
+    getMyGroups,
     joinGroup,
     leaveGroup,
     createPost,
