@@ -1,12 +1,15 @@
 'use client';
 
 import { Button } from '@/components/atoms/Button';
+import { useSurveyStore } from '@/store/surveyStore';
 import { useRouter } from 'next/navigation';
 
 export default function StartPage() {
   const router = useRouter();
+  const { clearAnswers } = useSurveyStore();
 
   const handleClick = () => {
+    clearAnswers();
     router.push('/investment/1');
   };
 

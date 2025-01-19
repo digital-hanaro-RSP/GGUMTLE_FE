@@ -15,26 +15,34 @@ export default function SurveyStepPage({
 }) {
   const router = useRouter();
   const currentStep = parseInt(params.step);
-  const { answers, setAnswer } = useSurveyStore();
-  const [selectedValue, setSelectedValue] = useState<number | null>(null);
+  const { answers, selectedIds, setAnswer } = useSurveyStore();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const TOTAL_QUESTIONS = 2;
-  useEffect(() => {
-    // Zustand store에서 현재 질문에 대한 답변 불러오기
-    const savedAnswer = answers[`q${currentStep}`];
-    if (savedAnswer !== undefined) {
-      setSelectedValue(savedAnswer);
-    } else {
-      setSelectedValue(null);
-    }
-  }, [currentStep, answers]);
 
-  const handleChange = (value: number) => {
-    setSelectedValue(value);
-    setAnswer(`q${currentStep}`, value);
+  useEffect(() => {
+    // 모든 질문에 답변했는지 확인
+    const totalAnswers = Object.keys(answers).length;
+    if (totalAnswers === 0) {
+      router.push('/investment/1');
+    }
+
+    // Zustand store에서 현재 질문에 대한 답변의 id 불러오기
+    const questionKey = `q${currentStep}`;
+    const savedId = selectedIds[questionKey];
+    if (savedId) {
+      setSelectedId(savedId);
+    } else {
+      setSelectedId(null);
+    }
+  }, [currentStep, selectedIds, answers, router]);
+
+  const handleChange = (id: string, value: number) => {
+    setSelectedId(id);
+    setAnswer(`q${currentStep}`, value, id);
   };
 
   const handleNext = () => {
-    if (selectedValue === null) return;
+    if (selectedId === null) return;
 
     if (currentStep < 2) {
       router.push(`/investment/${currentStep + 1}`);
@@ -79,8 +87,8 @@ export default function SurveyStepPage({
                 id={option.id}
                 name={`q${currentStep}`}
                 value={option.value}
-                checked={selectedValue === option.value}
-                onChange={() => handleChange(option.value)}
+                checked={selectedId === option.id}
+                onChange={() => handleChange(option.id, option.value)}
                 className='mb-3'
               >
                 {option.label}
@@ -100,11 +108,11 @@ export default function SurveyStepPage({
             )}
             <button
               onClick={handleNext}
-              disabled={selectedValue === null}
+              disabled={selectedId === null} // selectedValue를 selectedId로 변경
               className='px-6 py-2 bg-blue-600 text-white rounded-lg
-                        hover:bg-blue-700 transition-colors duration-200
-                        disabled:opacity-50 disabled:cursor-not-allowed
-                        ml-auto'
+                      hover:bg-blue-700 transition-colors duration-200
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      ml-auto'
             >
               {currentStep === 2 ? '완료' : '다음'}
             </button>
