@@ -14,7 +14,7 @@ export default function StartPage() {
   };
 
   return (
-    <div className='p-4 bg-[#F2F5F6]'>
+    <div className='h-full bg-[#F2F5F6]'>
       <div className='flex flex-col items-center gap-14'>
         <div className='flex flex-col items-center mt-3'>
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-2 mt-10'>

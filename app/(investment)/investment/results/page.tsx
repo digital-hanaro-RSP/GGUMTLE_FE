@@ -11,7 +11,7 @@ export default function ResultsPage() {
   useEffect(() => {
     // 모든 질문에 답변했는지 확인
     const totalAnswers = Object.keys(answers).length;
-    if (totalAnswers < 2) {
+    if (totalAnswers < 8) {
       router.push('/investment/1');
     }
   }, [answers, router]);
@@ -24,7 +24,7 @@ export default function ResultsPage() {
   const totalScore = getTotalScore();
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='h-full bg-gray-50 py-8'>
       <div className='max-w-2xl mx-auto px-4'>
         <div className='bg-white rounded-lg shadow-md p-6'>
           <h2 className='text-2xl font-bold mb-6'>설문조사 결과</h2>

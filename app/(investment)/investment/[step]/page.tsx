@@ -17,7 +17,7 @@ export default function SurveyStepPage({
   const currentStep = parseInt(params.step);
   const { answers, selectedIds, setAnswer } = useSurveyStore();
   const [selectedId, setSelectedId] = useState<string | null>(null);
-  const TOTAL_QUESTIONS = 2;
+  const TOTAL_QUESTIONS = 8;
 
   useEffect(() => {
     // 모든 질문에 답변했는지 확인
@@ -44,7 +44,7 @@ export default function SurveyStepPage({
   const handleNext = () => {
     if (selectedId === null) return;
 
-    if (currentStep < 2) {
+    if (currentStep < 8) {
       router.push(`/investment/${currentStep + 1}`);
     } else {
       router.push('/investment/results');
@@ -59,7 +59,7 @@ export default function SurveyStepPage({
   }
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='h-full bg-gray-50 py-8 overflow-y-auto'>
       <div className='max-w-2xl mx-auto px-4'>
         <div className='bg-white rounded-lg shadow-md p-6'>
           <div className='mb-6'>
@@ -114,7 +114,7 @@ export default function SurveyStepPage({
                       disabled:opacity-50 disabled:cursor-not-allowed
                       ml-auto'
             >
-              {currentStep === 2 ? '완료' : '다음'}
+              {currentStep === 8 ? '완료' : '다음'}
             </button>
           </div>
         </div>
