@@ -69,7 +69,17 @@ export const useSurveyStore = create<SurveyState>()(
           }
         }),
 
-      clearAnswers: () => ({ answers: {}, selectedIds: {} }),
+      clearAnswers: () => {
+        set(
+          (state) => ({
+            ...state,
+            answers: {},
+            selectedIds: {},
+          }),
+          true
+        );
+        useSurveyStore.persist.clearStorage();
+      },
 
       getTotalScore: () => {
         const { answers } = get();

@@ -28,6 +28,8 @@ import { useEffect, useState } from 'react';
 
 // app/(investment)/investment/[step]/page.tsx
 
+// app/(investment)/investment/[step]/page.tsx
+
 export default function SurveyStepPage({
   params,
 }: {
@@ -160,7 +162,7 @@ export default function SurveyStepPage({
               <Button
                 size='sm'
                 onClick={() => router.push(`/investment/${currentStep - 1}`)}
-                className='px-6 py-2 bg-gray-300 transition-colors duration-200'
+                className='px-6 py-2 bg-gray-500 transition-colors duration-200'
               >
                 이전
               </Button>

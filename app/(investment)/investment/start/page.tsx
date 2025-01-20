@@ -31,7 +31,7 @@ export default function StartPage() {
             />
           </div>
           <p className='text-[#7D8B8A] font-semibold text-center text-md translate-y-36'>
-            간단한 질문으로
+            간단한 테스트로
             <br />더 나은 투자 여정의 시작을 함께하세요
           </p>
         </div>
