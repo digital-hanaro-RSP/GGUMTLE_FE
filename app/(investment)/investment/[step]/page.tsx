@@ -1,34 +1,14 @@
-// app/(investment)/investment/[step]/page.tsx
 'use client';
 
 import { Button } from '@/components/atoms/Button';
 import CheckBox from '@/components/atoms/CheckBox';
 import { RadioItem } from '@/components/atoms/RadioItem';
-// 우리가 만든 컴포넌트
 import { StatusBar } from '@/components/atoms/StatusBar';
 import { SurveyCard } from '@/components/molecules/SurveyCard';
 import { surveyQuestions } from '@/constants/surveyQuestions';
 import { useSurveyStore } from '@/store/surveyStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
-
-// app/(investment)/investment/[step]/page.tsx
 
 export default function SurveyStepPage({
   params,
