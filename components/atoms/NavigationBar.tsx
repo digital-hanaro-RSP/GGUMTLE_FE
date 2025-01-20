@@ -30,27 +30,31 @@ export default function Navigation({ currentPath }: NavigationProps) {
       style={{ height: '58px' }}
     >
       <div className='flex justify-around items-center w-full'>
-        {navigationItems.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`flex flex-col items-center gap-1 transition-colors ${
-              activePath === item.href
-                ? 'text-primary-main font-bold'
-                : 'text-[#8297AC]'
-            }`}
-          >
-            <item.Icon
-              size={30}
-              color={
-                activePath === item.href ? 'var(--primary-main)' : '#8297AC'
-              }
-            />
-            <span className='text-xs' style={{ fontSize: '12px' }}>
-              {item.label}
-            </span>
-          </Link>
-        ))}
+        {navigationItems.map((item) => {
+          // 커뮤니티 모든 하위 페이지에 색상 표시
+          const isCommunityItem = item.href === '/community/main/popular';
+          const isActive = isCommunityItem
+            ? activePath.startsWith('/community')
+            : activePath === item.href;
+
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`flex flex-col items-center gap-1 transition-colors ${
+                isActive ? 'text-primary-main font-bold' : 'text-[#8297AC]'
+              }`}
+            >
+              <item.Icon
+                size={30}
+                color={isActive ? 'var(--primary-main)' : '#8297AC'}
+              />
+              <span className='text-xs' style={{ fontSize: '12px' }}>
+                {item.label}
+              </span>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
