@@ -4,7 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import { RadioItem } from '@/components/atoms/RadioItem';
 import { useSignUpStore } from '@/store/useSignUpStore';
-import { LuListCheck } from 'react-icons/lu';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
 
@@ -92,98 +92,106 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className='p-4'>
-      <div className='flex flex-col items-center gap-10'>
-        <div className='flex flex-col items-center mt-3'>
-          <LuListCheck className='text-primary-main text-5xl mb-3' />
-          <h1 className='text-xl font-bold whitespace-pre-line text-center text-primary-main mb-4'>
-            아래 내용을 하나씩{'\n'}차근차근 입력해주세요
-          </h1>
-        </div>
-
-        <div className='w-full max-w-md space-y-6'>
-          <div>
-            <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>이름</p>
-            <DefaultInputRef
-              name='name'
-              placeHolder='이름을 입력해주세요'
-              onChange={handleNameChange}
-              value={name}
-              required
-              error='이름을 입력해주세요'
+    <div className='h-screen overflow-hidden'>
+      <div className='h-full overflow-y-auto p-4'>
+        <div className='flex flex-col items-center gap-10'>
+          <div className='flex flex-col items-center mt-3'>
+            <Image
+              src={'/image/icons/list.png'}
+              width={80}
+              height={80}
+              alt={'리스트 아이콘'}
+              className='mb-3'
             />
+            <h1 className='text-xl font-bold whitespace-pre-line text-center text-primary-main mb-4'>
+              아래 내용을 하나씩{'\n'}차근차근 입력해주세요
+            </h1>
           </div>
 
-          <div>
-            <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>생년월일</p>
-            <div className='flex justify-between'>
-              <div className='w-[30%]'>
-                <DefaultInputRef
-                  name='year'
-                  placeHolder='출생연도'
-                  onChange={handleBirthChange}
-                  value={birth.year}
-                  required
-                  maxLength={4}
-                />
+          <div className='w-full max-w-md space-y-6'>
+            <div>
+              <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>이름</p>
+              <DefaultInputRef
+                name='name'
+                placeHolder='이름을 입력해주세요'
+                onChange={handleNameChange}
+                value={name}
+                required
+                error='이름을 입력해주세요'
+              />
+            </div>
+
+            <div>
+              <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>생년월일</p>
+              <div className='flex justify-between'>
+                <div className='w-[30%]'>
+                  <DefaultInputRef
+                    name='year'
+                    placeHolder='출생연도'
+                    onChange={handleBirthChange}
+                    value={birth.year}
+                    required
+                    maxLength={4}
+                  />
+                </div>
+                <div className='w-[30%]'>
+                  <DefaultInputRef
+                    name='month'
+                    placeHolder='월'
+                    onChange={handleBirthChange}
+                    value={birth.month}
+                    required
+                    maxLength={2}
+                  />
+                </div>
+                <div className='w-[30%]'>
+                  <DefaultInputRef
+                    name='day'
+                    placeHolder='일'
+                    onChange={handleBirthChange}
+                    value={birth.day}
+                    required
+                    maxLength={2}
+                  />
+                </div>
               </div>
-              <div className='w-[30%]'>
-                <DefaultInputRef
-                  name='month'
-                  placeHolder='월'
-                  onChange={handleBirthChange}
-                  value={birth.month}
-                  required
-                  maxLength={2}
-                />
-              </div>
-              <div className='w-[30%]'>
-                <DefaultInputRef
-                  name='day'
-                  placeHolder='일'
-                  onChange={handleBirthChange}
-                  value={birth.day}
-                  required
-                  maxLength={2}
-                />
+            </div>
+
+            <div>
+              <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>성별</p>
+              <div className='flex gap-4'>
+                <RadioItem
+                  id='male'
+                  name='gender'
+                  value='male'
+                  contentDirection='vertical'
+                  shape='box'
+                  className='flex-1 rounded-xl text-[#C0C0C0] border border-placeholderGray'
+                  onChange={handleGenderChange}
+                  checked={gender === 'male'}
+                >
+                  남성
+                </RadioItem>
+                <RadioItem
+                  id='female'
+                  name='gender'
+                  value='female'
+                  contentDirection='vertical'
+                  shape='box'
+                  className='flex-1 rounded-xl text-[#C0C0C0] border border-placeholderGray'
+                  onChange={handleGenderChange}
+                  checked={gender === 'female'}
+                >
+                  여성
+                </RadioItem>
               </div>
             </div>
           </div>
-
-          <div>
-            <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>성별</p>
-            <div className='flex gap-4'>
-              <RadioItem
-                id='male'
-                name='gender'
-                value='male'
-                contentDirection='vertical'
-                shape='box'
-                className='flex-1 rounded-xl text-[#C0C0C0] border border-placeholderGray'
-                onChange={handleGenderChange}
-                checked={gender === 'male'}
-              >
-                남성
-              </RadioItem>
-              <RadioItem
-                id='female'
-                name='gender'
-                value='female'
-                contentDirection='vertical'
-                shape='box'
-                className='flex-1 rounded-xl text-[#C0C0C0] border border-placeholderGray'
-                onChange={handleGenderChange}
-                checked={gender === 'female'}
-              >
-                여성
-              </RadioItem>
-            </div>
+          <div className='flex flex-col items-center mt-12'>
+            <Button size='lg' onClick={handleNext}>
+              다음
+            </Button>
           </div>
-        </div>
-        <div className='flex flex-col items-center mt-12'>
-          <Button size='lg' onClick={handleNext}>
-            다음
-          </Button>
         </div>
       </div>
     </div>
