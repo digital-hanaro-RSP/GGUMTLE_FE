@@ -3,6 +3,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { IoPeople } from 'react-icons/io5';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
+import { convertCodeToCategory } from '@/lib/utils';
 // import { useRouter } from 'next/navigation';
 import { Card } from '../atoms/Card';
 
@@ -59,7 +60,9 @@ export default function GroupCard({
               <IoPeople width={14} height={14} />
               <span className='text-[12px]'>{memberCount} 명</span>
               <span>·</span>
-              <span className='text-[12px]'>{category}</span>
+              <span className='text-[12px]'>
+                {convertCodeToCategory(category)}
+              </span>
             </div>
           </div>
         </div>

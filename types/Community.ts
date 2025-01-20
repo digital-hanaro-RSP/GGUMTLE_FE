@@ -58,4 +58,5 @@ export type Group = {
   imageUrl: string;
   memberCount: number;
   createdAt: string;
+  updatedAt: string;
 };
