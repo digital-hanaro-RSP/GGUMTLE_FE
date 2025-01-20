@@ -6,18 +6,18 @@ const meta: Meta<typeof BucketListCard> = {
   component: BucketListCard,
   tags: ['autodocs'], // 자동 문서화를 활성화
   argTypes: {
-    type: {
+    howTo: {
       control: { type: 'select' },
-      options: ['effort', 'money'], // 선택 가능한 옵션
+      options: ['EFFORT', 'MONEY'], // 선택 가능한 옵션
     },
-    how: {
+    tagType: {
       control: { type: 'select' },
-      options: ['have', 'do', 'be', 'go', 'learn'], // 선택 가능한 옵션
+      options: ['HAVE', 'DO', 'BE', 'GO', 'LEARN'], // 선택 가능한 옵션
     },
     dataPercent: {
       control: { type: 'number' },
     },
-    balance: {
+    safeBox: {
       control: { type: 'number' },
     },
   },
@@ -31,31 +31,31 @@ type Story = StoryObj<typeof BucketListCard>;
 // Default 스토리
 export const Default: Story = {
   args: {
-    type: 'effort',
+    howTo: 'EFFORT',
     dataPercent: 50,
     title: '운동하기',
-    how: 'do',
+    tagType: 'DO',
   },
 };
 
 // MoneyGoal 스토리
 export const MoneyGoal: Story = {
   args: {
-    type: 'money',
+    howTo: 'MONEY',
     dataPercent: 75,
     title: '여행 자금 모으기',
-    how: 'have',
-    balance: 1500000,
+    tagType: 'HAVE',
+    safeBox: 1500000,
   },
 };
 
 // Goal 완성
 export const CompleteGoal: Story = {
   args: {
-    type: 'money',
+    howTo: 'MONEY',
     dataPercent: 100,
     title: '스카이다이빙 배우기',
-    how: 'learn',
-    balance: 2500000,
+    tagType: 'LEARN',
+    safeBox: 2500000,
   },
 };

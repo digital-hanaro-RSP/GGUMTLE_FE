@@ -19,17 +19,17 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function BucketListPage() {
-  const [filter, setFilter] = useState<string>('default');
+  const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const lastScrollY = useRef(0);
   const categories = new Map([
-    ['default', '전체'],
-    ['do', '해보고 싶다'],
-    ['be', '되고 싶다'],
-    ['have', '갖고 싶다'],
-    ['go', '가보고 싶다'],
-    ['learn', '배우고 싶다'],
+    ['DEFAULT', '전체'],
+    ['DO', '해보고 싶다'],
+    ['BE', '되고 싶다'],
+    ['HAVE', '갖고 싶다'],
+    ['GO', '가보고 싶다'],
+    ['LEARN', '배우고 싶다'],
   ]);
 
   const router = useRouter();
@@ -119,57 +119,57 @@ export default function BucketListPage() {
             <div className={cn('flex flex-col gap-2 overflow-visible')}>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='effort'
+                safeBox={40000}
+                howTo='EFFORT'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='effort'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <div className='relative flex flex-row w-full pb-32 '>
                 <div
@@ -207,12 +207,12 @@ export default function BucketListPage() {
             <div className='flex flex-col gap-2'>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='be'
-                bid={1}
+                tagType='BE'
+                bucketId={1}
               />
             </div>
           </TabsContent>
@@ -220,12 +220,12 @@ export default function BucketListPage() {
             <div className='flex flex-col gap-2'>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='money'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='be'
-                bid={1}
+                tagType='BE'
+                bucketId={1}
               />
             </div>
           </TabsContent>

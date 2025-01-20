@@ -20,12 +20,12 @@ export default function BucketListDetail() {
           className='bg-gradient-to-t from-[#F4F6F8] from-[13%] to-white'
           showPercent={false}
           isSelectMode={false}
-          balance={40000}
-          type='money'
+          safeBox={40000}
+          howTo='MONEY'
           dataPercent={80}
           title='예시'
-          how='do'
-          bid={1}
+          tagType='DO'
+          bucketId={1}
         >
           <div className='pt-10'>
             <ProgressBar dataPercent={30} />

@@ -19,35 +19,35 @@ export const Gray: Story = {
 
 export const Do: Story = {
   args: {
-    color: 'do',
+    color: 'DO',
     children: '하고 싶어요',
   },
 };
 
 export const Be: Story = {
   args: {
-    color: 'be',
+    color: 'BE',
     children: '되고 싶어요',
   },
 };
 
 export const Have: Story = {
   args: {
-    color: 'have',
+    color: 'HAVE',
     children: '갖고 싶어요',
   },
 };
 
 export const Go: Story = {
   args: {
-    color: 'go',
+    color: 'GO',
     children: '가보고 싶어요',
   },
 };
 
 export const Learn: Story = {
   args: {
-    color: 'learn',
+    color: 'LEARN',
     children: '배우고 싶어요',
   },
 };
