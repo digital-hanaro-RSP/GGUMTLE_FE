@@ -34,3 +34,9 @@ export const getRelativeTimeString = (dateString: string): string => {
     });
   }
 };
+
+export const parseIntWithoutCommas = (inputValue: string) => {
+  const numericValue = inputValue.replace(/[^0-9]/g, '');
+  const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
+  return parsedValue;
+};

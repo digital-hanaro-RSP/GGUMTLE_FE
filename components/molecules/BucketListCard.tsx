@@ -14,10 +14,12 @@ import { BsThreeDots } from 'react-icons/bs';
 import { FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 import { cn, formatNumberWithCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
+import { MoneyTransferDrawer } from '../organisms/MoneyTransferDrawer';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -48,6 +50,7 @@ export const BucketListCard = ({
 }: BucketListCardProps) => {
   const { completeBucketList } = useBucketListApi();
   const router = useRouter();
+  const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
 
   const data = {
     datasets: [
@@ -108,6 +111,19 @@ export const BucketListCard = ({
   const handleClick = () => {
     if (showPercent) router.push(`/bucket-list/${bucketId}`);
   };
+
+  const handleTransferClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    type: 'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
+  ) => {
+    e.stopPropagation();
+    setTransferDrawerOpen(true);
+    setTransferType(type);
+  };
+
+  const [transferType, setTransferType] = useState<
+    'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
+  >('FILLUP');
 
   return (
     <>
@@ -176,13 +192,21 @@ export const BucketListCard = ({
               {howTo === 'MONEY' && isSelectMode === false && (
                 <>
                   <div className='text-2xl truncate ml-2'>
-                    {`${formatNumberWithCommas(safeBox?.toString() ?? '0')}원`}
+                    {`${safeBox?.toLocaleString()}원`}
                   </div>
                   <div className='flex flex-row gap-2'>
-                    <Button size='sm' className='bg-[#EFF0F4] text-black w-1/2'>
+                    <Button
+                      size='sm'
+                      className='bg-[#EFF0F4] text-black w-1/2'
+                      onClick={(e) => handleTransferClick(e, 'BRINGOUT')}
+                    >
                       꺼내기
                     </Button>
-                    <Button size='sm' className='w-1/2'>
+                    <Button
+                      size='sm'
+                      className='w-1/2'
+                      onClick={(e) => handleTransferClick(e, 'FILLUP')}
+                    >
                       채우기
                     </Button>
                   </div>
@@ -194,6 +218,15 @@ export const BucketListCard = ({
 
         {children}
       </Card>
+      <div>
+        <MoneyTransferDrawer
+          transferDrawerOpen={transferDrawerOpen}
+          setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+          transferType={transferType}
+          toId={1}
+          fromId={1}
+        />
+      </div>
     </>
   );
 };

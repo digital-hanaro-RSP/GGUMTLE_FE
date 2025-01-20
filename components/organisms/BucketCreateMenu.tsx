@@ -26,7 +26,7 @@ import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { cn, parseIntWithoutCommas } from '@/lib/utils';
 import { DefaultInputRef } from '../atoms/Inputs';
 import { RadioItem } from '../atoms/RadioItem';
 import TextArea from '../atoms/TextArea';
@@ -230,10 +230,10 @@ export const CreateBucketHowTo = () => {
   const goalAmountinputRef = useRef<HTMLInputElement>(null);
 
   const onAllocateAmountChange = () => {
-    setAllocateAmount(parseInt(allocateAmountinputRef.current?.value ?? '0'));
+    setAllocateAmount(parseIntWithoutCommas(allocateAmountinputRef.current?.value ?? '0'));
   };
   const onGoalAmountChange = () => {
-    setGoalAmount(parseInt(goalAmountinputRef.current?.value ?? '0'));
+    setGoalAmount(parseIntWithoutCommas(goalAmountinputRef.current?.value ?? '0'));
   };
 
   return (
