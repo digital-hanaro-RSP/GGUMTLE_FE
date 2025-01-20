@@ -1,5 +1,5 @@
 import { useApi } from '@/hooks/useApi';
-import { CommentResponse, PostResponse } from '@/types/Community';
+import { CommentResponse, Group, PostResponse } from '@/types/Community';
 
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
@@ -77,6 +77,95 @@ export const useCommunityApi = () => {
       options
     );
   };
+  const createGroup = async (
+    name: string,
+    category: string,
+    description: string,
+    imageUrl: string
+  ): Promise<Group> => {
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        category,
+        description,
+        imageUrl,
+      }),
+    };
+    const response = await fetchApi(`/community/group`, options);
+    return response;
+  };
+
+  const getGroups = async (
+    limit: number,
+    offset: number,
+    category: string,
+    search: string
+  ): Promise<Group[]> => {
+    const response = await fetchApi(
+      `/community/group?${category !== '' ? `category=${category}&` : ''}${search !== '' ? `search=${search}&` : ''}${`limit=${limit}&`}${`offset=${offset}`}`
+    );
+
+    return response.data.content;
+  };
+
+  const getMyGroups = async (
+    limit: number,
+    offset: number,
+    category: string,
+    search: string
+  ): Promise<Group[]> => {
+    const response = await fetchApi(
+      `/community/group/my-group?${category !== '' ? `category=${category}&` : ''}${search !== '' ? `search=${search}&` : ''}${`limit=${limit}&`}${`offset=${offset}`}`
+    );
+    return response.data.content;
+  };
+
+  const joinGroup = async (groupId: number) => {
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify({
+        groupId,
+      }),
+    };
+    const response = await fetchApi(
+      `/community/group/${groupId}/member`,
+      options
+    );
+    return response;
+  };
+
+  const leaveGroup = async (groupId: number) => {
+    const options: RequestInit = {
+      method: 'DELETE',
+    };
+    const response = await fetchApi(
+      `/community/group/${groupId}/member`,
+      options
+    );
+    return response;
+  };
+
+  const createPost = async (
+    groupId: number,
+    imageUrls: string[],
+    content: string,
+    postType: string
+  ) => {
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify({
+        imageUrls,
+        content,
+        postType,
+      }),
+    };
+    const response = await fetchApi(
+      `/community/group/${groupId}/post`,
+      options
+    );
+    return response;
+  };
 
   return {
     getPosts,
@@ -86,5 +175,11 @@ export const useCommunityApi = () => {
     plusCommentLike,
     minusCommentLike,
     getPopularPosts,
+    createGroup,
+    getGroups,
+    getMyGroups,
+    joinGroup,
+    leaveGroup,
+    createPost,
   };
 };

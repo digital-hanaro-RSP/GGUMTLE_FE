@@ -7,6 +7,7 @@ import Header from '@/components/atoms/Header';
 import { SearchInpuRef } from '@/components/atoms/Inputs';
 import { AddNewCard } from '@/components/molecules/AddNewCard';
 import { useCategoryStore } from '@/store/useCategoryStore';
+import { useSearchStore } from '@/store/useSearchStore';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -25,6 +26,7 @@ export default function CommunityMainLayout({
   const router = useRouter();
   const pathname = usePathname();
   const { selectedCategory, setSelectedCategory } = useCategoryStore();
+  const { setSearchInput } = useSearchStore();
 
   const currentTab = (pathname.split('/').pop() as Tab) || 'popular';
 
@@ -82,6 +84,7 @@ export default function CommunityMainLayout({
                   onSubmit={(e) => {
                     e.preventDefault();
                     const searchValue = searchInputRef.current?.value || '';
+                    setSearchInput(searchValue);
                     console.log('검색어:', searchValue);
                   }}
                 />

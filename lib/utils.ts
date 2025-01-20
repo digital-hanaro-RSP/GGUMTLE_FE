@@ -35,6 +35,32 @@ export const getRelativeTimeString = (dateString: string): string => {
   }
 };
 
+export const convertCategoryToCode = (category: string): string => {
+  const categoryMap: { [key: string]: string } = {
+    여행: 'TRAVEL',
+    재테크: 'INVESTMENT',
+    노후: 'AFTER_RETIREMENT',
+    교육: 'EDUCATION',
+    취미: 'HOBBY',
+  };
+
+  if (category === '전체') return '';
+  return categoryMap[category] || '';
+};
+
+export const convertCodeToCategory = (code: string): string => {
+  const reverseCategoryMap: { [key: string]: string } = {
+    TRAVEL: '여행',
+    INVESTMENT: '재테크',
+    AFTER_RETIREMENT: '노후',
+    EDUCATION: '교육',
+    HOBBY: '취미',
+  };
+
+  if (!code) return '전체';
+  return reverseCategoryMap[code] || '전체';
+};
+
 export const parseIntWithoutCommas = (inputValue: string) => {
   const numericValue = inputValue.replace(/[^0-9]/g, '');
   const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
