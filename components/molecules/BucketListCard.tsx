@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
-import { completeBucketList } from '@/types/BucketList';
+import { bucketListStatus } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
@@ -15,7 +15,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { cn, formatNumberWithCommas } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
@@ -24,16 +24,17 @@ import { MoneyTransferDrawer } from '../organisms/MoneyTransferDrawer';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
-  howTo: 'EFFORT' | 'MONEY';
+  howTo: 'EFFORT' | 'MONEY' | 'WILL';
   dataPercent: number;
   title: string;
-  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN';
+  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN' | 'DEFAULT';
   safeBox?: number;
   isSelectMode?: boolean; //커뮤니티 용인지 체크
   bucketId: number;
   children?: React.ReactNode;
   showPercent?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 export const BucketListCard = ({
@@ -47,8 +48,9 @@ export const BucketListCard = ({
   bucketId,
   children,
   showPercent = true,
+  onClick,
 }: BucketListCardProps) => {
-  const { completeBucketList } = useBucketListApi();
+  const { changeBucketListStatus } = useBucketListApi();
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
 
@@ -99,17 +101,32 @@ export const BucketListCard = ({
     bucketId: number
   ) => {
     e.stopPropagation();
-    const data: completeBucketList = {
-      status: 'done',
+    const data: bucketListStatus = {
+      status: 'DONE',
     };
-    router.push(`/bucket-list/complete?howto=${howTo}`);
-    // await completeBucketList(bid, data).then((res) => {
-    //   router.push('/completePage')
-    // });
+    await changeBucketListStatus(bucketId, data).then(() => {
+      router.push(`/bucket-list/complete?howto=${howTo}`);
+    });
+  };
+
+  const hold = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    bucketId: number
+  ) => {
+    e.stopPropagation();
+    const data: bucketListStatus = {
+      status: 'HOLD',
+    };
+    await changeBucketListStatus(bucketId, data).then(() => {
+      window.location.reload();
+    });
   };
 
   const handleClick = () => {
-    if (showPercent) router.push(`/bucket-list/${bucketId}`);
+    if (showPercent && !isSelectMode) router.push(`/bucket-list/${bucketId}`);
+    if (isSelectMode) {
+      if (onClick) onClick();
+    }
   };
 
   const handleTransferClick = (
@@ -139,7 +156,7 @@ export const BucketListCard = ({
               <div className='absolute top-[calc((100%-44px)/2)] left-1.5 w-11 h-11 justify-center items-center flex bg-white rounded-full'>
                 {dataPercent >= 100 ? (
                   <FaCheckCircle size={30} />
-                ) : howTo === 'EFFORT' ? (
+                ) : howTo === 'EFFORT' || howTo === 'WILL' ? (
                   <Image
                     src={'/image/icons/Fire.png'}
                     alt='img'
@@ -173,13 +190,15 @@ export const BucketListCard = ({
                     <DropdownMenuTrigger>
                       <BsThreeDots />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='text-center w-10'>
+                    <DropdownMenuContent className='text-center w-10 z-[105]'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={(e) => complete(e, bucketId)}>
                         완료하기
                       </DropdownMenuItem>
-                      <DropdownMenuItem>보류하기</DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => hold(e, bucketId)}>
+                        보류하기
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

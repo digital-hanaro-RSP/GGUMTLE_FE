@@ -1,17 +1,70 @@
-import { completeBucketList } from '@/types/BucketList';
+import { bucketListStatus, createBucketListReq } from '@/types/BucketList';
 import { useApi } from '../useApi';
 
 export const useBucketListApi = () => {
   const { fetchApi } = useApi();
-  /** 버킷리스트 완료하는 hook 추후 status 변경 hook으로 바뀔 예정 */
-  const completeBucketList = async (bid: number, data: completeBucketList) => {
+
+  /** bucketlist status 변환 hook */
+  const changeBucketListStatus = async (
+    bid: number,
+    data: bucketListStatus
+  ) => {
     return await fetchApi(`/bucketlist/${bid}/complete`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
   };
+  /** bucketlist 전체 조회 Hook */
+  const getAllBucketList = async () => {
+    return await fetchApi('/bucketlist', {
+      method: 'GET',
+    });
+  };
+
+  /** bucketlist 상세 조회 hook */
+  const getBucketListbyId = async (bid: number) => {
+    return await fetchApi(`/bucketlist/${bid}`, {
+      method: 'GET',
+    });
+  };
+
+  /** bucketlist 생성 hook */
+  const createBucketList = async (data: createBucketListReq) => {
+    return await fetchApi('/bucketlist', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  };
+
+  /** bucketlist 수정 hook */
+  const editBucketListbyId = async (bid: number, data: createBucketListReq) => {
+    return await fetchApi(`/bucketlist/${bid}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  };
+
+  /** bucketlist 삭제 hook */
+  const deleteBucketListbyId = async (bid: number) => {
+    return await fetchApi(`/bucketlist/${bid}`, {
+      method: 'DELETE',
+    });
+  };
+
+  /** 추천 bucketlist 받기 hook */
+  const getRecommendBucklist = async () => {
+    return await fetchApi('/bucketlist/recommendation', {
+      method: 'GET',
+    });
+  };
 
   return {
-    completeBucketList,
+    changeBucketListStatus,
+    getAllBucketList,
+    getBucketListbyId,
+    createBucketList,
+    editBucketListbyId,
+    deleteBucketListbyId,
+    getRecommendBucklist,
   };
 };
