@@ -42,23 +42,23 @@ export const CreateBucketTitle = () => {
   const bucketTitleRef = useRef<HTMLInputElement>(null);
   const categories = new Map([
     ['Default', '버킷리스트 타입을 선택해주세요.'],
-    ['do', '해보고 싶다'],
-    ['be', '되고 싶다'],
-    ['have', '갖고 싶다'],
-    ['go', '가보고 싶다'],
-    ['learn', '배우고 싶다'],
+    ['DO', '해보고 싶다'],
+    ['BE', '되고 싶다'],
+    ['HAVE', '갖고 싶다'],
+    ['GO', '가보고 싶다'],
+    ['LEARN', '배우고 싶다'],
   ]);
   const bgColor = (type: string) => {
     switch (type) {
-      case 'do':
+      case 'DO':
         return '#FFF89F';
-      case 'be':
+      case 'BE':
         return '#CDF5D8';
-      case 'have':
+      case 'HAVE':
         return '#CDF7F7';
-      case 'go':
+      case 'GO':
         return '#F5CFF6';
-      case 'learn':
+      case 'LEARN':
         return '#F3D0CE';
       default:
         return '#FFF';

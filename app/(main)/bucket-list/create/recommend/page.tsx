@@ -8,15 +8,14 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import useCreateBucketStore from '@/contexts/useCreateBucketStore';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const data = [
   {
-    bucketType: 'Do',
+    bucketType: 'DO',
     recommendations: [
       { title: '하와이 여행', followers: 1500 },
       { title: '프랑스 와인 투어', followers: 1200 },
@@ -24,7 +23,7 @@ const data = [
     ],
   },
   {
-    bucketType: 'Be',
+    bucketType: 'BE',
     recommendations: [
       { title: '하와이 여행', followers: 1500 },
       { title: '프랑스 와인 투어', followers: 1200 },
@@ -32,7 +31,7 @@ const data = [
     ],
   },
   {
-    bucketType: 'Have',
+    bucketType: 'HAVE',
     recommendations: [
       { title: '스카이다이빙', followers: 2000 },
       { title: '클래식 피아노 배우기', followers: 1800 },
@@ -40,7 +39,7 @@ const data = [
     ],
   },
   {
-    bucketType: 'Go',
+    bucketType: 'GO',
     recommendations: [
       { title: '스카이다이빙', followers: 2000 },
       { title: '클래식 피아노 배우기', followers: 1800 },
@@ -48,7 +47,7 @@ const data = [
     ],
   },
   {
-    bucketType: 'Learn',
+    bucketType: 'LEARN',
     recommendations: [
       { title: '스카이다이빙', followers: 2000 },
       { title: '클래식 피아노 배우기', followers: 1800 },
@@ -63,16 +62,16 @@ export default function RecommendBucketPage() {
   const [current, setCurrent] = useState<number>(0);
 
   const bgColor = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'do':
+    switch (type) {
+      case 'DO':
         return '#FFF89F';
-      case 'be':
+      case 'BE':
         return '#CDF5D8';
-      case 'have':
+      case 'HAVE':
         return '#CDF7F7';
-      case 'go':
+      case 'GO':
         return '#F5CFF6';
-      case 'learn':
+      case 'LEARN':
         return '#F3D0CE';
       default:
         return '#FFF';

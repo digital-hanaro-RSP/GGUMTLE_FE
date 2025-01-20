@@ -76,15 +76,15 @@ export const BucketListCard = ({
 
   const getTagType = (tagType: string) => {
     switch (tagType) {
-      case 'do':
+      case 'DO':
         return '해보고 싶다';
-      case 'be':
+      case 'BE':
         return '되고 싶다';
-      case 'have':
+      case 'HAVE':
         return '갖고 싶다';
-      case 'go':
+      case 'GO':
         return '가보고 싶다';
-      case 'learn':
+      case 'LEARN':
         return '배우고 싶다';
       default:
         return '오류';

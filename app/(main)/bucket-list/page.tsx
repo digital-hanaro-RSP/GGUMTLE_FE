@@ -19,17 +19,17 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function BucketListPage() {
-  const [filter, setFilter] = useState<string>('default');
+  const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
   const lastScrollY = useRef(0);
   const categories = new Map([
-    ['default', '전체'],
-    ['do', '해보고 싶다'],
-    ['be', '되고 싶다'],
-    ['have', '갖고 싶다'],
-    ['go', '가보고 싶다'],
-    ['learn', '배우고 싶다'],
+    ['DEFAULT', '전체'],
+    ['DO', '해보고 싶다'],
+    ['BE', '되고 싶다'],
+    ['HAVE', '갖고 싶다'],
+    ['GO', '가보고 싶다'],
+    ['LEARN', '배우고 싶다'],
   ]);
 
   const router = useRouter();
