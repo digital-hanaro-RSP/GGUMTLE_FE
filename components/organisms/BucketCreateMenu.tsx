@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import useCreateBucketStore from '@/contexts/useCreateBucketStore';
+import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
@@ -230,10 +230,14 @@ export const CreateBucketHowTo = () => {
   const goalAmountinputRef = useRef<HTMLInputElement>(null);
 
   const onAllocateAmountChange = () => {
-    setAllocateAmount(parseIntWithoutCommas(allocateAmountinputRef.current?.value ?? '0'));
+    setAllocateAmount(
+      parseIntWithoutCommas(allocateAmountinputRef.current?.value ?? '0')
+    );
   };
   const onGoalAmountChange = () => {
-    setGoalAmount(parseIntWithoutCommas(goalAmountinputRef.current?.value ?? '0'));
+    setGoalAmount(
+      parseIntWithoutCommas(goalAmountinputRef.current?.value ?? '0')
+    );
   };
 
   return (
