@@ -53,7 +53,7 @@ export default function SyncPage() {
               />
             </div>
             <div
-              className={`w-60 mt-24 ${!isLoading ? 'animate-fadeOut' : ''}`}
+              className={`w-60 mt-40 ${!isLoading ? 'animate-fadeOut' : ''}`}
             >
               <LoadingBar />
             </div>
@@ -65,7 +65,7 @@ export default function SyncPage() {
             <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-2 mt-10'>
               마이데이터에서{'\n'}성공적으로 정보를 가져왔습니다!
             </h1>
-            <div className='animate-bounce-slow'>
+            <div className='animate-bounce-slow mt-16'>
               <Image
                 src={'/image/icons/CheckMarkButton.png'}
                 alt=''

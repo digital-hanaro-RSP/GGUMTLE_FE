@@ -81,11 +81,11 @@ export default function SignInPage() {
               autoComplete='current-password'
             />
           </div>
-          <div className='flex flex-col items-center mt-2'>
-            <Button type='submit' size='lg' disabled={isLoading}>
-              {isLoading ? '로그인 중...' : '로그인'}
-            </Button>
-          </div>
+        </div>
+        <div className='flex flex-col items-center mt-20'>
+          <Button type='submit' size='lg' disabled={isLoading}>
+            {isLoading ? '로그인 중...' : '로그인'}
+          </Button>
         </div>
       </div>
     </form>
