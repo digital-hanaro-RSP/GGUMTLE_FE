@@ -1,4 +1,4 @@
-import useCreateBucketStore from '@/contexts/useCreateBucketStore';
+import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { IoIosArrowDown } from 'react-icons/io';
 import { cn } from '@/lib/utils';
 import ColorChip from '../atoms/ColorChips';

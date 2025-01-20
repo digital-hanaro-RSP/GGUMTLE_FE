@@ -231,7 +231,6 @@ export default function BucketListPage() {
           </TabsContent>
         </Tabs>
       </div>
-      <div></div>
     </div>
   );
 }

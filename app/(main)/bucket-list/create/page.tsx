@@ -7,7 +7,7 @@ import {
   CreateBucketMemo,
   CreateBucketTitle,
 } from '@/components/organisms/BucketCreateMenu';
-import useCreateBucketStore from '@/contexts/useCreateBucketStore';
+import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';

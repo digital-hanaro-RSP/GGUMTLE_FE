@@ -60,3 +60,9 @@ export const convertCodeToCategory = (code: string): string => {
   if (!code) return '전체';
   return reverseCategoryMap[code] || '전체';
 };
+
+export const parseIntWithoutCommas = (inputValue: string) => {
+  const numericValue = inputValue.replace(/[^0-9]/g, '');
+  const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
+  return parsedValue;
+};
