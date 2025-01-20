@@ -24,7 +24,7 @@ export const LoadingBar = () => {
   return (
     <div className='w-full bg-gray-200 rounded-full h-4'>
       <div
-        className='h-full bg-primary-main rounded-full transition-all duration-[50ms] ease-linear'
+        className='h-full bg-primary-main rounded-full transition-all duration-75 ease-linear'
         style={{ width: `${progress}%` }}
       />
     </div>
