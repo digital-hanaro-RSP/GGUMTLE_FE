@@ -23,23 +23,20 @@ export default function SurveyStepPage({
   const [selectedList, setSelectedList] = useState<string[]>([]);
 
   useEffect(() => {
-    // 1. 질문 불러오기
     const questionKey = `q${currentStep}`;
-    // 2. 이미 저장된 답안 id들
     const savedIds = selectedIds[questionKey] || [];
     setSelectedList(savedIds);
   }, [currentStep, selectedIds]);
 
   const question = surveyQuestions[currentStep];
 
-  // 질문 id가 잘못된 경우
   if (!question) {
     router.push('/');
     return null;
   }
 
   const handleChangeRadio = (id: string, value: number) => {
-    setAnswer(`q${currentStep}`, value, id, false /* 단일 선택 */);
+    setAnswer(`q${currentStep}`, value, id, false);
     setSelectedList([id]);
   };
 
@@ -48,22 +45,16 @@ export default function SurveyStepPage({
     value: number,
     checked: boolean
   ) => {
-    // checked = 현재 토글 이후의 상태
-    // store에 넣으면 알아서 토글 처리
-    setAnswer(`q${currentStep}`, value, id, true /* 다중 선택 */);
+    setAnswer(`q${currentStep}`, value, id, true);
 
-    // 로컬 state도 토글
     if (checked) {
-      // 새로 추가
       setSelectedList((prev) => [...prev, id]);
     } else {
-      // 이미 있던 것을 제거
       setSelectedList((prev) => prev.filter((item) => item !== id));
     }
   };
 
   const handleNext = () => {
-    // 선택이 하나도 없는 경우 넘어가지 못하도록 막을 수도 있음
     if (selectedList.length === 0) return;
 
     if (currentStep < TOTAL_QUESTIONS) {
@@ -74,70 +65,80 @@ export default function SurveyStepPage({
   };
 
   return (
-    <div className='h-full bg-gray-50 py-8 overflow-y-auto'>
-      <div className='max-w-2xl mx-auto px-4'>
-        <div className='bg-white rounded-lg shadow-md p-6'>
-          <div className='mb-6'>
-            <StatusBar
-              current={currentStep}
-              total={TOTAL_QUESTIONS}
-              className='mb-2'
-            />
-            <p className='text-sm text-gray-600 text-right'>
-              {currentStep}/{TOTAL_QUESTIONS}
-            </p>
+    <div className='h-screen bg-gray-50'>
+      <div className='max-w-2xl mx-auto px-2 h-full py-4'>
+        <div className='bg-white rounded-lg shadow-md p-6 h-full flex flex-col'>
+          {/* 상단 고정 영역 */}
+          <div className='sticky top-0 bg-white z-10'>
+            <div className='mb-6'>
+              <StatusBar
+                current={currentStep}
+                total={TOTAL_QUESTIONS}
+                className='mb-1'
+              />
+              <p className='text-sm text-gray-600 text-right'>
+                {currentStep}/{TOTAL_QUESTIONS}
+              </p>
+            </div>
+
+            <div className='question-section mb-5'>
+              <SurveyCard
+                sid={currentStep}
+                question={question.question}
+                direction='vertical'
+              ></SurveyCard>
+            </div>
           </div>
 
-          <SurveyCard
-            sid={currentStep}
-            question={question.question}
-            direction='vertical'
-            className='mb-8'
-          >
-            {/* 문항 options 렌더링 */}
-            {question.options.map((option) => {
-              // 다중 선택 여부 판단
-              if (question.isMultiple) {
-                // ------ CheckBox 사용 ------
-                return (
-                  <div key={option.id} className='flex items-center gap-2 mb-3'>
-                    <CheckBox
-                      checked={selectedList.includes(option.id)}
-                      onChange={(checked) =>
-                        handleChangeCheckbox(option.id, option.value, checked)
-                      }
-                    />
-                    <label
-                      htmlFor={option.id}
-                      className='cursor-pointer text-gray-700'
+          {/* 스크롤 가능한 문항 영역 */}
+          <div className='flex-1 overflow-y-auto'>
+            <div className='options-container max-w-xl mx-auto'>
+              {question.options.map((option) => {
+                if (question.isMultiple) {
+                  return (
+                    <div
+                      key={option.id}
+                      className='flex items-center gap-2 mb-3'
                     >
-                      {option.label}
-                    </label>
-                  </div>
-                );
-              } else {
-                // ------ RadioItem 사용 ------
-                return (
-                  <RadioItem
-                    key={option.id}
-                    id={option.id}
-                    name={`q${currentStep}`}
-                    value={option.value}
-                    checked={selectedList.includes(option.id)}
-                    onChange={() => handleChangeRadio(option.id, option.value)}
-                    className='mb-3'
-                    shape='circle'
-                    contentDirection='horizontal'
-                  >
-                    {option.label}
-                  </RadioItem>
-                );
-              }
-            })}
-          </SurveyCard>
+                      <CheckBox
+                        checked={selectedList.includes(option.id)}
+                        onChange={(checked) =>
+                          handleChangeCheckbox(option.id, option.value, checked)
+                        }
+                      />
+                      <label
+                        htmlFor={option.id}
+                        className='cursor-pointer text-gray-700 flex-1 min-w-0 '
+                      >
+                        {option.label}
+                      </label>
+                    </div>
+                  );
+                } else {
+                  return (
+                    <RadioItem
+                      key={option.id}
+                      id={option.id}
+                      name={`q${currentStep}`}
+                      value={option.value}
+                      checked={selectedList.includes(option.id)}
+                      onChange={() =>
+                        handleChangeRadio(option.id, option.value)
+                      }
+                      className='mb-3 flex items-center'
+                      shape='circle'
+                      contentDirection='horizontal'
+                    >
+                      <span className='flex-1 min-w-0'>{option.label}</span>
+                    </RadioItem>
+                  );
+                }
+              })}
+            </div>
+          </div>
 
+          {/* 하단 버튼 영역 */}
           <div className='flex justify-between mt-8'>
-            {/* 이전 버튼 */}
             {currentStep > 1 && (
               <Button
                 size='sm'
@@ -147,14 +148,13 @@ export default function SurveyStepPage({
                 이전
               </Button>
             )}
-            {/* 다음 버튼 */}
             <Button
               size='sm'
               onClick={handleNext}
               disabled={selectedList.length === 0}
               className='px-6 py-2 transition-colors duration-200
-                         disabled:opacity-50 disabled:cursor-not-allowed
-                         ml-auto'
+                       disabled:opacity-50 disabled:cursor-not-allowed
+                       ml-auto'
             >
               {currentStep === TOTAL_QUESTIONS ? '완료' : '다음'}
             </Button>
