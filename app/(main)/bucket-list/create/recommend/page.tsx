@@ -117,7 +117,7 @@ export default function RecommendBucketPage() {
 
   const onClickRecommend = (title: string, bucketType: string) => {
     router.push(
-      `/bucket-list/create?title=${title}&tagType=${bucketType.toLowerCase()}`
+      `/bucket-list/create?title=${title}&tagType=${bucketType}`
     );
   };
 
