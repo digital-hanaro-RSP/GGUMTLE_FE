@@ -13,12 +13,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { getAllBucketListRes } from '@/types/BucketList';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function BucketListPage() {
+  const { getAllBucketList } = useBucketListApi();
+  const [bucketLists, setBucketLists] = useState<getAllBucketListRes[]>();
   const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
@@ -56,9 +60,45 @@ export default function BucketListPage() {
   };
 
   useEffect(() => {
+    const fetchBucketList = async () => {
+      await getAllBucketList()
+        .then((res) => {
+          setBucketLists(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    fetchBucketList();
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll); // 클린업
   }, []);
+
+  console.log(bucketLists);
+
+  const calculatePercent = (
+    howTo: 'EFFORT' | 'WILL' | 'MONEY',
+    goalAmount?: number,
+    currentAmount?: number,
+    goalDate?: Date,
+    createdAt?: Date
+  ): number => {
+    if (howTo === 'MONEY' && goalAmount && currentAmount) {
+      return Math.min((100 * currentAmount) / goalAmount, 100);
+    } else if (createdAt) {
+      const now = new Date().getTime();
+      const start = createdAt.getTime();
+      const goal = goalDate?.getTime() ?? 0;
+
+      const elapsed = now - start;
+      const totalDuration = goal - start;
+      return Math.min((100 * elapsed) / totalDuration, 100);
+    }
+    throw new Error(
+      "Invalid parameters or missing 'createdAt' for non-MONEY types."
+    );
+  };
 
   return (
     <div className='gap-2 flex flex-col w-full relative'>
@@ -97,7 +137,9 @@ export default function BucketListPage() {
                   </div>
                 </ColorChip>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
+              <DropdownMenuContent
+                className={cn(' min-w-[30px] w-fit px-[10px] z-[105]')}
+              >
                 <DropdownMenuLabel className='flex justify-center'>
                   카테고리
                 </DropdownMenuLabel>
@@ -117,60 +159,30 @@ export default function BucketListPage() {
           </TabsList>
           <TabsContent value='doing'>
             <div className={cn('flex flex-col gap-2 overflow-visible')}>
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='EFFORT'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='DO'
-                bucketId={1}
-              />
+              {bucketLists
+                ?.filter((item) => item.status === 'DOING')
+                .filter((item) =>
+                  filter === 'DEFAULT' ? true : item.tagType === filter
+                )
+                .map((item) => (
+                  <div key={item.id}>
+                    <BucketListCard
+                      isSelectMode={false}
+                      safeBox={item.safeBox}
+                      howTo={item.howTo}
+                      dataPercent={calculatePercent(
+                        item.howTo,
+                        item.goalAmount,
+                        item.safeBox,
+                        new Date(item.dueDate),
+                        new Date(item.createdAt)
+                      )}
+                      title={item.title}
+                      tagType={item.tagType}
+                      bucketId={item.id}
+                    />
+                  </div>
+                ))}
               <div className='relative flex flex-row w-full pb-32 '>
                 <div
                   onClick={onAddClick}
@@ -205,28 +217,62 @@ export default function BucketListPage() {
           </TabsContent>
           <TabsContent value='done'>
             <div className='flex flex-col gap-2'>
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='BE'
-                bucketId={1}
-              />
+              {bucketLists
+                ?.filter((item) => item.status === 'DONE')
+                .filter((item) =>
+                  filter === 'DEFAULT' ? true : item.tagType === filter
+                )
+                .map((item) => (
+                  <div key={item.id}>
+                    <div key={item.id}>
+                      <BucketListCard
+                        isSelectMode={false}
+                        safeBox={item.safeBox}
+                        howTo={item.howTo}
+                        dataPercent={calculatePercent(
+                          item.howTo,
+                          item.goalAmount,
+                          item.safeBox,
+                          new Date(item.dueDate),
+                          new Date(item.createdAt)
+                        )}
+                        title={item.title}
+                        tagType={item.tagType}
+                        bucketId={item.id}
+                      />
+                    </div>
+                  </div>
+                ))}
             </div>
           </TabsContent>
           <TabsContent value='hold'>
             <div className='flex flex-col gap-2'>
-              <BucketListCard
-                isSelectMode={false}
-                safeBox={40000}
-                howTo='MONEY'
-                dataPercent={80}
-                title='예시'
-                tagType='BE'
-                bucketId={1}
-              />
+              {bucketLists
+                ?.filter((item) => item.status === 'HOLD')
+                .filter((item) =>
+                  filter === 'DEFAULT' ? true : item.tagType === filter
+                )
+                .map((item) => (
+                  <div key={item.id}>
+                    <div key={item.id}>
+                      <BucketListCard
+                        isSelectMode={false}
+                        safeBox={item.safeBox}
+                        howTo={item.howTo}
+                        dataPercent={calculatePercent(
+                          item.howTo,
+                          item.goalAmount,
+                          item.safeBox,
+                          new Date(item.dueDate),
+                          new Date(item.createdAt)
+                        )}
+                        title={item.title}
+                        tagType={item.tagType}
+                        bucketId={item.id}
+                      />
+                    </div>
+                  </div>
+                ))}
             </div>
           </TabsContent>
         </Tabs>
