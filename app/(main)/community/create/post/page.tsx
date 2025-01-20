@@ -124,7 +124,7 @@ export default function CreatePostPage() {
         open={isOpenGroupDrawer}
         onOpenChange={(open) => setIsOpenGroupDrawer(open)}
       >
-        <DrawerContent className='h-[60%] max-h-[60%] max-w-screen-md mx-auto flex flex-col gap-[20px] px-[10px] pb-[10px] overflow-hidden'>
+        <DrawerContent className='h-[60%] max-h-[60%] max-w-screen-md mx-auto flex flex-col gap-[20px] px-[10px] pb-[70px] overflow-hidden'>
           <DrawerHeader>
             <DrawerTitle>글을 작성할 꿈모임을 선택해주세요</DrawerTitle>
           </DrawerHeader>
