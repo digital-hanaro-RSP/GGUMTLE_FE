@@ -22,13 +22,13 @@ import ColorChip from '../atoms/ColorChips';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
-  type: 'EFFORT' | 'MONEY';
+  howTo: 'EFFORT' | 'MONEY';
   dataPercent: number;
   title: string;
-  how: 'have' | 'do' | 'be' | 'go' | 'learn';
-  balance?: number;
+  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN';
+  safeBox?: number;
   isSelectMode?: boolean; //커뮤니티 용인지 체크
-  bid: number;
+  bucketId: number;
   children?: React.ReactNode;
   showPercent?: boolean;
   className?: string;
@@ -36,13 +36,13 @@ export interface BucketListCardProps {
 
 export const BucketListCard = ({
   className,
-  type,
+  howTo,
   dataPercent,
   title,
-  how,
-  balance,
+  tagType,
+  safeBox,
   isSelectMode,
-  bid,
+  bucketId,
   children,
   showPercent = true,
 }: BucketListCardProps) => {
@@ -74,8 +74,8 @@ export const BucketListCard = ({
     },
   };
 
-  const howto = (how: string) => {
-    switch (how) {
+  const getTagType = (tagType: string) => {
+    switch (tagType) {
       case 'do':
         return '해보고 싶다';
       case 'be':
@@ -93,20 +93,20 @@ export const BucketListCard = ({
 
   const complete = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bid: number
+    bucketId: number
   ) => {
     e.stopPropagation();
     const data: completeBucketList = {
       status: 'done',
     };
-    router.push(`/bucket-list/complete?howto=${type}`);
+    router.push(`/bucket-list/complete?howto=${howTo}`);
     // await completeBucketList(bid, data).then((res) => {
     //   router.push('/completePage')
     // });
   };
 
   const handleClick = () => {
-    if (showPercent) router.push(`/bucket-list/${bid}`);
+    if (showPercent) router.push(`/bucket-list/${bucketId}`);
   };
 
   return (
@@ -123,7 +123,7 @@ export const BucketListCard = ({
               <div className='absolute top-[calc((100%-44px)/2)] left-1.5 w-11 h-11 justify-center items-center flex bg-white rounded-full'>
                 {dataPercent >= 100 ? (
                   <FaCheckCircle size={30} />
-                ) : type === 'EFFORT' ? (
+                ) : howTo === 'EFFORT' ? (
                   <Image
                     src={'/image/icons/Fire.png'}
                     alt='img'
@@ -150,7 +150,7 @@ export const BucketListCard = ({
           >
             <div className='flex flex-row gap-1 w-full'>
               <ColorChip color='gray'>언제까지</ColorChip>
-              <ColorChip color={how}>{howto(how)}</ColorChip>
+              <ColorChip color={tagType}>{getTagType(tagType)}</ColorChip>
               {isSelectMode !== true && (
                 <div className='flex-grow justify-end items-end flex'>
                   <DropdownMenu>
@@ -160,7 +160,7 @@ export const BucketListCard = ({
                     <DropdownMenuContent className='text-center w-10'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={(e) => complete(e, bid)}>
+                      <DropdownMenuItem onClick={(e) => complete(e, bucketId)}>
                         완료하기
                       </DropdownMenuItem>
                       <DropdownMenuItem>보류하기</DropdownMenuItem>
@@ -173,10 +173,10 @@ export const BucketListCard = ({
               <h1 className='truncate w-full'>
                 <span className='ml-2 text-xl'>{title}</span>
               </h1>
-              {type === 'MONEY' && isSelectMode === false && (
+              {howTo === 'MONEY' && isSelectMode === false && (
                 <>
                   <div className='text-2xl truncate ml-2'>
-                    {`${formatNumberWithCommas(balance?.toString() ?? '0')}원`}
+                    {`${formatNumberWithCommas(safeBox?.toString() ?? '0')}원`}
                   </div>
                   <div className='flex flex-row gap-2'>
                     <Button size='sm' className='bg-[#EFF0F4] text-black w-1/2'>

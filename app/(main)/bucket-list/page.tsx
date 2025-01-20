@@ -119,57 +119,57 @@ export default function BucketListPage() {
             <div className={cn('flex flex-col gap-2 overflow-visible')}>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='EFFORT'
+                safeBox={40000}
+                howTo='EFFORT'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='do'
-                bid={1}
+                tagType='DO'
+                bucketId={1}
               />
               <div className='relative flex flex-row w-full pb-32 '>
                 <div
@@ -207,12 +207,12 @@ export default function BucketListPage() {
             <div className='flex flex-col gap-2'>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='be'
-                bid={1}
+                tagType='BE'
+                bucketId={1}
               />
             </div>
           </TabsContent>
@@ -220,12 +220,12 @@ export default function BucketListPage() {
             <div className='flex flex-col gap-2'>
               <BucketListCard
                 isSelectMode={false}
-                balance={40000}
-                type='MONEY'
+                safeBox={40000}
+                howTo='MONEY'
                 dataPercent={80}
                 title='예시'
-                how='be'
-                bid={1}
+                tagType='BE'
+                bucketId={1}
               />
             </div>
           </TabsContent>
