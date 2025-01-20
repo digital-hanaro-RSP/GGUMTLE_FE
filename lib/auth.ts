@@ -110,6 +110,6 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1시간
+    maxAge: 60 * 60 * 6, // 1시간
   },
 });
