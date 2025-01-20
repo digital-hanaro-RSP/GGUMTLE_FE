@@ -113,10 +113,11 @@ type MoneyInputProps = {
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   placeHolder?: string;
   disable?: boolean;
+  value?: string;
 };
 
 const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
-  ({ onChange, onFocus, onBlur, placeHolder, disable }, ref) => {
+  ({ onChange, onFocus, onBlur, placeHolder, disable, value }, ref) => {
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const inputValue = e.target.value.replace(/[^\d]/g, '');
       const numericValue = parseInt(inputValue, 10);
@@ -139,6 +140,7 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
     return (
       <div className='flex items-center w-full text-2xl text-primary-main border rounded-[10px] bg-white overflow-hidden px-[20px]'>
         <input
+          value={value}
           disabled={disable}
           type='text'
           ref={ref}
