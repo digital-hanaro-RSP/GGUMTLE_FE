@@ -1,6 +1,7 @@
 'use client';
 
 // 백업
+import LoadingDot from '@/components/atoms/LoadingDot';
 import GroupCard from '@/components/molecules/GroupCard';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useCategoryStore } from '@/store/useCategoryStore';
@@ -104,7 +105,13 @@ export default function CommunityMainGroupPage() {
               <GroupCard {...group} />
             </m.div>
           ))}
-        {isLoading && <div className='w-full text-center py-4'>로딩 중...</div>}
+        {isLoading && (
+          <div className='w-full flex justify-center mt-[20px]'>
+            <div className='dot-loading'>
+              <div className='middle-dot'></div>
+            </div>
+          </div>
+        )}
       </div>
     </LazyMotion>
   );
