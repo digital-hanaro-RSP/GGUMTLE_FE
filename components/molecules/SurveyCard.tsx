@@ -22,14 +22,17 @@ export const SurveyCard = ({
     <>
       <Card {...props} className='p-0'>
         <div>
-          <div className='question-block text-lg p-5 rounded-t-xl bg-[#F5FFFE]'>
+          <div className='question-block text-md p-3 rounded-t-xl bg-[#F5FFFE]'>
             <strong className='text-primary-main'>{`Q${sid}. `}</strong>
-            <strong>{question}</strong>
+            <div className='font-medium'>{question}</div>
           </div>
           <div className=''></div>
         </div>
         <fieldset
-          className={cn('flex p-3 gap-2 items-start break-keep', direction === 'vertical' && 'flex-col')}
+          className={cn(
+            'flex p-3 gap-2 items-start break-keep',
+            direction === 'vertical' && 'flex-col'
+          )}
         >
           {children}
         </fieldset>

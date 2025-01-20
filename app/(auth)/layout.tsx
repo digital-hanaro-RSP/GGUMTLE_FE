@@ -7,7 +7,7 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className='relative mx-auto max-w-screen-md min-h-screen bg-background pb-[58px]'>
+    <div className='relative mx-auto max-w-screen-md min-h-screen bg-background'>
       {children}
     </div>
   );

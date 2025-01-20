@@ -11,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        cookie: ['CookieRun-Regular', 'sans-serif'],
+      },
       animation: {
         fadeIn: 'fadeIn 0.6s ease-out forwards',
         fadeOut: 'fadeOut 1.5s ease-out forwards',
