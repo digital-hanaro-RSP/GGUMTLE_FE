@@ -9,7 +9,7 @@ import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 export default function PostIdPage() {
-  const [post, setPost] = useState<PostType | null>();
+  const [post, setPost] = useState<PostType | null>(null);
   const param = useParams();
   const { getPost } = useCommunityApi();
 
@@ -26,6 +26,9 @@ export default function PostIdPage() {
           ? JSON.parse(res.imageUrls)
           : (res.imageUrls ?? []);
 
+      console.log(
+        'parsedSnapShot : ' + JSON.parse(parsedSnapShot).currentPortfolio
+      );
       setPost({
         ...res,
         snapShot: parsedSnapShot,

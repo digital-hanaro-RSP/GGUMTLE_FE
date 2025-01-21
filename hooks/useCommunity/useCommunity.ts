@@ -180,6 +180,13 @@ export const useCommunityApi = () => {
     return response;
   };
 
+  const isMember = async (groupId: number): Promise<boolean> => {
+    const response = await fetchApi(
+      `/community/groupMember/${groupId}/membership`
+    );
+    return response.data;
+  };
+
   return {
     getPosts,
     getPost,
@@ -196,5 +203,6 @@ export const useCommunityApi = () => {
     joinGroup,
     leaveGroup,
     createPost,
+    isMember,
   };
 };

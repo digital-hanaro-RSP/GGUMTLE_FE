@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
+import { PortfolioCard } from './PortfolioCard';
 
 // TODO
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
@@ -47,6 +48,10 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
+
+  console.log('snapShot : ', snapShot);
+  console.log('currentPortfolio : ', snapShot?.currentPortfolio);
+  console.log('goalPortfolio : ', snapShot?.goalPortfolio);
 
   const { plusLike, minusLike, deletePost } = useCommunityApi();
 
@@ -181,7 +186,12 @@ export default function Post({
           )}
 
         {snapShot && snapShot.goalPortfolio && snapShot.currentPortfolio && (
-          <div className='mt-4'>{/* 포트폴리오 */}</div>
+          <div className='mt-4'>
+            <PortfolioCard
+              goalPortfolio={snapShot.goalPortfolio}
+              currentPortfolio={snapShot.currentPortfolio}
+            />
+          </div>
         )}
 
         {Array.isArray(imageUrls) && imageUrls.length > 0 && (
