@@ -26,12 +26,9 @@ export default function PostIdPage() {
           ? JSON.parse(res.imageUrls)
           : (res.imageUrls ?? []);
 
-      console.log(
-        'parsedSnapShot : ' + JSON.parse(parsedSnapShot).currentPortfolio
-      );
       setPost({
         ...res,
-        snapShot: parsedSnapShot,
+        snapShot: JSON.parse(parsedSnapShot),
         imageUrls: parsedImageUrls,
       });
     };

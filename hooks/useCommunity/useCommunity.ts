@@ -5,11 +5,15 @@ export const useCommunityApi = () => {
   const { fetchApi } = useApi();
 
   // offset으로 수정해야할듯
-  const getPosts = async (groupId: number, page?: number): Promise<Post[]> => {
+  const getPosts = async (
+    groupId: number,
+    offset: number,
+    limit: number
+  ): Promise<Post[]> => {
     const response = await fetchApi(
-      `/community/group/${groupId}/post${page ? '?page=' + page : ''}`
+      `/community/group/${groupId}/post?offset=${offset}&limit=${limit}`
     );
-    return response.data;
+    return response.data.content;
   };
 
   const getPost = async (groupId: number, postId: number): Promise<Post> => {

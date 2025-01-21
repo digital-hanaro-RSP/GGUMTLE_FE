@@ -49,9 +49,9 @@ export default function Post({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
 
-  console.log('snapShot : ', snapShot);
-  console.log('currentPortfolio : ', snapShot?.currentPortfolio);
-  console.log('goalPortfolio : ', snapShot?.goalPortfolio);
+  // console.log('snapShot : ', snapShot);
+  // console.log('currentPortfolio : ', snapShot?.currentPortfolio);
+  // console.log('goalPortfolio : ', snapShot?.goalPortfolio);
 
   const { plusLike, minusLike, deletePost } = useCommunityApi();
 

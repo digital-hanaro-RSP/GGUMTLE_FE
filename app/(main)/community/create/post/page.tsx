@@ -30,6 +30,7 @@ export default function CreatePostPage() {
     useState<BucketListCardProps | null>(null);
   const [isOpenBucketListDrawer, setIsOpenBucketListDrawer] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
   const { createPost, getMyGroups } = useCommunityApi();
@@ -41,13 +42,39 @@ export default function CreatePostPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // 1) 현재까지의 파일 총합 + 새 파일 크기가 10MB를 넘어가는지 확인
+      const MAX_SIZE = 10 * 1024 * 1024; // 10MB
+      const totalSizeSoFar = selectedFiles.reduce(
+        (acc, cur) => acc + cur.size,
+        0
+      );
+      const newFileSize = file.size;
+      if (totalSizeSoFar + newFileSize > MAX_SIZE) {
+        alert('이미지는 10MB 이하로 업로드해 주세요.');
+        return;
+      }
+
+      // 2) 용량 검사가 통과되면 선택된 파일 목록에 추가
       const imageUrl = URL.createObjectURL(file);
-      setSelectedImage([...selectedImage, imageUrl]);
+      setSelectedImage((prev) => [...prev, imageUrl]);
+      setSelectedFiles((prev) => [...prev, file]);
     }
   };
 
   const handleImageRemove = (imageUrl: string) => {
     setSelectedImage(selectedImage.filter((url) => url !== imageUrl));
+
+    setSelectedFiles((prev) => {
+      // imageUrl를 만들어낸 file 객체를 추적하기 위해, URL.createObjectURL(file)와 비교
+      // 실제로는 파일명 등으로 매핑하거나, 인덱스로 매핑할 수 있음
+      const indexToRemove = selectedImage.indexOf(imageUrl);
+      if (indexToRemove === -1) return prev; // 혹시나 없는 경우
+
+      // indexToRemove 위치의 File을 제거
+      const newArray = [...prev];
+      newArray.splice(indexToRemove, 1);
+      return newArray;
+    });
   };
 
   const handleDisabled = () => {
@@ -170,7 +197,7 @@ export default function CreatePostPage() {
                 onRemove={() => handleImageRemove(image)}
               />
             ))}
-            {selectedImage.length < 4 && (
+            {selectedImage.length < 5 && (
               <ImageInputRef onChange={handleImageSelect} />
             )}
           </div>
