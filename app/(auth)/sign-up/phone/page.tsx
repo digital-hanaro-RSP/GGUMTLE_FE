@@ -9,10 +9,12 @@ import { useState, useEffect } from 'react';
 
 export default function PhonePage() {
   const [showVerification, setShowVerification] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
+  const [timeLeft, setTimeLeft] = useState(180); // 3분
   const [timerExpired, setTimerExpired] = useState(false);
   const setPhoneInfo = useSignUpStore((state) => state.setPhoneInfo);
   const router = useRouter();
+  const [buttonText, setButtonText] = useState('인증번호 받기');
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
   const formatPhoneNumber = (phoneNumber: string) => {
     const cleaned = phoneNumber.replace(/\D/g, '');
@@ -23,16 +25,51 @@ export default function PhonePage() {
     return phoneNumber;
   };
 
-  const handleVerificationSuccess = () => {
+  const buttonStyles = isButtonDisabled
+    ? 'text-xs bg-[#B0B0B0] text-white font-semibold cursor-not-allowed'
+    : 'text-xs bg-[#EFF0F4] text-[#5B5B5B] font-semibold hover:bg-[#E0E1E5]';
+
+  const handleVerificationSuccess = async () => {
     const phoneInput = document.querySelector(
       "input[name='phone']"
     ) as HTMLInputElement;
-    if (phoneInput) {
-      const formattedPhone = formatPhoneNumber(phoneInput.value);
-      setPhoneInfo(formattedPhone);
-      console.log('저장된 정보: ', useSignUpStore.getState().formData);
-      alert('인증에 성공하였습니다.');
-      router.push('/sign-up/profile');
+    const codeInput = document.querySelector(
+      "input[name='name']"
+    ) as HTMLInputElement;
+
+    if (!phoneInput?.value || !codeInput?.value) {
+      alert('전화번호와 인증번호를 모두 입력해주세요');
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/data/verification-code/validation`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tel: phoneInput.value,
+            code: codeInput.value,
+          }),
+        }
+      );
+
+      if (response.status === 200) {
+        const formattedPhone = formatPhoneNumber(phoneInput.value);
+        setPhoneInfo(formattedPhone);
+        alert('인증에 성공하였습니다.');
+        router.push('/sign-up/profile');
+      } else if (response.status === 401) {
+        alert('인증번호가 일치하지 않습니다.');
+      } else {
+        alert('인증에 실패했습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      alert('요청 중 오류가 발생했습니다.');
+      console.error(error);
     }
   };
 
@@ -63,10 +100,58 @@ export default function PhonePage() {
     return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
   };
 
-  const handleGetVerificationCode = () => {
-    setShowVerification(true);
-    setTimeLeft(180);
-    setTimerExpired(false);
+  const handleGetVerificationCode = async () => {
+    const phoneInput = document.querySelector(
+      "input[name='phone']"
+    ) as HTMLInputElement;
+    if (!phoneInput?.value) {
+      alert('휴대전화 번호를 입력해주세요');
+      return;
+    }
+
+    setButtonText('발송중...');
+    setIsButtonDisabled(true);
+
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/data/verification-code`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tel: phoneInput.value,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      console.log('Response:', response.status, data); // 디버깅용
+
+      if (response.status === 200) {
+        alert('문자가 발송되었습니다. 잠시만 기다려주세요.');
+        setShowVerification(true); // 순서 변경
+        setTimeLeft(180);
+        setTimerExpired(false);
+
+        setTimeout(() => {
+          setButtonText('인증번호 받기');
+          setIsButtonDisabled(false);
+        }, 180000);
+      } else if (response.status === 409) {
+        alert('이미 가입된 휴대전화 번호입니다.');
+      } else if (response.status === 400) {
+        alert(data.message);
+      } else if (response.status === 500) {
+        alert('SMS 발송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      }
+    } catch (error) {
+      console.error('Error:', error); // 디버깅용
+      alert('요청 중 오류가 발생했습니다.');
+      setButtonText('인증번호 받기');
+      setIsButtonDisabled(false);
+    }
   };
 
   return (
@@ -98,10 +183,11 @@ export default function PhonePage() {
               </div>
               <Button
                 size='sm'
-                className='text-xs bg-[#EFF0F4] text-[#5B5B5B] font-semibold'
+                className={buttonStyles}
                 onClick={handleGetVerificationCode}
+                disabled={isButtonDisabled}
               >
-                인증번호 받기
+                {buttonText}
               </Button>
             </div>
           </div>
@@ -110,10 +196,12 @@ export default function PhonePage() {
             <div className='animate-fadeIn space-y-10'>
               <div className='text-primary-main font-medium'>
                 <span className='flex justify-center'>
-                  전화번호로 인증번호를 보내드렸습니다.
-                </span>
+                  {' '}
+                  문자로 도착한 인증번호를 입력해주세요.
+                </span>{' '}
                 <span className='flex justify-center'>
-                  3분 안에 입력해 주세요.
+                  {' '}
+                  문자가 오지 않으시면 3분 후에 다시 받으실 수 있습니다.
                 </span>
               </div>
 
