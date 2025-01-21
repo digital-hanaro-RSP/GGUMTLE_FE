@@ -1,17 +1,30 @@
 import { useApi } from '@/hooks/useApi';
-import { CommentResponse, Group, PostResponse } from '@/types/Community';
+import { CommentResponse, Group, Post, PostResponse } from '@/types/Community';
 
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
 
-  const getPosts = async (
-    groupId: number,
-    category: string
-  ): Promise<PostResponse> => {
+  // offset으로 수정해야할듯
+  const getPosts = async (groupId: number, page?: number): Promise<Post[]> => {
     const response = await fetchApi(
-      `/community/group/${groupId}/post?category=${category}`
+      `/community/group/${groupId}/post${page ? '?page=' + page : ''}`
     );
-    return response;
+    return response.data;
+  };
+
+  const getPost = async (groupId: number, postId: number): Promise<Post> => {
+    const response = await fetchApi(
+      `/community/group/${groupId}/post/${postId}`
+    );
+
+    return response.data;
+  };
+
+  const deletePost = async (groupId: number, postId: number): Promise<void> => {
+    const options: RequestInit = {
+      method: 'DELETE',
+    };
+    await fetchApi(`/community/group/${groupId}/post/${postId}`, options);
   };
 
   const getPopularPosts = async (category: string): Promise<PostResponse> => {
@@ -148,16 +161,16 @@ export const useCommunityApi = () => {
 
   const createPost = async (
     groupId: number,
-    imageUrls: string[],
+    imageUrls: string,
     content: string,
-    postType: string
+    snapShot: string
   ) => {
     const options: RequestInit = {
       method: 'POST',
       body: JSON.stringify({
         imageUrls,
         content,
-        postType,
+        snapShot,
       }),
     };
     const response = await fetchApi(
@@ -169,6 +182,8 @@ export const useCommunityApi = () => {
 
   return {
     getPosts,
+    getPost,
+    deletePost,
     getComments,
     plusLike,
     minusLike,

@@ -15,7 +15,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { cn, formatNumberWithCommas } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
@@ -24,7 +24,7 @@ import { MoneyTransferDrawer } from '../organisms/MoneyTransferDrawer';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
-  howTo: 'EFFORT' | 'MONEY';
+  howTo: 'EFFORT' | 'MONEY' | 'WILL';
   dataPercent: number;
   title: string;
   tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN';
@@ -34,6 +34,7 @@ export interface BucketListCardProps {
   children?: React.ReactNode;
   showPercent?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
 export const BucketListCard = ({
@@ -47,6 +48,7 @@ export const BucketListCard = ({
   bucketId,
   children,
   showPercent = true,
+  onClick,
 }: BucketListCardProps) => {
   const { completeBucketList } = useBucketListApi();
   const router = useRouter();
@@ -109,7 +111,10 @@ export const BucketListCard = ({
   };
 
   const handleClick = () => {
-    if (showPercent) router.push(`/bucket-list/${bucketId}`);
+    if (showPercent && !isSelectMode) router.push(`/bucket-list/${bucketId}`);
+    if (isSelectMode) {
+      if (onClick) onClick();
+    }
   };
 
   const handleTransferClick = (
@@ -139,7 +144,7 @@ export const BucketListCard = ({
               <div className='absolute top-[calc((100%-44px)/2)] left-1.5 w-11 h-11 justify-center items-center flex bg-white rounded-full'>
                 {dataPercent >= 100 ? (
                   <FaCheckCircle size={30} />
-                ) : howTo === 'EFFORT' ? (
+                ) : howTo === 'EFFORT' || howTo === 'WILL' ? (
                   <Image
                     src={'/image/icons/Fire.png'}
                     alt='img'

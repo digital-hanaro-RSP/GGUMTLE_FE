@@ -1,7 +1,6 @@
 'use client';
 
 // 백업
-import LoadingDot from '@/components/atoms/LoadingDot';
 import GroupCard from '@/components/molecules/GroupCard';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useCategoryStore } from '@/store/useCategoryStore';

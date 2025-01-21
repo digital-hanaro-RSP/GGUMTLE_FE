@@ -17,11 +17,13 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { Switch } from '@/components/ui/switch';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function CreatePostPage() {
+  const [myGroups, setMyGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
   const [selectedBucketList, setSelectedBucketList] =
@@ -30,6 +32,8 @@ export default function CreatePostPage() {
   const [selectedImage, setSelectedImage] = useState<string[]>([]);
   const [content, setContent] = useState('');
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
+  const { createPost, getMyGroups } = useCommunityApi();
+
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
@@ -45,6 +49,47 @@ export default function CreatePostPage() {
   const handleImageRemove = (imageUrl: string) => {
     setSelectedImage(selectedImage.filter((url) => url !== imageUrl));
   };
+
+  const handleDisabled = () => {
+    return selectedGroup === null || content === '';
+  };
+
+  const handleSubmit = async () => {
+    if (!selectedGroup || !selectedGroup.id) return;
+
+    console.log('꿈모임 : ' + JSON.stringify(selectedGroup));
+    console.log('버킷리스트 : ' + JSON.stringify(selectedBucketList));
+    console.log('포트폴리오 추가 여부 : ' + isPortfolioIncluded);
+    console.log('이미지 : ' + JSON.stringify(selectedImage));
+    console.log('본문 : ' + content);
+
+    const imageUrls = JSON.stringify(selectedImage);
+
+    const snapshot = JSON.stringify({
+      // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
+      bucketId: selectedBucketList ? [] : [],
+      portfolio: isPortfolioIncluded,
+    });
+
+    const response = await createPost(
+      selectedGroup?.id,
+      imageUrls,
+      content,
+      snapshot
+    );
+
+    console.log('응답 : ' + response);
+  };
+
+  useEffect(() => {
+    const fetchMyGroups = async () => {
+      await getMyGroups(30, 0, '', '').then((res) => {
+        setMyGroups(res);
+        console.log(res);
+      });
+    };
+    fetchMyGroups();
+  }, []);
 
   return (
     <div className='flex flex-col gap-[20px] w-full'>
@@ -77,7 +122,10 @@ export default function CreatePostPage() {
         </div>
 
         {/* 버킷리스트 선택 */}
-        <div className='flex flex-col gap-[10px]'>
+        <div
+          className='flex flex-col gap-[10px]'
+          onClick={() => setIsOpenBucketListDrawer(true)}
+        >
           <p className='text-[18px] font-bold'>
             글을 작성할 버킷리스트를 선택해주세요 (선택)
           </p>
@@ -134,7 +182,11 @@ export default function CreatePostPage() {
           <TextArea type='post' value={content} onChange={onChangeContent} />
         </div>
 
-        <Button className='w-full' isDisabled={true}>
+        <Button
+          className='w-full'
+          isDisabled={handleDisabled()}
+          onClick={handleSubmit}
+        >
           완료
         </Button>
       </div>
@@ -150,7 +202,7 @@ export default function CreatePostPage() {
           </DrawerHeader>
           {/* 스크롤 영역 */}
           <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-            {MockGroups.map((group) => (
+            {myGroups.map((group) => (
               <GroupCard
                 key={group.id}
                 {...group}
@@ -175,171 +227,171 @@ export default function CreatePostPage() {
             <DrawerTitle>버킷리스트를 선택해주세요</DrawerTitle>
           </DrawerHeader>
           {/* 스크롤 영역 */}
-          {/* <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
+          <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
             {MockBucketLists.map((bucketList) => (
               <BucketListCard
                 key={bucketList.bucketId}
                 {...bucketList}
                 onClick={() => {
-                  setSelectedGroup(group);
-                  setIsOpenGroupDrawer(false);
+                  setSelectedBucketList(bucketList);
+                  setIsOpenBucketListDrawer(false);
                 }}
-                rightIcon={false}
+                isSelectMode={true}
               />
             ))}
-          </div> */}
+          </div>
         </DrawerContent>
       </Drawer>
     </div>
   );
 }
 
-// const MockBucketLists: BucketListCardProps[] = [
-//   {
-//     isSelectMode: false,
-//     safeBox: 40000,
-//     howTo: 'EFFORT',
-//     dataPercent: 80,
-//     title: '새로운 기술 배우기',
-//     tagType: 'DO',
-//     bucketId: 1,
-//   },
-//   {
-//     isSelectMode: false,
-//     safeBox: 50000,
-//     howTo: 'MONEY',
-//     dataPercent: 60,
-//     title: '여행을 떠나기',
-//     tagType: 'DO',
-//     bucketId: 2,
-//   },
-//   {
-//     isSelectMode: false,
-//     safeBox: 30000,
-//     howTo: 'MONEY',
-//     dataPercent: 70,
-//     title: '책 10권 읽기',
-//     tagType: 'DO',
-//     bucketId: 3,
-//   },
-//   {
-//     isSelectMode: false,
-//     safeBox: 45000,
-//     howTo: 'MONEY',
-//     dataPercent: 85,
-//     title: '운동 루틴 완성',
-//     tagType: 'DO',
-//     bucketId: 4,
-//   },
-//   {
-//     isSelectMode: false,
-//     safeBox: 60000,
-//     howTo: 'MONEY',
-//     dataPercent: 90,
-//     title: '외국어 공부',
-//     tagType: 'DO',
-//     bucketId: 5,
-//   },
-//   {
-//     isSelectMode: false,
-//     safeBox: 35000,
-//     howTo: 'MONEY',
-//     dataPercent: 50,
-//     title: '음악 연주 배우기',
-//     tagType: 'DO',
-//     bucketId: 6,
-//   },
-// ];
-
-const MockGroups: Group[] = [
+const MockBucketLists: BucketListCardProps[] = [
   {
-    id: 1,
-    name: '그룹 1',
-    category: '여행',
-    description: '그룹 1 설명',
-    imageUrl: 'https://picsum.photos/699/699',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 40000,
+    howTo: 'EFFORT',
+    dataPercent: 80,
+    title: '새로운 기술 배우기',
+    tagType: 'DO',
+    bucketId: 1,
   },
   {
-    id: 2,
-    name: '그룹 2',
-    category: '재테크',
-    description: '그룹 2 설명',
-    imageUrl: 'https://picsum.photos/698/698',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 50000,
+    howTo: 'MONEY',
+    dataPercent: 60,
+    title: '여행을 떠나기',
+    tagType: 'DO',
+    bucketId: 2,
   },
   {
-    id: 3,
-    name: '그룹 3',
-    category: '노후',
-    description: '그룹 3 설명',
-    imageUrl: 'https://picsum.photos/697/697',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 30000,
+    howTo: 'MONEY',
+    dataPercent: 70,
+    title: '책 10권 읽기',
+    tagType: 'DO',
+    bucketId: 3,
   },
   {
-    id: 4,
-    name: '그룹 4',
-    category: '교육',
-    description: '그룹 4 설명',
-    imageUrl: 'https://picsum.photos/695/695',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 45000,
+    howTo: 'MONEY',
+    dataPercent: 85,
+    title: '운동 루틴 완성',
+    tagType: 'DO',
+    bucketId: 4,
   },
   {
-    id: 5,
-    name: '그룹 5',
-    category: '취미',
-    description: '그룹 5 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 60000,
+    howTo: 'MONEY',
+    dataPercent: 90,
+    title: '외국어 공부',
+    tagType: 'DO',
+    bucketId: 5,
   },
   {
-    id: 6,
-    name: '그룹 6',
-    category: '취미',
-    description: '그룹 6 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 7,
-    name: '그룹 7',
-    category: '취미',
-    description: '그룹 7 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 8,
-    name: '그룹 8',
-    category: '취미',
-    description: '그룹 8 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 9,
-    name: '그룹 9',
-    category: '취미',
-    description: '그룹 9 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
+    isSelectMode: false,
+    safeBox: 35000,
+    howTo: 'MONEY',
+    dataPercent: 50,
+    title: '음악 연주 배우기',
+    tagType: 'DO',
+    bucketId: 6,
   },
 ];
+
+// const MockGroups: Group[] = [
+//   {
+//     id: 1,
+//     name: '그룹 1',
+//     category: '여행',
+//     description: '그룹 1 설명',
+//     imageUrl: 'https://picsum.photos/699/699',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 2,
+//     name: '그룹 2',
+//     category: '재테크',
+//     description: '그룹 2 설명',
+//     imageUrl: 'https://picsum.photos/698/698',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 3,
+//     name: '그룹 3',
+//     category: '노후',
+//     description: '그룹 3 설명',
+//     imageUrl: 'https://picsum.photos/697/697',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 4,
+//     name: '그룹 4',
+//     category: '교육',
+//     description: '그룹 4 설명',
+//     imageUrl: 'https://picsum.photos/695/695',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 5,
+//     name: '그룹 5',
+//     category: '취미',
+//     description: '그룹 5 설명',
+//     imageUrl: 'https://picsum.photos/700/700',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 6,
+//     name: '그룹 6',
+//     category: '취미',
+//     description: '그룹 6 설명',
+//     imageUrl: 'https://picsum.photos/700/700',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 7,
+//     name: '그룹 7',
+//     category: '취미',
+//     description: '그룹 7 설명',
+//     imageUrl: 'https://picsum.photos/700/700',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 8,
+//     name: '그룹 8',
+//     category: '취미',
+//     description: '그룹 8 설명',
+//     imageUrl: 'https://picsum.photos/700/700',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+//   {
+//     id: 9,
+//     name: '그룹 9',
+//     category: '취미',
+//     description: '그룹 9 설명',
+//     imageUrl: 'https://picsum.photos/700/700',
+//     memberCount: 10,
+//     createdAt: '2021-01-01',
+//     updatedAt: '2021-01-01',
+//   },
+// ];

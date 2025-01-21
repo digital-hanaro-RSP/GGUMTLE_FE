@@ -33,7 +33,7 @@ export default function Post({
   groupId,
   id,
   userBriefInfo,
-  snapshot,
+  snapShot,
   imageUrls,
   content,
   createdAt,
@@ -48,7 +48,7 @@ export default function Post({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
 
-  const { plusLike, minusLike } = useCommunityApi();
+  const { plusLike, minusLike, deletePost } = useCommunityApi();
 
   const handleLikeClick = async () => {
     console.log('목서버 제한량 때문에 막았습니다. return문 해제하면 정상동작');
@@ -103,6 +103,10 @@ export default function Post({
     }
   };
 
+  const handleDelete = async () => {
+    await deletePost(groupId, id);
+  };
+
   return (
     <div className='p-[20px] bg-white/80'>
       <div className='flex flex-col gap-[20px]' onClick={handlePostClick}>
@@ -139,7 +143,7 @@ export default function Post({
               >
                 수정
               </DropdownMenuItem>
-              <DropdownMenuItem>삭제</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -170,15 +174,17 @@ export default function Post({
 
         {/* 버킷리스트 와 포트폴리오는 추후 api 연동시 수정 */}
 
-        {snapshot && snapshot.bucketLists.length > 0 && (
-          <div className='mt-4'>{/* 버킷리스트 */}</div>
-        )}
+        {snapShot &&
+          Array.isArray(snapShot.bucketLists) &&
+          snapShot.bucketLists.length > 0 && (
+            <div className='mt-4'>{/* 버킷리스트 */}</div>
+          )}
 
-        {snapshot && snapshot.goalPortfolio && snapshot.currentPortfolio && (
+        {snapShot && snapShot.goalPortfolio && snapShot.currentPortfolio && (
           <div className='mt-4'>{/* 포트폴리오 */}</div>
         )}
 
-        {imageUrls.length > 0 && (
+        {Array.isArray(imageUrls) && imageUrls.length > 0 && (
           <div className='w-full z-0'>
             <Swiper
               modules={[Pagination]}

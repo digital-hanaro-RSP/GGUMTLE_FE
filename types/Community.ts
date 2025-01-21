@@ -13,11 +13,12 @@ export type Snapshot = {
   currentPortfolio: CurrentPortfolio;
 };
 
+// 백엔드에서 보내주는 타입은 string.. 이 문제를 어떻게 해결?
 export type Post = {
   id: number;
   userId: string;
   groupId: number;
-  snapshot?: Snapshot;
+  snapShot?: Snapshot;
   imageUrls: string[];
   content: string;
   createdAt: string;

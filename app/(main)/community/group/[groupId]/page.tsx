@@ -1,8 +1,25 @@
 'use client';
 
 import Post from '@/components/molecules/Post';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import { Post as PostType } from '@/types/Community';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function GroupIdPage() {
+  const [posts, setPosts] = useState<PostType[]>([]);
+  const params = useParams();
+  const { getPosts } = useCommunityApi();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await getPosts(Number(params.groupId));
+      setPosts(res);
+    };
+
+    fetchPosts();
+  }, []);
+
   return (
     <div className='flex flex-col gap-[20px] w-full '>
       {/* <Header text='꿈그룹' showActionButton={false} /> */}
