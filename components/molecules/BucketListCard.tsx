@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
-import { completeBucketList } from '@/types/BucketList';
+import { bucketListStatus } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
@@ -27,7 +27,7 @@ export interface BucketListCardProps {
   howTo: 'EFFORT' | 'MONEY' | 'WILL';
   dataPercent: number;
   title: string;
-  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN';
+  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN' | 'DEFAULT';
   safeBox?: number;
   isSelectMode?: boolean; //커뮤니티 용인지 체크
   bucketId: number;
@@ -50,7 +50,7 @@ export const BucketListCard = ({
   showPercent = true,
   onClick,
 }: BucketListCardProps) => {
-  const { completeBucketList } = useBucketListApi();
+  const { changeBucketListStatus } = useBucketListApi();
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
 
@@ -101,13 +101,25 @@ export const BucketListCard = ({
     bucketId: number
   ) => {
     e.stopPropagation();
-    const data: completeBucketList = {
-      status: 'done',
+    const data: bucketListStatus = {
+      status: 'DONE',
     };
-    router.push(`/bucket-list/complete?howto=${howTo}`);
-    // await completeBucketList(bid, data).then((res) => {
-    //   router.push('/completePage')
-    // });
+    await changeBucketListStatus(bucketId, data).then(() => {
+      router.push(`/bucket-list/complete?howto=${howTo}`);
+    });
+  };
+
+  const hold = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    bucketId: number
+  ) => {
+    e.stopPropagation();
+    const data: bucketListStatus = {
+      status: 'HOLD',
+    };
+    await changeBucketListStatus(bucketId, data).then(() => {
+      window.location.reload();
+    });
   };
 
   const handleClick = () => {
@@ -178,13 +190,15 @@ export const BucketListCard = ({
                     <DropdownMenuTrigger>
                       <BsThreeDots />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className='text-center w-10'>
+                    <DropdownMenuContent className='text-center w-10 z-[105]'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem onClick={(e) => complete(e, bucketId)}>
                         완료하기
                       </DropdownMenuItem>
-                      <DropdownMenuItem>보류하기</DropdownMenuItem>
+                      <DropdownMenuItem onClick={(e) => hold(e, bucketId)}>
+                        보류하기
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

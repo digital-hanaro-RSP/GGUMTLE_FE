@@ -13,7 +13,7 @@ export default function StartPage() {
       {/* 상단 컨텐츠 그룹 */}
       <div className='flex flex-col items-center gap-4'>
         {/* 이름 섹션 */}
-        <h1 className='font-semibold text-primary-main text-3xl translate-y-12'>
+        <h1 className='font-cookie text-primary-main text-3xl translate-y-12'>
           꿈틀
         </h1>
 

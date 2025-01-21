@@ -3,7 +3,7 @@
 import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import { useSignUpStore } from '@/store/useSignUpStore';
-import { RiPhoneFindLine } from 'react-icons/ri';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 
@@ -73,7 +73,13 @@ export default function PhonePage() {
     <div className='p-4'>
       <div className='flex flex-col items-center gap-14'>
         <div className='flex flex-col items-center mt-3'>
-          <RiPhoneFindLine className='text-primary-main text-5xl mb-3' />
+          <Image
+            src={'/image/icons/phone.png'}
+            width={60}
+            height={60}
+            alt={'휴대폰 아이콘'}
+            className='mb-3'
+          />
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-4'>
             간단한 휴대폰 인증으로{'\n'}본인 확인을 완료하세요
           </h1>

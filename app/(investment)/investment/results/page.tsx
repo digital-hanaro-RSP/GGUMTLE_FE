@@ -1,11 +1,12 @@
 'use client';
 
 import { Button } from '@/components/atoms/Button';
+import LoadingCircle from '@/components/atoms/LoadingCircle';
 import { useSurveyApi } from '@/hooks/useServey/useServey';
 import { useSurveyStore } from '@/store/surveyStore';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface InvestmentType {
   type: string;
@@ -62,6 +63,7 @@ const TENDENCY_TO_INVESTMENT_TYPE = {
 type TendencyType = keyof typeof TENDENCY_TO_INVESTMENT_TYPE;
 
 export default function ResultsPage() {
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const { answers, getTotalScore, clearAnswers } = useSurveyStore();
   const { submitSurvey } = useSurveyApi();
@@ -71,7 +73,15 @@ export default function ResultsPage() {
     if (totalAnswers < 8) {
       router.push('/investment/1');
     }
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2500);
+    return () => clearTimeout(timer);
   }, [answers, router]);
+
+  if (isLoading) {
+    return <LoadingCircle />;
+  }
 
   const handleRestart = () => {
     clearAnswers();
@@ -109,7 +119,7 @@ export default function ResultsPage() {
   const investmentType = INVESTMENT_TYPES[tendency];
 
   return (
-    <div className='min-h-screen bg-gray-50 py-8'>
+    <div className='min-h-screen bg-gray-50 py-8 animate-fadeIn'>
       <div className='max-w-2xl mx-auto px-4'>
         <div className='bg-white rounded-lg shadow-md p-6'>
           <h1 className='text-2xl font-bold text-center mb-8'>

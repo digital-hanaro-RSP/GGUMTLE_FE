@@ -35,7 +35,7 @@ export default function StartPage() {
             <br />더 나은 투자 여정의 시작을 함께하세요
           </p>
         </div>
-        <div className='flex flex-col items-center mt-32'>
+        <div className='flex flex-col items-center mt-36'>
           <Button size='lg' onClick={handleClick}>
             투자성향 알아보러 가기
           </Button>
