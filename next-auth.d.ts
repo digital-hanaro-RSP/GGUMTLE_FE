@@ -18,6 +18,7 @@ declare module 'next-auth' {
       jwt: string;
       permission: number;
     };
+    error?: 'RefreshAccessTokenError';
   }
 }
 
@@ -27,6 +28,7 @@ declare module 'next-auth/jwt' {
     id: string;
     permission: number;
     refreshToken: string;
-    exp: number; // 이 줄을 추가
+    expiresAt: number;
+    error?: 'RefreshAccessTokenError';
   }
 }
