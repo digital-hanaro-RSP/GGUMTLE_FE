@@ -194,7 +194,7 @@ export default function PhonePage() {
 
           {showVerification && (
             <div className='animate-fadeIn space-y-10'>
-              <div className='text-primary-main font-medium'>
+              <div className='text-sm text-primary-main font-medium'>
                 <span className='flex justify-center'>
                   {' '}
                   문자로 도착한 인증번호를 입력해주세요.
