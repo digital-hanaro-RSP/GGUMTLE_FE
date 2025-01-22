@@ -21,6 +21,7 @@ import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useEffect, useState } from 'react';
+import { checkImageSize } from '@/lib/utils';
 
 export default function CreatePostPage() {
   const [myGroups, setMyGroups] = useState<Group[]>([]);
@@ -33,7 +34,7 @@ export default function CreatePostPage() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
-  const { createPost, getMyGroups } = useCommunityApi();
+  const { createPost, getMyGroups, uploadImages } = useCommunityApi();
 
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -42,19 +43,9 @@ export default function CreatePostPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // 1) 현재까지의 파일 총합 + 새 파일 크기가 10MB를 넘어가는지 확인
-      const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-      const totalSizeSoFar = selectedFiles.reduce(
-        (acc, cur) => acc + cur.size,
-        0
-      );
-      const newFileSize = file.size;
-      if (totalSizeSoFar + newFileSize > MAX_SIZE) {
-        alert('이미지는 10MB 이하로 업로드해 주세요.');
+      if (!checkImageSize(file)) {
         return;
       }
-
-      // 2) 용량 검사가 통과되면 선택된 파일 목록에 추가
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage((prev) => [...prev, imageUrl]);
       setSelectedFiles((prev) => [...prev, file]);
@@ -65,12 +56,9 @@ export default function CreatePostPage() {
     setSelectedImage(selectedImage.filter((url) => url !== imageUrl));
 
     setSelectedFiles((prev) => {
-      // imageUrl를 만들어낸 file 객체를 추적하기 위해, URL.createObjectURL(file)와 비교
-      // 실제로는 파일명 등으로 매핑하거나, 인덱스로 매핑할 수 있음
       const indexToRemove = selectedImage.indexOf(imageUrl);
       if (indexToRemove === -1) return prev; // 혹시나 없는 경우
 
-      // indexToRemove 위치의 File을 제거
       const newArray = [...prev];
       newArray.splice(indexToRemove, 1);
       return newArray;
@@ -84,28 +72,27 @@ export default function CreatePostPage() {
   const handleSubmit = async () => {
     if (!selectedGroup || !selectedGroup.id) return;
 
-    console.log('꿈모임 : ' + JSON.stringify(selectedGroup));
-    console.log('버킷리스트 : ' + JSON.stringify(selectedBucketList));
-    console.log('포트폴리오 추가 여부 : ' + isPortfolioIncluded);
-    console.log('이미지 : ' + JSON.stringify(selectedImage));
-    console.log('본문 : ' + content);
+    try {
+      const encodedUrls = await uploadImages(selectedFiles);
+      const imageUrls = JSON.stringify(encodedUrls);
 
-    const imageUrls = JSON.stringify(selectedImage);
+      const snapshot = JSON.stringify({
+        // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
+        bucketId: selectedBucketList ? [] : [],
+        portfolio: isPortfolioIncluded,
+      });
 
-    const snapshot = JSON.stringify({
-      // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
-      bucketId: selectedBucketList ? [] : [],
-      portfolio: isPortfolioIncluded,
-    });
+      const response = await createPost(
+        selectedGroup?.id,
+        imageUrls,
+        content,
+        snapshot
+      );
 
-    const response = await createPost(
-      selectedGroup?.id,
-      imageUrls,
-      content,
-      snapshot
-    );
-
-    console.log('응답 : ' + response);
+      console.log('응답 : ' + response);
+    } catch (error) {
+      console.error('게시물 작성 실패:', error);
+    }
   };
 
   useEffect(() => {
@@ -123,7 +110,7 @@ export default function CreatePostPage() {
       <Header text='커뮤니티 글 작성' showActionButton={false} />
 
       {/* 이미지 입력 칸 간격이 너무 좁아서 간격 7 -> 10으로 조정했습니다. */}
-      <div className='flex flex-col gap-[20px] w-full px-[20px]'>
+      <div className='flex flex-col gap-[20px] w-full px-[20px] '>
         {/* 꿈모임 선택 */}
         <div
           className='flex flex-col gap-[10px]'
@@ -329,96 +316,3 @@ const MockBucketLists: BucketListCardProps[] = [
     bucketId: 6,
   },
 ];
-
-// const MockGroups: Group[] = [
-//   {
-//     id: 1,
-//     name: '그룹 1',
-//     category: '여행',
-//     description: '그룹 1 설명',
-//     imageUrl: 'https://picsum.photos/699/699',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 2,
-//     name: '그룹 2',
-//     category: '재테크',
-//     description: '그룹 2 설명',
-//     imageUrl: 'https://picsum.photos/698/698',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 3,
-//     name: '그룹 3',
-//     category: '노후',
-//     description: '그룹 3 설명',
-//     imageUrl: 'https://picsum.photos/697/697',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 4,
-//     name: '그룹 4',
-//     category: '교육',
-//     description: '그룹 4 설명',
-//     imageUrl: 'https://picsum.photos/695/695',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 5,
-//     name: '그룹 5',
-//     category: '취미',
-//     description: '그룹 5 설명',
-//     imageUrl: 'https://picsum.photos/700/700',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 6,
-//     name: '그룹 6',
-//     category: '취미',
-//     description: '그룹 6 설명',
-//     imageUrl: 'https://picsum.photos/700/700',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 7,
-//     name: '그룹 7',
-//     category: '취미',
-//     description: '그룹 7 설명',
-//     imageUrl: 'https://picsum.photos/700/700',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 8,
-//     name: '그룹 8',
-//     category: '취미',
-//     description: '그룹 8 설명',
-//     imageUrl: 'https://picsum.photos/700/700',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-//   {
-//     id: 9,
-//     name: '그룹 9',
-//     category: '취미',
-//     description: '그룹 9 설명',
-//     imageUrl: 'https://picsum.photos/700/700',
-//     memberCount: 10,
-//     createdAt: '2021-01-01',
-//     updatedAt: '2021-01-01',
-//   },
-// ];

@@ -9,15 +9,17 @@ import TextArea from '@/components/atoms/TextArea';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { checkImageSize } from '@/lib/utils';
 
 export default function CreateGroupPage() {
   const [name, setName] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [description, setDescription] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const router = useRouter();
 
-  const { createGroup } = useCommunityApi();
+  const { createGroup, uploadImages } = useCommunityApi();
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   };
@@ -44,27 +46,38 @@ export default function CreateGroupPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (!checkImageSize(file)) {
+        return;
+      }
+
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
+      setSelectedFile(file);
     }
   };
 
   const handleImageRemove = () => {
     setSelectedImage('');
+    setSelectedFile(null);
   };
 
-  const handleSubmit = () => {
-    console.log(name, selectedCategory, selectedImage, description);
-    createGroup(
-      name,
-      categoryMap[selectedCategory],
-      description,
-      selectedImage
-    ).then((res) => {
-      console.log(res);
-      // 꿈모임 생성 후 내 꿈모임 페이지로 이동
+  const handleSubmit = async () => {
+    try {
+      if (!selectedFile) return;
+
+      const encodedUrls = await uploadImages([selectedFile]);
+
+      await createGroup(
+        name,
+        categoryMap[selectedCategory],
+        description,
+        encodedUrls[0]
+      );
+
       router.push('/community/main/mygroup');
-    });
+    } catch (error) {
+      console.error('그룹 생성 실패:', error);
+    }
   };
 
   return (

@@ -48,6 +48,7 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
+  console.log('imageUrls : ', imageUrls, Array.isArray(imageUrls));
 
   // console.log('snapShot : ', snapShot);
   // console.log('currentPortfolio : ', snapShot?.currentPortfolio);

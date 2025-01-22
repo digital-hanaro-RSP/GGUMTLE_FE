@@ -142,10 +142,10 @@ export default function CommunityMainLayout({
             >
               <div className='relative'>
                 {showLeftArrow && (
-                  <div className='absolute left-[-15px] top-1/2 -translate-y-1/2 z-20 bg-gradient-to-r from-primary-main to-transparent w-8 h-full flex items-center  pointer-events-none'>
+                  <div className='absolute left-[-20px] top-1/2 -translate-y-1/2 z-20  w-8 h-full flex items-center  pointer-events-none'>
                     <IoIosArrowDown
                       size={26}
-                      className='rotate-90 text-white'
+                      className='rotate-90 text-primary-main'
                     />
                   </div>
                 )}
@@ -165,10 +165,10 @@ export default function CommunityMainLayout({
                   ))}
                 </div>
                 {showRightArrow && (
-                  <div className='absolute right-[-15px] top-1/2 -translate-y-1/2 z-20 bg-gradient-to-l from-primary-main to-transparent w-8 h-full flex items-center justify-end  pointer-events-none'>
+                  <div className='absolute right-[-20px] top-1/2 -translate-y-1/2 z-20  w-8 h-full flex items-center justify-end  pointer-events-none'>
                     <IoIosArrowDown
                       size={26}
-                      className='-rotate-90 text-white'
+                      className='-rotate-90 text-primary-main'
                     />
                   </div>
                 )}

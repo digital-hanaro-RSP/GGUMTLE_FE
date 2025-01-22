@@ -5,6 +5,7 @@ import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Post as PostType } from '@/types/Community';
 import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { parsePostData } from '@/lib/utils';
 
 export default function GroupIdPage() {
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -26,14 +27,12 @@ export default function GroupIdPage() {
 
     try {
       const res = await getPosts(Number(params.groupId), currentOffset, limit);
-      console.log('데이터 패칭 완료, 데이터 ' + res.length + '개');
-      for (let i = 0; i < res.length; i++) {
-        console.log(res[i]);
-      }
-      if (res.length < limit) {
+      const parsedPosts = res.map(parsePostData);
+
+      if (parsedPosts.length < limit) {
         setHasMore(false);
       }
-      setPosts((prev) => (isInitial ? res : [...prev, ...res]));
+      setPosts((prev) => (isInitial ? parsedPosts : [...prev, ...parsedPosts]));
       setOffset(currentOffset + limit);
     } catch (err) {
       console.log('데이터 fetch중 에러 :', err);

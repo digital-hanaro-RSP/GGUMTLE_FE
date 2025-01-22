@@ -7,6 +7,7 @@ import { Post as PostType } from '@/types/Community';
 import { LazyMotion, domAnimation, m } from 'motion/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { parsePostData } from '@/lib/utils';
 
 export default function PostIdPage() {
   const [post, setPost] = useState<PostType | null>(null);
@@ -16,21 +17,7 @@ export default function PostIdPage() {
   useEffect(() => {
     const fetchPost = async () => {
       const res = await getPost(Number(param.groupId), Number(param.postId));
-
-      const parsedSnapShot =
-        typeof res.snapShot === 'string'
-          ? JSON.parse(res.snapShot)
-          : (res.snapShot ?? null);
-      const parsedImageUrls =
-        typeof res.imageUrls === 'string'
-          ? JSON.parse(res.imageUrls)
-          : (res.imageUrls ?? []);
-
-      setPost({
-        ...res,
-        snapShot: JSON.parse(parsedSnapShot),
-        imageUrls: parsedImageUrls,
-      });
+      setPost(parsePostData(res));
     };
 
     fetchPost();

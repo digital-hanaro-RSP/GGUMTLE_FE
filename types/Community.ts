@@ -61,3 +61,8 @@ export type Group = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type Image = {
+  name: string;
+  size: number;
+};

@@ -1,5 +1,12 @@
 import { useApi } from '@/hooks/useApi';
-import { CommentResponse, Group, Post, PostResponse } from '@/types/Community';
+import {
+  CommentResponse,
+  Group,
+  Image,
+  Post,
+  PostResponse,
+} from '@/types/Community';
+import { encodeImageUrl } from '@/lib/utils';
 
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
@@ -191,6 +198,59 @@ export const useCommunityApi = () => {
     return response.data;
   };
 
+  const imageUpload = async (images: Image[]): Promise<string[]> => {
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify({
+        images,
+      }),
+    };
+    const response = await fetchApi(`/imageUpload/multiple`, options);
+
+    return response.data;
+  };
+
+  const imageUploadAws = async (url: string, file: File): Promise<void> => {
+    const options: RequestInit = {
+      method: 'PUT',
+      body: file,
+      headers: {
+        'Content-Type': 'application/octet-stream',
+      },
+    };
+
+    await fetch(url, options);
+  };
+
+  const uploadImages = async (files: File[]): Promise<string[]> => {
+    try {
+      const imageInfoArray = files.map((file) => ({
+        name: file.name,
+        size: file.size,
+      }));
+
+      const presignedUrls = await imageUpload(imageInfoArray);
+
+      for (let i = 0; i < files.length; i++) {
+        try {
+          await imageUploadAws(presignedUrls[i], files[i]);
+        } catch (error) {
+          console.error(`${i + 1}번째 이미지 업로드 실패:`, error);
+          throw new Error(`이미지 업로드 중 오류가 발생했습니다`);
+        }
+      }
+
+      const encodedUrls = imageInfoArray.map((imageInfo) =>
+        encodeImageUrl(imageInfo)
+      );
+
+      return encodedUrls;
+    } catch (error) {
+      console.error('이미지 업로드 실패:', error);
+      throw error;
+    }
+  };
+
   return {
     getPosts,
     getPost,
@@ -208,5 +268,8 @@ export const useCommunityApi = () => {
     leaveGroup,
     createPost,
     isMember,
+    imageUpload,
+    imageUploadAws,
+    uploadImages,
   };
 };
