@@ -1,6 +1,9 @@
 'use client';
 
+import { Button } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
+import { NicknameEditModal } from '@/components/molecules/NicknameEditModal';
+import { PasswordEditModal } from '@/components/molecules/PasswordEditModal';
 import { useUserApi } from '@/hooks/useUser/useUser';
 import { useEffect, useRef, useState } from 'react';
 
@@ -19,7 +22,9 @@ interface UserInfo {
 export default function MyPage() {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const { getUserInfo } = useUserApi();
+  const [isEditingNickname, setIsEditingNickname] = useState(false);
+  const [isEditingPassword, setIsEditingPassword] = useState(false);
+  const { getUserInfo, updateUserInfo } = useUserApi();
 
   const isMounted = useRef(false);
 
@@ -28,7 +33,6 @@ export default function MyPage() {
   };
 
   useEffect(() => {
-    // 이미 마운트된 경우 실행하지 않음
     if (isMounted.current) return;
 
     const fetchUserInfo = async () => {
@@ -45,6 +49,32 @@ export default function MyPage() {
     fetchUserInfo();
     isMounted.current = true;
   }, [getUserInfo]);
+
+  const handleNicknameUpdate = async (newNickname: string) => {
+    try {
+      const updatedUser = await updateUserInfo({ nickname: newNickname });
+      setUserInfo(updatedUser);
+      setIsEditingNickname(false);
+    } catch (error) {
+      console.error('Failed to update nickname:', error);
+    }
+  };
+
+  const handlePasswordUpdate = async (passwords: {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+  }) => {
+    try {
+      const updatedUser = await updateUserInfo({
+        password: passwords.newPassword,
+      });
+      setUserInfo(updatedUser);
+      setIsEditingPassword(false);
+    } catch (error) {
+      console.error('Failed to update password:', error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -104,7 +134,36 @@ export default function MyPage() {
             </div>
           </div>
         </Card>
+
+        <div className='flex flex-col items-center gap-4 mt-10'>
+          <Button
+            size='lg'
+            onClick={() => setIsEditingNickname(true)}
+            className='px-4 py-2'
+          >
+            닉네임 수정
+          </Button>
+          <Button
+            size='lg'
+            onClick={() => setIsEditingPassword(true)}
+            className='px-4 py-2'
+          >
+            비밀번호 변경
+          </Button>
+        </div>
       </div>
+      {isEditingNickname && (
+        <NicknameEditModal
+          onSubmit={handleNicknameUpdate}
+          onClose={() => setIsEditingNickname(false)}
+        />
+      )}
+      {isEditingPassword && (
+        <PasswordEditModal
+          onSubmit={handlePasswordUpdate}
+          onClose={() => setIsEditingPassword(false)}
+        />
+      )}
     </div>
   );
 }
