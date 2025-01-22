@@ -5,6 +5,7 @@ export interface SignUpData {
   tel: string;
   password: string;
   nickname: string;
+  profileImageUrl: string | null;
 }
 
 export interface SignUpResponse {
