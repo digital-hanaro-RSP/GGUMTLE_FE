@@ -6,6 +6,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import {
+  bucketListStatus,
+  changeBucketListStatusReq,
+} from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
@@ -112,6 +117,22 @@ export const BucketListCard = ({
   const [transferType, setTransferType] = useState<
     'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
   >('FILLUP');
+
+  const { changeBucketListStatus } = useBucketListApi();
+
+  const changeStatus = async (bid: number, status: bucketListStatus) => {
+    const formData: changeBucketListStatusReq = {
+      status: status,
+    };
+    await changeBucketListStatus(bid, formData)
+      .then((res) => {
+        console.log(res);
+        router.refresh();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   return (
     <>

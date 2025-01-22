@@ -65,3 +65,7 @@ export type createBucketListReq = {
   followers?: number;
   safeBox?: number;
 };
+
+export type changeBucketListStatusReq = {
+  status: bucketListStatus;
+};

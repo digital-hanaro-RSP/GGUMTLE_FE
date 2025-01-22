@@ -1,4 +1,7 @@
-import { bucketListStatus, createBucketListReq } from '@/types/BucketList';
+import {
+  changeBucketListStatusReq,
+  createBucketListReq,
+} from '@/types/BucketList';
 import { useApi } from '../useApi';
 
 export const useBucketListApi = () => {
@@ -7,9 +10,9 @@ export const useBucketListApi = () => {
   /** bucketlist status 변환 hook */
   const changeBucketListStatus = async (
     bid: number,
-    data: bucketListStatus
+    data: changeBucketListStatusReq
   ) => {
-    return await fetchApi(`/bucketlist/${bid}/complete`, {
+    return await fetchApi(`/buckets/${bid}`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
