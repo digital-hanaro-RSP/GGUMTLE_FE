@@ -6,8 +6,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
-import { bucketListStatus } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
@@ -50,7 +48,6 @@ export const BucketListCard = ({
   showPercent = true,
   onClick,
 }: BucketListCardProps) => {
-  const { changeBucketListStatus } = useBucketListApi();
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
 
@@ -94,32 +91,6 @@ export const BucketListCard = ({
       default:
         return '오류';
     }
-  };
-
-  const complete = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bucketId: number
-  ) => {
-    e.stopPropagation();
-    const data: bucketListStatus = {
-      status: 'DONE',
-    };
-    await changeBucketListStatus(bucketId, data).then(() => {
-      router.push(`/bucket-list/complete?howto=${howTo}`);
-    });
-  };
-
-  const hold = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bucketId: number
-  ) => {
-    e.stopPropagation();
-    const data: bucketListStatus = {
-      status: 'HOLD',
-    };
-    await changeBucketListStatus(bucketId, data).then(() => {
-      window.location.reload();
-    });
   };
 
   const handleClick = () => {
@@ -193,12 +164,8 @@ export const BucketListCard = ({
                     <DropdownMenuContent className='text-center w-10 z-[105]'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={(e) => complete(e, bucketId)}>
-                        완료하기
-                      </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => hold(e, bucketId)}>
-                        보류하기
-                      </DropdownMenuItem>
+                      <DropdownMenuItem>완료하기</DropdownMenuItem>
+                      <DropdownMenuItem>보류하기</DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

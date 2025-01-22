@@ -18,7 +18,7 @@ import { getAllBucketListRes } from '@/types/BucketList';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { calculatePercent, cn } from '@/lib/utils';
 
 export default function BucketListPage() {
   const { getAllBucketList } = useBucketListApi();
@@ -73,32 +73,10 @@ export default function BucketListPage() {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll); // 클린업
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log(bucketLists);
-
-  const calculatePercent = (
-    howTo: 'EFFORT' | 'WILL' | 'MONEY',
-    goalAmount?: number,
-    currentAmount?: number,
-    goalDate?: Date,
-    createdAt?: Date
-  ): number => {
-    if (howTo === 'MONEY' && goalAmount && currentAmount) {
-      return Math.min((100 * currentAmount) / goalAmount, 100);
-    } else if (createdAt) {
-      const now = new Date().getTime();
-      const start = createdAt.getTime();
-      const goal = goalDate?.getTime() ?? 0;
-
-      const elapsed = now - start;
-      const totalDuration = goal - start;
-      return Math.min((100 * elapsed) / totalDuration, 100);
-    }
-    throw new Error(
-      "Invalid parameters or missing 'createdAt' for non-MONEY types."
-    );
-  };
 
   return (
     <div className='gap-2 flex flex-col w-full relative'>
@@ -259,13 +237,16 @@ export default function BucketListPage() {
                         isSelectMode={false}
                         safeBox={item.safeBox}
                         howTo={item.howTo}
-                        dataPercent={calculatePercent(
-                          item.howTo,
-                          item.goalAmount,
-                          item.safeBox,
-                          new Date(item.dueDate),
-                          new Date(item.createdAt)
-                        )}
+                        dataPercent={
+                          30
+                          //   calculatePercent(
+                          //   item.howTo,
+                          //   item.goalAmount,
+                          //   item.safeBox,
+                          //   new Date(item.dueDate),
+                          //   new Date(item.createdAt)
+                          // )
+                        }
                         title={item.title}
                         tagType={item.tagType}
                         bucketId={item.id}

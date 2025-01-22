@@ -108,3 +108,26 @@ export const checkImageSize = (
   }
   return true;
 };
+
+export const calculatePercent = (
+  howTo: 'EFFORT' | 'WILL' | 'MONEY' | undefined,
+  goalAmount?: number,
+  currentAmount?: number,
+  goalDate?: Date,
+  createdAt?: Date
+): number => {
+  if (howTo === 'MONEY' && goalAmount && currentAmount) {
+    return Math.min((100 * currentAmount) / goalAmount, 100);
+  } else if (createdAt) {
+    const now = new Date().getTime();
+    const start = createdAt.getTime();
+    const goal = goalDate?.getTime() ?? 0;
+
+    const elapsed = now - start;
+    const totalDuration = goal - start;
+    return Math.min((100 * elapsed) / totalDuration, 100);
+  }
+  throw new Error(
+    "Invalid parameters or missing 'createdAt' for non-MONEY types."
+  );
+};

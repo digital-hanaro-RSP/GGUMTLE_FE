@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import useCreateBucketStore from '@/store/useCreateBucketStore';
+import { bucketListTagType } from '@/types/BucketList';
 import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
@@ -40,15 +41,15 @@ import {
 export const CreateBucketTitle = () => {
   const { title, tagType, setTagType, setTitle } = useCreateBucketStore();
   const bucketTitleRef = useRef<HTMLInputElement>(null);
-  const categories = new Map([
-    ['Default', '버킷리스트 타입을 선택해주세요.'],
+  const categories = new Map<bucketListTagType | undefined, string>([
+    // ['DEFAULT', '버킷리스트 타입을 선택해주세요.'],
     ['DO', '해보고 싶다'],
     ['BE', '되고 싶다'],
     ['HAVE', '갖고 싶다'],
     ['GO', '가보고 싶다'],
     ['LEARN', '배우고 싶다'],
   ]);
-  const bgColor = (type: string) => {
+  const bgColor = (type: bucketListTagType | undefined) => {
     switch (type) {
       case 'DO':
         return '#FFF89F';
@@ -100,7 +101,7 @@ export const CreateBucketTitle = () => {
           className='items-center gap-2 top-[52px]'
         >
           {Array.from(categories)
-            .filter(([key]) => key !== 'Default')
+            .filter(([key]) => key !== undefined)
             .map(([key, value]) => (
               <DropCardItem key={key} onClick={() => setTagType(key)}>
                 <div
@@ -134,7 +135,7 @@ export const CreateBucketDueDate = () => {
     <div
       className={cn(
         'pt-3 flex flex-col gap-2',
-        tagType === 'Default' || title === undefined
+        tagType === undefined || title === undefined
           ? 'hidden'
           : 'animate-fadeIn'
       )}

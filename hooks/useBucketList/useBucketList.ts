@@ -16,21 +16,21 @@ export const useBucketListApi = () => {
   };
   /** bucketlist 전체 조회 Hook */
   const getAllBucketList = async () => {
-    return await fetchApi('/bucketlist', {
+    return await fetchApi('/buckets', {
       method: 'GET',
     });
   };
 
   /** bucketlist 상세 조회 hook */
   const getBucketListbyId = async (bid: number) => {
-    return await fetchApi(`/bucketlist/${bid}`, {
+    return await fetchApi(`/buckets/${bid}`, {
       method: 'GET',
     });
   };
 
   /** bucketlist 생성 hook */
   const createBucketList = async (data: createBucketListReq) => {
-    return await fetchApi('/bucketlist', {
+    return await fetchApi('/buckets', {
       method: 'POST',
       body: JSON.stringify(data),
     });

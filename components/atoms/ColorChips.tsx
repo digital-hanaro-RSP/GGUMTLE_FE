@@ -21,7 +21,7 @@ export default function ColorChip({
   color,
   className,
 }: PropsWithChildren<ColorChipProps>) {
-  const { bgColor, textColor } = colorMap[color];
+  const { bgColor, textColor } = colorMap[color] ?? {};
   return (
     <div
       className={cn(

@@ -1,23 +1,24 @@
+import { bucketListHowTo, bucketListTagType } from '@/types/BucketList';
 import { create } from 'zustand';
 
 type CreateBucketStore = {
   title: string | undefined;
-  tagType: string;
+  tagType: bucketListTagType | undefined;
   date: Date | undefined;
   isDueDate: boolean | undefined;
-  howTo: 'MONEY' | 'EFFORT' | 'WILL' | undefined;
+  howTo: bucketListHowTo | undefined;
   autoAllocate: boolean;
-  cycleOpt1: string;
-  cycleOpt2: string;
+  cycleOpt1: string | undefined;
+  cycleOpt2: string | undefined;
   allocateAmount: number | undefined;
   goalAmount: number | undefined;
   memo: string | undefined;
 
   setTitle: (value: string) => void;
-  setTagType: (value: string) => void;
+  setTagType: (value: bucketListTagType | undefined) => void;
   setDate: (value: Date | undefined) => void;
   setIsDueDate: (value: boolean) => void;
-  setHowTo: (value: 'MONEY' | 'EFFORT' | 'WILL') => void;
+  setHowTo: (value: bucketListHowTo) => void;
   setAutoAllocate: (value: boolean) => void;
   setCycleOpt1: (value: string) => void;
   setCycleOpt2: (value: string) => void;
@@ -28,13 +29,13 @@ type CreateBucketStore = {
 
 const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
   title: '',
-  tagType: 'Default',
+  tagType: undefined,
   date: undefined,
   isDueDate: undefined,
   howTo: undefined,
   autoAllocate: false,
-  cycleOpt1: 'Default',
-  cycleOpt2: 'Default',
+  cycleOpt1: undefined,
+  cycleOpt2: undefined,
   allocateAmount: undefined,
   goalAmount: undefined,
   memo: undefined,

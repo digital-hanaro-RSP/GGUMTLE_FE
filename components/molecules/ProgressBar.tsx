@@ -43,7 +43,7 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
           style={{ transform: `translateX(-${100 - (progress || 0)}%)` }}
         >
           <Image
-            className={cn('-right-5 -top-5 absolute floating')}
+            className={cn('-right-5 -top-5 absolute floating z-[50]')}
             src={'/image/icons/Hana_Airplane.png'}
             alt='img'
             width={70}
@@ -51,11 +51,11 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
           />
           <div
             className={cn(
-              'right-0 top-[68px] absolute transition duration-1000 font-semibold text-lg text-primary-main',
+              'right-0 top-[68px] absolute transition duration-1000 font-semibold text-lg text-primary-main bg-white',
               showPercent ? 'opacity-100' : 'opacity-0'
             )}
           >
-            {countProgress}%
+            {countProgress.toFixed(0)}%
           </div>
         </span>
       </div>
