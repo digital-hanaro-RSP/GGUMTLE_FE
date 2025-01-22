@@ -20,6 +20,7 @@ import { Switch } from '@/components/ui/switch';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { checkImageSize } from '@/lib/utils';
 
@@ -35,6 +36,7 @@ export default function CreatePostPage() {
   const [content, setContent] = useState('');
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
   const { createPost, getMyGroups, uploadImages } = useCommunityApi();
+  const router = useRouter();
 
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -90,6 +92,7 @@ export default function CreatePostPage() {
       );
 
       console.log('응답 : ' + response);
+      router.push(`/community/group/${selectedGroup.id}`);
     } catch (error) {
       console.error('게시물 작성 실패:', error);
     }
