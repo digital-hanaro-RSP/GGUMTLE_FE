@@ -69,21 +69,6 @@ export default function GroupLayout({
 
       {children}
 
-      {/* 플러스 버튼 */}
-      {/* {isMember && postId === undefined ? (
-        <div className='fixed left-0 right-0 bottom-[68px] max-w-screen-md mx-auto pointer-events-none'>
-          <PlusButton
-            className='absolute bottom-[20px] right-[20px] pointer-events-auto'
-            size='sm'
-            onClick={() => {
-              router.push('/community/create/post');
-            }}
-          />
-        </div>
-      ) : (
-        <CommentInput />
-      )} */}
-
       {isGroupMember && postId === undefined ? (
         <div className='fixed left-0 right-0 bottom-[68px] max-w-screen-md mx-auto pointer-events-none'>
           <PlusButton

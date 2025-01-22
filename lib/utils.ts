@@ -91,7 +91,7 @@ export const encodeImageUrl = (imageInfo: { name: string; size: number }) => {
   const fileExt = fileName.substring(fileName.lastIndexOf('.'));
   const encodedFileName = encodeURIComponent(fileNameWithoutExt);
 
-  return `${process.env.IMAGE_BASE_URL}${encodedFileName}${fileExt}`;
+  return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}${encodedFileName}${fileExt}`;
 };
 
 export const checkImageSize = (
