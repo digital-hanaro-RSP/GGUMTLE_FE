@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
+import { PortfolioCard } from './PortfolioCard';
 
 // TODO
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
@@ -27,13 +28,14 @@ import UserProfile from '../atoms/UserProfile';
 
 type PostProps = PostType & {
   isDetailPage?: boolean;
+  onDelete?: () => void;
 };
 
 export default function Post({
   groupId,
   id,
   userBriefInfo,
-  snapshot,
+  snapShot,
   imageUrls,
   content,
   createdAt,
@@ -41,14 +43,20 @@ export default function Post({
   commentCount,
   isLiked: initialIsLiked,
   isDetailPage = false,
+  onDelete,
 }: PostProps) {
   const [isExpanded, setIsExpanded] = useState(isDetailPage);
   const [isClamped, setIsClamped] = useState(false);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
+  console.log('imageUrls : ', imageUrls, Array.isArray(imageUrls));
 
-  const { plusLike, minusLike } = useCommunityApi();
+  // console.log('snapShot : ', snapShot);
+  // console.log('currentPortfolio : ', snapShot?.currentPortfolio);
+  // console.log('goalPortfolio : ', snapShot?.goalPortfolio);
+
+  const { plusLike, minusLike, deletePost } = useCommunityApi();
 
   const handleLikeClick = async () => {
     console.log('목서버 제한량 때문에 막았습니다. return문 해제하면 정상동작');
@@ -103,6 +111,15 @@ export default function Post({
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      await deletePost(groupId, id);
+      onDelete?.(); // 삭제 성공 시 콜백 호출
+    } catch (error) {
+      console.error('게시물 삭제 실패:', error);
+    }
+  };
+
   return (
     <div className='p-[20px] bg-white/80'>
       <div className='flex flex-col gap-[20px]' onClick={handlePostClick}>
@@ -139,7 +156,7 @@ export default function Post({
               >
                 수정
               </DropdownMenuItem>
-              <DropdownMenuItem>삭제</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -170,15 +187,22 @@ export default function Post({
 
         {/* 버킷리스트 와 포트폴리오는 추후 api 연동시 수정 */}
 
-        {snapshot && snapshot.bucketLists.length > 0 && (
-          <div className='mt-4'>{/* 버킷리스트 */}</div>
+        {snapShot &&
+          Array.isArray(snapShot.bucketLists) &&
+          snapShot.bucketLists.length > 0 && (
+            <div className='mt-4'>{/* 버킷리스트 */}</div>
+          )}
+
+        {snapShot && snapShot.goalPortfolio && snapShot.currentPortfolio && (
+          <div className='mt-4'>
+            <PortfolioCard
+              goalPortfolio={snapShot.goalPortfolio}
+              currentPortfolio={snapShot.currentPortfolio}
+            />
+          </div>
         )}
 
-        {snapshot && snapshot.goalPortfolio && snapshot.currentPortfolio && (
-          <div className='mt-4'>{/* 포트폴리오 */}</div>
-        )}
-
-        {imageUrls.length > 0 && (
+        {Array.isArray(imageUrls) && imageUrls.length > 0 && (
           <div className='w-full z-0'>
             <Swiper
               modules={[Pagination]}

@@ -8,6 +8,9 @@ import { SearchInpuRef } from '@/components/atoms/Inputs';
 import { AddNewCard } from '@/components/molecules/AddNewCard';
 import { useCategoryStore } from '@/store/useCategoryStore';
 import { useSearchStore } from '@/store/useSearchStore';
+import * as motion from 'motion/react-client';
+import { IoIosArrowDown } from 'react-icons/io';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -18,6 +21,9 @@ export default function CommunityMainLayout({
 }) {
   const [isAdd, setIsAdd] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(true);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(false);
+  const categoryContainerRef = useRef<HTMLDivElement>(null);
   const lastScrollY = useRef(0);
   const ticking = useRef(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -51,6 +57,33 @@ export default function CommunityMainLayout({
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const checkScroll = () => {
+      const container = categoryContainerRef.current;
+      if (container) {
+        setShowLeftArrow(container.scrollLeft > 0);
+        setShowRightArrow(
+          container.scrollLeft < container.scrollWidth - container.clientWidth
+        );
+      }
+    };
+
+    const container = categoryContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', checkScroll);
+      window.addEventListener('resize', checkScroll);
+      // 초기 상태 체크
+      checkScroll();
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('scroll', checkScroll);
+        window.removeEventListener('resize', checkScroll);
+      }
+    };
   }, []);
 
   return (
@@ -107,16 +140,38 @@ export default function CommunityMainLayout({
             <div
               className={`flex flex-col w-full px-[20px] ${isSearchVisible ? 'py-[10px]' : ''} `}
             >
-              <div className='flex items-center justify-between gap-[20px] overflow-x-scroll scrollbar-hide'>
-                {categories.map((category) => (
-                  <CategoryTag
-                    key={category}
-                    content={category}
-                    isContentShow={isSearchVisible}
-                    isSelected={selectedCategory === category}
-                    onClick={() => setSelectedCategory(category)}
-                  />
-                ))}
+              <div className='relative'>
+                {showLeftArrow && (
+                  <div className='absolute left-[-20px] top-1/2 -translate-y-1/2 z-20  w-8 h-full flex items-center  pointer-events-none'>
+                    <IoIosArrowDown
+                      size={26}
+                      className='rotate-90 text-primary-main'
+                    />
+                  </div>
+                )}
+
+                <div
+                  ref={categoryContainerRef}
+                  className='flex items-center justify-between gap-[20px] overflow-x-scroll scrollbar-hide'
+                >
+                  {categories.map((category) => (
+                    <CategoryTag
+                      key={category}
+                      content={category}
+                      isContentShow={isSearchVisible}
+                      isSelected={selectedCategory === category}
+                      onClick={() => setSelectedCategory(category)}
+                    />
+                  ))}
+                </div>
+                {showRightArrow && (
+                  <div className='absolute right-[-20px] top-1/2 -translate-y-1/2 z-20  w-8 h-full flex items-center justify-end  pointer-events-none'>
+                    <IoIosArrowDown
+                      size={26}
+                      className='-rotate-90 text-primary-main'
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -138,23 +193,43 @@ export default function CommunityMainLayout({
       {/* 추가 카드 모달 */}
       {isAdd && (
         <div
-          className='bg-black/70 fixed mx-auto w-full md:w-[768px] h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
+          className='bg-black/50 backdrop-blur-sm fixed mx-auto w-full md:w-[768px] h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsAdd(false);
           }}
         >
-          <AddNewCard
-            usage='newPost'
-            size='md'
-            className='h-[100px]'
-            onClick={() => router.push('/community/create/post')}
-          />
-          <AddNewCard
-            usage='newGroup'
-            size='md'
-            className='h-[100px]'
-            onClick={() => router.push('/community/create/group')}
-          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.4,
+              scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
+            }}
+            className='h-[100px] w-[150px]'
+          >
+            <AddNewCard
+              usage='newPost'
+              size='lg'
+              className='h-[100px]'
+              onClick={() => router.push('/community/create/post')}
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              duration: 0.4,
+              scale: { type: 'spring', visualDuration: 0.4, bounce: 0.5 },
+            }}
+            className='h-[100px] w-[150px]'
+          >
+            <AddNewCard
+              usage='newGroup'
+              size='lg'
+              className='h-[100px]'
+              onClick={() => router.push('/community/create/group')}
+            />
+          </motion.div>
         </div>
       )}
     </div>

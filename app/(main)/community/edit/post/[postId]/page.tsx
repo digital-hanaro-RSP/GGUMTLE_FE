@@ -27,7 +27,7 @@ export default function EditPostPage() {
   );
   const [content, setContent] = useState(postMockData.content);
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(
-    postMockData.snapshot ? true : false
+    postMockData.snapShot ? true : false
   );
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);

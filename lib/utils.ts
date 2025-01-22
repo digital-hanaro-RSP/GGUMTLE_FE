@@ -66,3 +66,45 @@ export const parseIntWithoutCommas = (inputValue: string) => {
   const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
   return parsedValue;
 };
+
+export const parsePostData = (post: any) => {
+  const parsedSnapShot =
+    typeof post.snapShot === 'string'
+      ? JSON.parse(post.snapShot)
+      : (post.snapShot ?? null);
+
+  const parsedImageUrls =
+    typeof post.imageUrls === 'string'
+      ? JSON.parse(post.imageUrls)
+      : (post.imageUrls ?? []);
+
+  return {
+    ...post,
+    snapShot: parsedSnapShot ? JSON.parse(parsedSnapShot) : null,
+    imageUrls: parsedImageUrls ? JSON.parse(parsedImageUrls) : [],
+  };
+};
+
+export const encodeImageUrl = (imageInfo: { name: string; size: number }) => {
+  const fileName = imageInfo.name;
+  const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  const fileExt = fileName.substring(fileName.lastIndexOf('.'));
+  const encodedFileName = encodeURIComponent(fileNameWithoutExt);
+
+  return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}${encodedFileName}${fileExt}`;
+};
+
+export const checkImageSize = (
+  newFile: File,
+  existingFiles: File[] = []
+): boolean => {
+  const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB
+  const totalSizeSoFar = existingFiles.reduce((acc, cur) => acc + cur.size, 0);
+  const newFileSize = newFile.size;
+
+  if (totalSizeSoFar + newFileSize > MAX_TOTAL_SIZE) {
+    alert('이미지는 10MB 이하로 업로드해 주세요.');
+    return false;
+  }
+  return true;
+};

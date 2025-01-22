@@ -101,6 +101,13 @@ export default function CommunityMainMyGroupPage() {
             <GroupCard key={group.id} {...group} />
           </m.div>
         ))}
+        {isLoading && (
+          <div className='w-full flex justify-center mt-[20px]'>
+            <div className='dot-loading'>
+              <div className='middle-dot'></div>
+            </div>
+          </div>
+        )}
       </div>
     </LazyMotion>
   );
