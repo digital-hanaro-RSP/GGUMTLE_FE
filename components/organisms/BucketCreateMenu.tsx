@@ -85,7 +85,9 @@ export const CreateBucketTitle = () => {
               'bg-white text-[#9CA3AF] btn-lg py-3 px-4 font-normal text-left rounded-xl text-[16px] w-full border flex flex-row justify-between items-center'
             )}
           >
-            <p>{categories.get(tagType)}</p>
+            <p>
+              {categories.get(tagType) ?? '버킷리스트 타입을 선택해주세요.'}
+            </p>
             <IoIosArrowDown className={cn('-rotate-90')} />
             <div
               className={cn(

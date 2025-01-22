@@ -10,17 +10,19 @@ import {
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { bucketListTagType, createBucketListReq } from '@/types/BucketList';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 
 export default function BucketListRegisterPage() {
   const searchParams = useSearchParams();
   const { createBucketList } = useBucketListApi();
+  const router = useRouter();
 
   const {
     setTitle,
     setTagType,
+    reset,
     title,
     tagType,
     date,
@@ -83,14 +85,15 @@ export default function BucketListRegisterPage() {
       cronCycle: createCronCode(cycleOpt1, cycleOpt2),
       goalAmount: goalAmount,
       memo: memo,
-      status: 'DOING',
       isRecommended: false, //추후 보완 필요
-      followers: 0, //추후 보완 필요
-      safeBox: 0, //추후 보완 필요
+      // followers: 0, //추후 보완 필요
+      // safeBox: 0, //추후 보완 필요
     };
     await createBucketList(formData)
       .then((res) => {
         console.log(res);
+        reset();
+        router.push('/bucket-list');
       })
       .catch((err) => {
         alert(err);

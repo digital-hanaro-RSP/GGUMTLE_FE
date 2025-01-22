@@ -11,6 +11,8 @@ import {
 import { ProgressBar } from '@/components/molecules/ProgressBar';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { getBucketListbyIdRes } from '@/types/BucketList';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { calculatePercent } from '@/lib/utils';
@@ -44,7 +46,7 @@ export default function BucketListDetail({
         {bucketList && (
           <>
             <BucketListCard
-              className='bg-gradient-to-t from-[#F4F6F8] from-[13%] to-white'
+              className='bg-gradient-to-t from-[#F4F6F8] from-[70%] to-white'
               showPercent={false}
               isSelectMode={false}
               safeBox={bucketList?.safeBox}
@@ -71,8 +73,8 @@ export default function BucketListDetail({
                   )}
                 />
               </div>
-              <div className='pt-8 z-11 '>
-                <div className='bg-gradient-to-t from-[#F4F6F8] to-white'>
+              <div className='pt-8 pl-20 pb-20 z-11 relative'>
+                <div className='bg-[#F4F6F8]'>
                   <h1 className='font-semibold text-3xl'>
                     홍길동님의 <br /> 예상 완료 기간은?
                   </h1>
@@ -89,12 +91,14 @@ export default function BucketListDetail({
                       <small> 개월</small>
                     </h1>
                     <small className='text-gray-500'>
-                      2025년 1월 15일 기준
+                      {format(new Date(), 'yyyy년 M월 d일', { locale: ko })}{' '}
+                      기준
                     </small>
                   </div>
                 </div>
-                <div className=''>
+                <div className='w-full flex justify-end items-center bg-none absolute top-28 right-10'>
                   <video
+                    className='w-96'
                     src='/image/video/pig.mp4'
                     autoPlay
                     loop
@@ -107,7 +111,7 @@ export default function BucketListDetail({
                 <small className='text-left '>
                   <h3 className='text-lg'>메모</h3>
                   <div className='bg-white py-3 px-5 mx-2 mt-2 rounded-lg border-2 min-h-40 text-base'>
-                    메모 내용
+                    {bucketList.memo}
                   </div>
                 </small>
               </div>

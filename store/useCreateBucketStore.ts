@@ -1,7 +1,7 @@
 import { bucketListHowTo, bucketListTagType } from '@/types/BucketList';
 import { create } from 'zustand';
 
-type CreateBucketStore = {
+type CreateBucketStoreState = {
   title: string | undefined;
   tagType: bucketListTagType | undefined;
   date: Date | undefined;
@@ -13,7 +13,9 @@ type CreateBucketStore = {
   allocateAmount: number | undefined;
   goalAmount: number | undefined;
   memo: string | undefined;
+};
 
+type CreateBucketStoreAction = {
   setTitle: (value: string) => void;
   setTagType: (value: bucketListTagType | undefined) => void;
   setDate: (value: Date | undefined) => void;
@@ -25,9 +27,10 @@ type CreateBucketStore = {
   setAllocateAmount: (value: number) => void;
   setGoalAmount: (value: number) => void;
   setMemo: (value: string) => void;
+  reset: () => void;
 };
 
-const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
+const initialState: CreateBucketStoreState = {
   title: '',
   tagType: undefined,
   date: undefined,
@@ -39,7 +42,12 @@ const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
   allocateAmount: undefined,
   goalAmount: undefined,
   memo: undefined,
+};
 
+const useCreateBucketStore = create<
+  CreateBucketStoreState & CreateBucketStoreAction
+>()((set) => ({
+  ...initialState,
   setTitle: (value) => set({ title: value }),
   setTagType: (value) => set({ tagType: value }),
   setDate: (value) => set({ date: value }),
@@ -51,6 +59,9 @@ const useCreateBucketStore = create<CreateBucketStore>()((set) => ({
   setAllocateAmount: (value) => set({ allocateAmount: value }),
   setGoalAmount: (value) => set({ goalAmount: value }),
   setMemo: (value) => set({ memo: value }),
+  reset: () => {
+    set(initialState);
+  },
 }));
 
 export default useCreateBucketStore;
