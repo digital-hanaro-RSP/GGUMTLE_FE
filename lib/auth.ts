@@ -55,24 +55,27 @@ export const {
   ],
   callbacks: {
     async jwt({ token, user }) {
+      // 최초 로그인 시
       if (user) {
-        // 최초 로그인 시
+        console.log('>>> [jwt callback] 최초 로그인. 1시간 후 토큰 만료 설정');
         return {
           ...token,
           jwt: user.jwt,
           id: user.id,
           permission: user.permission,
           refreshToken: user.refreshToken,
-          exp: Math.floor(Date.now() / 1000) + 3600,
+          exp: Math.floor(Date.now() / 1000) + 3600, // 만료시간을 1시간 후로 설정
         };
       }
 
-      // 토큰이 만료되지 않았으면 그대로 반환
+      // 토큰이 아직 만료되지 않았다면 그대로 반환
       if (Date.now() < (token.exp as number) * 1000) {
+        console.log('>>> [jwt callback] 토큰이 아직 만료되지 않았습니다.');
         return token;
       }
 
-      // 토큰이 만료되었으면 리프레시 시도
+      // 만료되었다면 리프레시 시도
+      console.log('>>> [jwt callback] 토큰 만료됨. 리프레시 시도...');
       try {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/data/auth/refresh`,
@@ -90,19 +93,21 @@ export const {
         const data = await response.json();
 
         if (response.ok && data.code === 200) {
-          console.log('Token refreshed successfully');
+          console.log('>>> [jwt callback] 토큰 재발급 성공!');
           return {
             ...token,
             jwt: data.data.accessToken,
             refreshToken: data.data.refreshToken,
-            exp: Math.floor(Date.now() / 1000) + 3600,
+            exp: Math.floor(Date.now() / 1000) + 3600, // 새로 1시간 뒤 만료
           };
+        } else {
+          console.log('>>> [jwt callback] 토큰 재발급 실패');
         }
       } catch (error) {
         console.error('Token refresh error:', error);
-        return token;
       }
 
+      // 리프레시 실패 시 기존 토큰 그대로 반환
       return token;
     },
     async session({ session, token }) {
@@ -120,6 +125,6 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 24 * 60 * 60, // 세션 유효기간을 24시간으로 설정
+    maxAge: 3600, // 세션 유효기간 1시간
   },
 });
