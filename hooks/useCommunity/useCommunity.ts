@@ -1,11 +1,5 @@
 import { useApi } from '@/hooks/useApi';
-import {
-  CommentResponse,
-  Group,
-  Image,
-  Post,
-  PostResponse,
-} from '@/types/Community';
+import { Comment, Group, Image, Post, PostResponse } from '@/types/Community';
 import { encodeImageUrl } from '@/lib/utils';
 
 export const useCommunityApi = () => {
@@ -44,13 +38,35 @@ export const useCommunityApi = () => {
   };
 
   const getComments = async (
-    postId: number,
-    groupId: number
-  ): Promise<CommentResponse> => {
+    limit: number,
+    offset: number,
+    postId: number
+  ): Promise<Comment[]> => {
     const response = await fetchApi(
-      `/community/group/${groupId}/post/${postId}/comment`
+      `/community/post/${postId}/comments?offset=${offset}&limit=${limit}`
     );
-    return response;
+    return response.data.content;
+  };
+
+  const createComment = async (
+    postId: number,
+    content: string
+  ): Promise<void> => {
+    const options: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify({
+        content,
+      }),
+    };
+    await fetchApi(`/community/post/${postId}/comment`, options);
+  };
+
+  const delelteComment = async (commentId: number): Promise<void> => {
+    const options: RequestInit = {
+      method: 'DELETE',
+    };
+
+    await fetchApi(`/community/comment/${commentId}`, options);
   };
 
   // 리턴 타입으로 200만 받음
@@ -271,5 +287,7 @@ export const useCommunityApi = () => {
     imageUpload,
     imageUploadAws,
     uploadImages,
+    createComment,
+    delelteComment,
   };
 };

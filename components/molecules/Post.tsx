@@ -41,9 +41,10 @@ export default function Post({
   createdAt,
   likeCount: initialLikeCount,
   commentCount,
-  isLiked: initialIsLiked,
+  liked: initialIsLiked,
   isDetailPage = false,
   onDelete,
+  mine,
 }: PostProps) {
   const [isExpanded, setIsExpanded] = useState(isDetailPage);
   const [isClamped, setIsClamped] = useState(false);
@@ -59,8 +60,6 @@ export default function Post({
   const { plusLike, minusLike, deletePost } = useCommunityApi();
 
   const handleLikeClick = async () => {
-    console.log('목서버 제한량 때문에 막았습니다. return문 해제하면 정상동작');
-    return;
     console.log('이게 찍힐라나');
     const newLikeState = !isLiked;
     try {
@@ -143,22 +142,24 @@ export default function Post({
 
           {/* TODO */}
           {/* 만약 본인이 작성자라면 드롭 다운 노출해야함 현재 본인이 작성자라는 판단을 할 수 없어서 구현 못했음*/}
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <BsThreeDots />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => {
-                  router.push(`/community/edit/post/${id}`);
-                }}
-              >
-                수정
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {mine && (
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <BsThreeDots />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push(`/community/edit/post/${id}`);
+                  }}
+                >
+                  수정
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
 
         {/* 본문 영역 */}
@@ -232,8 +233,8 @@ export default function Post({
 
         <div className='like-comment-section'>
           <LikeComment
-            isLiked={isLiked!}
-            likeCount={likeCount!}
+            isLiked={isLiked}
+            likeCount={likeCount}
             commentCount={commentCount}
             onLikeClick={handleLikeClick}
           />

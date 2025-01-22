@@ -1,9 +1,11 @@
 'use client';
 
 import CommentCard from '@/components/molecules/CommentCard';
+import CommentInput from '@/components/molecules/CommentInput';
 import Post from '@/components/molecules/Post';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
-import { Post as PostType } from '@/types/Community';
+import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
+import { Comment as CommentType, Post as PostType } from '@/types/Community';
 import { LazyMotion, domAnimation, m } from 'motion/react';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -11,27 +13,78 @@ import { parsePostData } from '@/lib/utils';
 
 export default function PostIdPage() {
   const [post, setPost] = useState<PostType | null>(null);
+  const [isGroupMember, setIsGroupMember] = useState(false);
+  const [commentTrigger, setCommentTrigger] = useState(0); // 댓글 추가 트리거
   const param = useParams();
-  const { getPost } = useCommunityApi();
+  const { getPost, getComments, createComment, isMember } = useCommunityApi();
 
+  // 멤버십 확인
+  useEffect(() => {
+    const checkMembership = async () => {
+      try {
+        const res = await isMember(Number(param.groupId));
+        setIsGroupMember(res);
+      } catch (error) {
+        console.error('멤버십 확인 중 오류 발생:', error);
+        setIsGroupMember(false);
+      }
+    };
+    checkMembership();
+  }, [param.groupId]);
+
+  // 게시물 데이터 가져오기
   useEffect(() => {
     const fetchPost = async () => {
-      const res = await getPost(Number(param.groupId), Number(param.postId));
-      setPost(parsePostData(res));
+      const postRes = await getPost(
+        Number(param.groupId),
+        Number(param.postId)
+      );
+      setPost(parsePostData(postRes));
     };
 
     fetchPost();
-  }, []);
+  }, [param.groupId, param.postId]);
+
+  const {
+    data: comments,
+    isLoading,
+    lastElementObserver,
+  } = useInfiniteScroll<CommentType>({
+    fetchData: ({ limit, offset }) =>
+      getComments(limit, offset, Number(param.postId)),
+    limit: 10,
+    dependencies: [param.postId, commentTrigger],
+  });
+
+  const handleCreateComment = async (content: string) => {
+    try {
+      await createComment(Number(param.postId), content);
+
+      setPost((prev) =>
+        prev
+          ? {
+              ...prev,
+              commentCount: (prev.commentCount || 0) + 1,
+            }
+          : null
+      );
+
+      setCommentTrigger((prev) => prev + 1);
+    } catch (error) {
+      console.error('댓글 작성 실패:', error);
+    }
+  };
 
   return (
     <div className='flex flex-col gap-[20px] w-full'>
       {post && <Post {...post} isDetailPage={true} />}
-      <p className='ml-[20px]'>{commentMockDatas.length}개의 댓글</p>
+      <p className='ml-[20px]'>{comments.length}개의 댓글</p>
       <LazyMotion features={domAnimation}>
         <div className='flex flex-col gap-[25px] pb-[200px] pt-[20px] bg-white'>
-          {commentMockDatas.map((comment, index) => (
+          {comments.map((comment, index) => (
             <m.div
               key={comment.id}
+              ref={index === comments.length - 1 ? lastElementObserver : null}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -41,81 +94,22 @@ export default function PostIdPage() {
               }}
             >
               <CommentCard {...comment} />
-              {index !== commentMockDatas.length - 1 && (
+              {index !== comments.length - 1 && (
                 <div className='h-[1px] w-[calc(100%-80px)] bg-[#D9D9D9] mx-auto mt-[25px]'></div>
               )}
             </m.div>
           ))}
+          {isLoading && (
+            <div className='w-full flex justify-center mt-[20px]'>
+              <div className='dot-loading'>
+                <div className='middle-dot'></div>
+              </div>
+            </div>
+          )}
         </div>
       </LazyMotion>
+
+      {isGroupMember && <CommentInput onClick={handleCreateComment} />}
     </div>
   );
 }
-
-// const postMockData = {
-//   id: 1,
-//   userId: '058140b5-4688-4290-8387-e6aafa655416',
-//   groupId: 1,
-//   imageUrls: [],
-//   content:
-//     '안녕하세요!\n\n오늘 처음으로 꿈틀 서비스를 시작했어요.\n버킷리스트도 작성해보고, 자산 관리도 시작했네요.\n\n앞으로 열심히 모으면서 제 버킷리스트를 하나씩 이뤄나가고 싶어요!\n다들 화이팅하세요 😊',
-//   createdAt: '2025-01-10 16:30',
-//   updatedAt: '2025-01-10 16:30',
-//   postType: 'POST' as const,
-//   likeCount: 5,
-//   commentCount: 3,
-//   userBriefInfo: {
-//     name: '김꿈틀',
-//     profileImage: 'https://picsum.photos/36/36',
-//     nickname: '김꿈틀',
-//   },
-//   isLiked: true,
-// };
-
-const commentMockDatas = [
-  {
-    id: 1,
-    postId: 1,
-    userId: '058140b5-4688-4290-8387-e6aafa655416',
-    content: '크루즈 타기',
-    createdAt: '2025-01-10 16:31',
-    updatedAt: '2025-01-10 16:31',
-    isLiked: false,
-    userBriefInfo: {
-      name: '김꿈틀',
-      profileImage: 'https://picsum.photos/36/36',
-      nickname: '김꿈틀',
-    },
-    likeCount: 1,
-  },
-  {
-    id: 2,
-    postId: 1,
-    userId: '058140b5-4688-4290-8387-e6aafa655416',
-    content: '크루즈 타기22',
-    createdAt: '2025-01-10 16:32',
-    updatedAt: '2025-01-10 16:32',
-    isLiked: true,
-    userBriefInfo: {
-      name: '김꿈틀',
-      profileImage: 'https://picsum.photos/36/36',
-      nickname: '김꿈틀',
-    },
-    likeCount: 3,
-  },
-  {
-    id: 3,
-    postId: 1,
-    userId: '058140b5-4688-4290-8387-e6aafa655416',
-    content: '크루즈 타기33',
-    createdAt: '2025-01-10 16:33',
-    updatedAt: '2025-01-10 16:33',
-    isLiked: false,
-    userBriefInfo: {
-      name: '김꿈틀',
-      profileImage: 'https://picsum.photos/36/36',
-      nickname: '김꿈틀',
-    },
-    likeCount: 5,
-  },
-];

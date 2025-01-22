@@ -2,7 +2,6 @@
 
 import { PlusButton } from '@/components/atoms/Button';
 import Header from '@/components/atoms/Header';
-import CommentInput from '@/components/molecules/CommentInput';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
@@ -17,9 +16,7 @@ export default function GroupLayout({
   const params = useParams();
   const [isGroupMember, setIsGroupMember] = useState(false);
   const router = useRouter();
-  const postId = params.postId;
   const groupId = Number(params.groupId);
-  console.log('postId', postId);
 
   const fetchIsMember = async () => {
     try {
@@ -29,7 +26,6 @@ export default function GroupLayout({
       } else {
         setIsGroupMember(false);
       }
-      console.log(res);
     } catch (error) {
       console.error('멤버십 확인 중 오류 발생:', error);
       setIsGroupMember(false);
@@ -41,15 +37,13 @@ export default function GroupLayout({
   }, [groupId]);
 
   const handleJoinGroup = async () => {
-    const response = await joinGroup(groupId);
+    await joinGroup(groupId);
     fetchIsMember();
-    console.log('handleJoinGroup : ' + response);
   };
 
   const handleLeaveGroup = async () => {
-    const response = await leaveGroup(groupId);
+    await leaveGroup(groupId);
     fetchIsMember();
-    console.log('handleLeaveGroup : ' + response);
   };
 
   return (
@@ -69,19 +63,17 @@ export default function GroupLayout({
 
       {children}
 
-      {isGroupMember && postId === undefined ? (
+      {isGroupMember && params.postId === undefined && (
         <div className='fixed left-0 right-0 bottom-[68px] max-w-screen-md mx-auto pointer-events-none'>
           <PlusButton
             className='absolute bottom-[20px] right-[20px] pointer-events-auto'
             size='sm'
             onClick={() => {
-              router.push('/community/create/post');
+              router.push(`/community/create/post?groupId=${groupId}`);
             }}
           />
         </div>
-      ) : postId ? (
-        <CommentInput />
-      ) : null}
+      )}
     </div>
   );
 }
