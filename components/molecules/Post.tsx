@@ -28,6 +28,7 @@ import { PortfolioCard } from './PortfolioCard';
 
 type PostProps = PostType & {
   isDetailPage?: boolean;
+  onDelete?: () => void;
 };
 
 export default function Post({
@@ -42,6 +43,7 @@ export default function Post({
   commentCount,
   isLiked: initialIsLiked,
   isDetailPage = false,
+  onDelete,
 }: PostProps) {
   const [isExpanded, setIsExpanded] = useState(isDetailPage);
   const [isClamped, setIsClamped] = useState(false);
@@ -110,7 +112,12 @@ export default function Post({
   };
 
   const handleDelete = async () => {
-    await deletePost(groupId, id);
+    try {
+      await deletePost(groupId, id);
+      onDelete?.(); // 삭제 성공 시 콜백 호출
+    } catch (error) {
+      console.error('게시물 삭제 실패:', error);
+    }
   };
 
   return (
