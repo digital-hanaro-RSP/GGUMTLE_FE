@@ -118,6 +118,7 @@ export const MoneyTransferDrawer = ({
   const { getAccountInfo } = useDreamAccountApi();
   const { getBucketListbyId } = useBucketListApi();
   const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
+  console.log('🚀 ~ accountInfo:', accountInfo);
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
   console.log('🚀 ~ bucketList:', bucketList);
 
@@ -137,18 +138,26 @@ export const MoneyTransferDrawer = ({
       case 'FILLUP':
         const getToBucketInfo = async () => {
           if (toId) {
-            await getBucketListbyId(toId).then((res) => {
-              setBucketList(res.data);
-            });
+            await getBucketListbyId(toId)
+              .then((res) => {
+                setBucketList(res.data);
+              })
+              .catch((err) => {
+                alert(err);
+              });
           }
         };
         getToBucketInfo();
         break;
     }
     const getAccount = async () => {
-      await getAccountInfo().then((res) => {
-        setAccountInfo(res.data);
-      });
+      await getAccountInfo()
+        .then((res) => {
+          setAccountInfo(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     };
     getAccount();
   }, [transferDrawerOpen]);
@@ -163,7 +172,8 @@ export const MoneyTransferDrawer = ({
   }, [bucketList]);
 
   useEffect(() => {
-    if (accountInfo?.balance) {
+    if (accountInfo) {
+      console.log('hi');
       switch (transferType) {
         case 'BRINGOUT':
         case 'RECEIVE':
@@ -180,7 +190,7 @@ export const MoneyTransferDrawer = ({
           break;
       }
     }
-  }, [accountInfo]);
+  }, [accountInfo, setAccountInfo]);
 
   console.log('🚀 ~ useEffect ~ transferType:', transferType);
 

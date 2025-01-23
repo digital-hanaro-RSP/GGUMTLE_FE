@@ -8,6 +8,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import useRecommendBucketStore from '@/store/useRecommendBucketStore';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -60,6 +61,20 @@ export default function RecommendBucketPage() {
   const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
+  const {
+    Popular,
+    Do,
+    Be,
+    Go,
+    Have,
+    Learn,
+    setPopular,
+    setDo,
+    setBe,
+    setGo,
+    setHave,
+    setLearn,
+  } = useRecommendBucketStore();
 
   const bgColor = (type: string) => {
     switch (type) {
@@ -116,9 +131,7 @@ export default function RecommendBucketPage() {
   };
 
   const onClickRecommend = (title: string, bucketType: string) => {
-    router.push(
-      `/bucket-list/create?title=${title}&tagType=${bucketType}`
-    );
+    router.push(`/bucket-list/create?title=${title}&tagType=${bucketType}`);
   };
 
   return (
