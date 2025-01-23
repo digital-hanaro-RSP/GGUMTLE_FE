@@ -21,7 +21,8 @@ export default function CommunityMainPopularPage() {
 
   const { data, isLoading, lastElementObserver } =
     useInfiniteScroll<PostResponse>({
-      fetchData: ({ limit, offset }) => getPopularPosts(limit, offset),
+      fetchData: ({ limit, offset }) =>
+        getPopularPosts(limit, offset, category, searchInput),
       dependencies: [searchInput, selectedCategory],
       category,
       search: searchInput,

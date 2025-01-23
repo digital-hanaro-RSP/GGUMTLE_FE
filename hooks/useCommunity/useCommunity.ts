@@ -56,10 +56,12 @@ export const useCommunityApi = () => {
 
   const getPopularPosts = async (
     limit: number,
-    offset: number
+    offset: number,
+    category: string,
+    search: string
   ): Promise<PostResponse[]> => {
     const response = await fetchApi(
-      `/community/post/popular?offset=${offset}&limit=${limit}`
+      `/community/post/popular?${category !== '' ? `category=${category}&` : ''}${search !== '' ? `search=${search}&` : ''}offset=${offset}&limit=${limit}`
     );
     return response.data.content;
   };
