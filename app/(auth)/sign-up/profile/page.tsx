@@ -1,16 +1,39 @@
 'use client';
 
 import { Button } from '@/components/atoms/Button';
-import { DefaultInputRef } from '@/components/atoms/Inputs';
+import { DefaultInputRef, ImageInputRef } from '@/components/atoms/Inputs';
+import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useSignUpStore } from '@/store/useSignUpStore';
 import { SignUpData } from '@/types/Auth';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { checkImageSize } from '@/lib/utils';
 
 export default function ProfilePage() {
   const { formData, setFinalInfo } = useSignUpStore();
   const router = useRouter();
+  const [selectedImage, setSelectedImage] = useState<string>('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const { uploadImages } = useCommunityApi();
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!checkImageSize(file)) {
+        return;
+      }
+
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      setSelectedFile(file);
+    }
+  };
+
+  const handleImageRemove = () => {
+    setSelectedImage('');
+    setSelectedFile(null);
+  };
 
   useEffect(() => {
     if (formData.password && formData.nickname) {
@@ -26,6 +49,14 @@ export default function ProfilePage() {
       "input[name='nickname']"
     ) as HTMLInputElement;
 
+    let profileImageUrl = ''; // 기본값으로 빈 문자열 설정
+
+    // 이미지가 있을 경우에만 업로드 진행
+    if (selectedFile) {
+      const encodedUrls = await uploadImages([selectedFile]);
+      profileImageUrl = encodedUrls[0];
+    }
+
     if (passwordInput?.value && nicknameInput?.value) {
       setFinalInfo(passwordInput.value, nicknameInput.value);
 
@@ -36,6 +67,7 @@ export default function ProfilePage() {
         tel: formData.tel,
         password: passwordInput.value,
         nickname: nicknameInput.value,
+        profileImageUrl: profileImageUrl, // 이미지 URL이 있으면 사용, 없으면 빈 문자열
       };
 
       try {
@@ -68,16 +100,16 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className='p-4'>
-      <div className='flex flex-col items-center gap-14'>
+    <div className='py-2 px-4'>
+      <div className='flex flex-col items-center gap-10'>
         <div className='flex flex-col items-center mt-3'>
-          <Image
+          {/* <Image
             src={'/image/icons/smile.png'}
             width={80}
             height={80}
             alt={''}
             className='mb-3'
-          />
+          /> */}
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-2'>
             프로필 정보를 입력하고{'\n'}나만의 계정을 만들어보세요
           </h1>
@@ -115,6 +147,21 @@ export default function ProfilePage() {
               required
               error='닉네임을 입력해주세요'
             />
+          </div>
+          <div>
+            <p className='text-lg font-bold mb-2 text-[#5B5B5B]'>
+              프로필 이미지 설정
+            </p>
+            <div className='flex items-center justify-center'>
+              {selectedImage ? (
+                <ShowSelectedImage
+                  imageUrl={selectedImage}
+                  onRemove={handleImageRemove}
+                />
+              ) : (
+                <ImageInputRef onChange={handleImageSelect} />
+              )}
+            </div>
           </div>
           <div className='flex flex-col items-center mt-2'>
             <Button size='lg' onClick={handleSignUp}>

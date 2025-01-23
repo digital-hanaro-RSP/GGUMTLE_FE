@@ -1,20 +1,43 @@
-export type bucketListStatus = {
-  status: 'DOING' | 'DONE' | 'HOLD';
-};
+export type bucketListStatus = 'DOING' | 'DONE' | 'HOLD';
+export type bucketListTagType = 'DO' | 'GO' | 'HAVE' | 'BE' | 'LEARN';
+export type bucketListHowTo = 'MONEY' | 'EFFORT' | 'WILL';
 
 export type getAllBucketListRes = {
   id: number;
   title: string;
-  tagType: 'DO' | 'GO' | 'HAVE' | 'BE' | 'LEARN' | 'DEFAULT';
+  tagType: bucketListTagType;
   dueDate: Date;
-  howTo: 'MONEY' | 'EFFORT' | 'WILL';
+  howTo: bucketListHowTo;
   isDueSet: boolean;
   isAutoAllocate: boolean;
   allocateAmount?: number;
   cronCycle?: string;
   goalAmount: number;
   memo: string;
-  status: 'DOING' | 'DONE' | 'HOLD';
+  status: bucketListStatus;
+  isRecommended: boolean;
+  originId?: number;
+  safeBox?: number;
+  followers?: number;
+  userId: string;
+  dreamAccountId: number;
+  recommendations: boolean | null;
+  createdAt: Date;
+};
+
+export type getBucketListbyIdRes = {
+  id: number;
+  title: string;
+  tagType: bucketListTagType;
+  dueDate: Date;
+  howTo: bucketListHowTo;
+  isDueSet: boolean;
+  isAutoAllocate: boolean;
+  allocateAmount?: number;
+  cronCycle?: string;
+  goalAmount: number;
+  memo: string;
+  status: bucketListStatus;
   isRecommended: boolean;
   originId?: number;
   safeBox?: number;
@@ -26,15 +49,23 @@ export type getAllBucketListRes = {
 };
 
 export type createBucketListReq = {
-  title: string;
-  tagType: 'DO' | 'GO' | 'HAVE' | 'BE' | 'LEARN';
-  isDueSet: boolean;
-  dueDate: Date;
-  howTo: 'MONEY' | 'EFFORT' | 'WILL';
-  isAutoAllocate: boolean;
+  title?: string;
+  tagType?: bucketListTagType;
+  isDueSet?: boolean;
+  dueDate?: string;
+  howTo?: bucketListHowTo;
+  isAutoAllocate?: boolean;
   allocateAmount?: number;
   cronCycle?: string;
-  goalAmount: number;
-  memo: string;
+  goalAmount?: number;
+  memo?: string;
+  status?: bucketListStatus;
+  isRecommended?: boolean;
+  originId?: number;
+  followers?: number;
+  safeBox?: number;
 };
 
+export type changeBucketListStatusReq = {
+  status: bucketListStatus;
+};
