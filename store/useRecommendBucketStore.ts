@@ -1,16 +1,5 @@
-import { bucketListTagType } from '@/types/BucketList';
+import { bucketListTagType, RecommendBucketListType } from '@/types/BucketList';
 import { create } from 'zustand';
-
-type RecommendationType = {
-  id: number;
-  title: string;
-  followers: number;
-};
-
-type RecommendBucketListType = {
-  tagType: bucketListTagType | undefined;
-  recommendations: RecommendationType[];
-};
 
 type RecommendBucketStoreState = {
   Popular: RecommendBucketListType[];
