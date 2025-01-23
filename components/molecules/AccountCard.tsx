@@ -10,9 +10,11 @@ type AccountCardProps = {
   title: string;
   balance: string;
   className?: string;
+  aid?: number;
 };
 
 export default function AccountCard({
+  aid,
   title,
   balance,
   className,
@@ -20,11 +22,9 @@ export default function AccountCard({
   const [isHide, setIsHide] = useState(false);
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
   const [transferType, setTransferType] = useState<
-    'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
-  >('SEND');
-  const onTransferClick = (
-    type: 'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
-  ) => {
+    'SEND' | 'RECEIVE' | undefined
+  >();
+  const onTransferClick = (type: 'SEND' | 'RECEIVE' | undefined) => {
     setTransferType(type);
     setTransferDrawerOpen(true);
   };
@@ -76,7 +76,7 @@ export default function AccountCard({
         <div className='flex'>
           <Button
             className='rounded-lg bg-[#EFF0F4] text-fontBlack flex-1 h-[40px] mr-[9px] flex items-center justify-center'
-            onClick={() => onTransferClick('RETRIEVE')}
+            onClick={() => onTransferClick('RECEIVE')}
           >
             가져오기
           </Button>
@@ -95,13 +95,24 @@ export default function AccountCard({
         </div>
       </Card>
       <div>
-        <MoneyTransferDrawer
-          transferDrawerOpen={transferDrawerOpen}
-          setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
-          transferType={transferType}
-          fromId={1}
-          toId={1}
-        />
+        {transferType === 'RECEIVE' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'RECEIVE'}
+            fromId={undefined}
+            toId={aid}
+          />
+        )}
+        {transferType === 'SEND' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'SEND'}
+            fromId={aid}
+            toId={undefined}
+          />
+        )}
       </div>
     </>
   );

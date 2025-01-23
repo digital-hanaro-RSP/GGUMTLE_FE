@@ -102,6 +102,7 @@ export default function BucketListPage() {
           'bg-opacity-30 max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
           // heightClass
         )}
+        aid={accountInfo?.id}
       />
       <div className='flex w-full'>
         <Tabs defaultValue='doing' className='w-full'>
