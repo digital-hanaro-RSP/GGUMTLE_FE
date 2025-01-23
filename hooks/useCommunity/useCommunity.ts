@@ -54,9 +54,14 @@ export const useCommunityApi = () => {
     await fetchApi(`/community/group/${groupId}/post/${postId}`, options);
   };
 
-  const getPopularPosts = async (category: string): Promise<PostResponse> => {
-    const response = await fetchApi(`/community/popular?category=${category}`);
-    return response;
+  const getPopularPosts = async (
+    limit: number,
+    offset: number
+  ): Promise<PostResponse[]> => {
+    const response = await fetchApi(
+      `/community/post/popular?offset=${offset}&limit=${limit}`
+    );
+    return response.data.content;
   };
 
   const getComments = async (

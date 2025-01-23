@@ -8,6 +8,7 @@ interface UseInfiniteScrollProps<T> {
     search?: string;
   }) => Promise<T[]>;
   limit?: number;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   dependencies?: any[];
   category?: string;
   search?: string;
