@@ -13,7 +13,7 @@ export const usePortfolioApi = () => {
   const { fetchApi } = useApi();
 
   const getPortfolio = useCallback(async (): Promise<PortfolioResponse> => {
-    const response = (await fetchApi('/api/portfolio', {
+    const response = (await fetchApi('/portfolio', {
       method: 'GET',
     })) as ApiResponse;
     return response.data;
