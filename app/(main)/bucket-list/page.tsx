@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
+import { accountInfoRes } from '@/types/Account';
 import { getAllBucketListRes } from '@/types/BucketList';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
@@ -22,6 +24,8 @@ import { calculatePercent, cn } from '@/lib/utils';
 
 export default function BucketListPage() {
   const { getAllBucketList } = useBucketListApi();
+  const { getAccountInfo } = useDreamAccountApi();
+  const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
   const [bucketLists, setBucketLists] = useState<getAllBucketListRes[]>();
   const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -69,6 +73,16 @@ export default function BucketListPage() {
           alert(err);
         });
     };
+    const fetchAccountInfo = async () => {
+      await getAccountInfo()
+        .then((res) => {
+          setAccountInfo(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    fetchAccountInfo();
     fetchBucketList();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -82,7 +96,7 @@ export default function BucketListPage() {
     <div className='gap-2 flex flex-col w-full relative'>
       <AccountCard
         title='꿈 모음 계좌'
-        balance='100000'
+        balance={accountInfo?.balance.toString() ?? '0'}
         className={cn(
           // 'bg-opacity-30 w-[calc(100%-40px)] max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-1000 ',
           'bg-opacity-30 max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
