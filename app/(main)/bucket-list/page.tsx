@@ -14,14 +14,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
+import { accountInfoRes } from '@/types/Account';
 import { getAllBucketListRes } from '@/types/BucketList';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { calculatePercent, cn } from '@/lib/utils';
 
 export default function BucketListPage() {
   const { getAllBucketList } = useBucketListApi();
+  const { getAccountInfo } = useDreamAccountApi();
+  const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
   const [bucketLists, setBucketLists] = useState<getAllBucketListRes[]>();
   const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -69,47 +73,36 @@ export default function BucketListPage() {
           alert(err);
         });
     };
+    const fetchAccountInfo = async () => {
+      await getAccountInfo()
+        .then((res) => {
+          setAccountInfo(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    fetchAccountInfo();
     fetchBucketList();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll); // 클린업
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   console.log(bucketLists);
-
-  const calculatePercent = (
-    howTo: 'EFFORT' | 'WILL' | 'MONEY',
-    goalAmount?: number,
-    currentAmount?: number,
-    goalDate?: Date,
-    createdAt?: Date
-  ): number => {
-    if (howTo === 'MONEY' && goalAmount && currentAmount) {
-      return Math.min((100 * currentAmount) / goalAmount, 100);
-    } else if (createdAt) {
-      const now = new Date().getTime();
-      const start = createdAt.getTime();
-      const goal = goalDate?.getTime() ?? 0;
-
-      const elapsed = now - start;
-      const totalDuration = goal - start;
-      return Math.min((100 * elapsed) / totalDuration, 100);
-    }
-    throw new Error(
-      "Invalid parameters or missing 'createdAt' for non-MONEY types."
-    );
-  };
 
   return (
     <div className='gap-2 flex flex-col w-full relative'>
       <AccountCard
         title='꿈 모음 계좌'
-        balance='100000'
+        balance={accountInfo?.balance.toString() ?? '0'}
         className={cn(
           // 'bg-opacity-30 w-[calc(100%-40px)] max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-1000 ',
           'bg-opacity-30 max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
           // heightClass
         )}
+        aid={accountInfo?.id}
       />
       <div className='flex w-full'>
         <Tabs defaultValue='doing' className='w-full'>
@@ -259,13 +252,16 @@ export default function BucketListPage() {
                         isSelectMode={false}
                         safeBox={item.safeBox}
                         howTo={item.howTo}
-                        dataPercent={calculatePercent(
-                          item.howTo,
-                          item.goalAmount,
-                          item.safeBox,
-                          new Date(item.dueDate),
-                          new Date(item.createdAt)
-                        )}
+                        dataPercent={
+                          30
+                          //   calculatePercent(
+                          //   item.howTo,
+                          //   item.goalAmount,
+                          //   item.safeBox,
+                          //   new Date(item.dueDate),
+                          //   new Date(item.createdAt)
+                          // )
+                        }
                         title={item.title}
                         tagType={item.tagType}
                         bucketId={item.id}
