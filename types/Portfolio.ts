@@ -27,3 +27,15 @@ export interface PortfolioResponse {
   currentPortfolio: CurrentPortfolio;
   goalPortfolio: GoalPortfolio;
 }
+
+export type InvestmentType =
+  | 'CONSERVATIVE'
+  | 'MODERATELY_CONSERVATIVE'
+  | 'BALANCED'
+  | 'MODERATELY_AGGRESSIVE'
+  | 'AGGRESSIVE';
+
+export interface InvestmentTypeResponse {
+  userName: string;
+  investmentType: InvestmentType;
+}
