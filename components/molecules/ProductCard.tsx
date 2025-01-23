@@ -15,15 +15,18 @@ type ProductCardProps = {
 };
 
 const PRODUCT_TYPE_MAP = {
-  savingTimeDeposit: '정기예금',
-  investment: '투자',
-  pension: '연금',
+  SAVING_TIME_DEPOSIT: '정기예금',
+  INVESTMENT: '투자',
+  FOREIGN_CURRENCY: '외화',
+  PENSION: '연금',
 } as const;
 
 const RISK_RATING_COLORS = {
-  매우낮은위험: '#9997FD',
-  매우높은위험: '#FF0000',
-  높은위험: '#f37021',
+  매우낮은위험: '#FDC7C7',
+  매우높은위험: '#540A09',
+  높은위험: '#911110',
+  보통위험: '#FE1E1E',
+  낮은위험: '#FC8E8D',
 } as const;
 
 export default function ProductCard({
@@ -55,7 +58,7 @@ export default function ProductCard({
   };
 
   return (
-    <div className='px-5'>
+    <div className=''>
       {' '}
       {/* 좌우 20px 패딩을 위한 컨테이너 */}
       <Card

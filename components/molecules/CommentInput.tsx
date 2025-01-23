@@ -14,7 +14,11 @@ import UserProfile from '../atoms/UserProfile';
 
 // 이미지 없으면 디폴트 이미지 넣어줘야함
 
-export default function CommentInput() {
+export default function CommentInput({
+  onClick,
+}: {
+  onClick: (comment: string) => void;
+}) {
   const [comment, setComment] = useState('');
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -28,6 +32,10 @@ export default function CommentInput() {
       console.log('댓글 작성 실패');
       return;
     }
+    if (onClick) {
+      onClick(comment);
+    }
+    setComment('');
     console.log('댓글', comment);
   };
 
@@ -51,7 +59,7 @@ export default function CommentInput() {
           <div
             className={` ${
               comment.trim() ? 'text-primary-main' : 'text-primary-placeholder'
-            }`}
+            } cursor-pointer`}
           >
             <IoIosSend size={34} />
           </div>

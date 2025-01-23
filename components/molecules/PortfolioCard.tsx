@@ -192,8 +192,8 @@ export const PortfolioCard = ({
   };
 
   return (
-    <Card className='p-6'>
-      <div className='text-2xl font-bold mb-6'>
+    <Card className='px-6 py-2'>
+      <div className='text-xl font-semibold mb-6'>
         총 자산: {getTotalAssets().toLocaleString()}원
       </div>
 
