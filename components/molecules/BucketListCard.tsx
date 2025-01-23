@@ -107,7 +107,7 @@ export const BucketListCard = ({
 
   const handleTransferClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    type: 'SEND' | 'RECEIVE' | 'BRINGOUT' | 'FILLUP'
+    type: 'BRINGOUT' | 'FILLUP'
   ) => {
     e.stopPropagation();
     setTransferDrawerOpen(true);
@@ -115,7 +115,7 @@ export const BucketListCard = ({
   };
 
   const [transferType, setTransferType] = useState<
-    'SEND' | 'RECEIVE' | 'BRINGOUT' | 'FILLUP' | undefined
+    'BRINGOUT' | 'FILLUP' | undefined
   >();
 
   const { changeBucketListStatus } = useBucketListApi();
@@ -243,13 +243,24 @@ export const BucketListCard = ({
         {children}
       </Card>
       <div>
-        <MoneyTransferDrawer
-          transferDrawerOpen={transferDrawerOpen}
-          setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
-          transferType={transferType}
-          toId={1}
-          fromId={1}
-        />
+        {transferType === 'BRINGOUT' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'BRINGOUT'}
+            toId={undefined}
+            fromId={bucketId}
+          />
+        )}
+        {transferType === 'FILLUP' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'FILLUP'}
+            toId={bucketId}
+            fromId={undefined}
+          />
+        )}
       </div>
     </>
   );

@@ -68,7 +68,7 @@ export const MoneyTransferDrawer = ({
     switch (transferType) {
       case 'SEND':
         await sendMoneyFromDreamAccount(formData, fromId)
-          .then((res) => {
+          .then(() => {
             setTransferSuccess(true);
           })
           .catch((err) => {
@@ -77,7 +77,7 @@ export const MoneyTransferDrawer = ({
         break;
       case 'RECEIVE':
         await receiveMoneyToDreamAccount(formData, toId)
-          .then((res) => {
+          .then(() => {
             setTransferSuccess(true);
           })
           .catch((err) => {
@@ -86,7 +86,7 @@ export const MoneyTransferDrawer = ({
         break;
       case 'FILLUP':
         await fillUpMoneyFromDreamAccount(formData, fromId, toId)
-          .then((res) => {
+          .then(() => {
             setTransferSuccess(true);
           })
           .catch((err) => {
@@ -95,7 +95,7 @@ export const MoneyTransferDrawer = ({
         break;
       case 'BRINGOUT':
         await bringOutMoneyToDreamAccount(formData, toId, fromId)
-          .then((res) => {
+          .then(() => {
             setTransferSuccess(true);
           })
           .catch((err) => {
@@ -118,7 +118,9 @@ export const MoneyTransferDrawer = ({
   const { getAccountInfo } = useDreamAccountApi();
   const { getBucketListbyId } = useBucketListApi();
   const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
+  console.log('🚀 ~ accountInfo:', accountInfo);
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
+  console.log('🚀 ~ bucketList:', bucketList);
 
   /**계좌및 버킷 잔액 확인용 */
   useEffect(() => {
@@ -127,7 +129,7 @@ export const MoneyTransferDrawer = ({
         const getFROMBucketInfo = async () => {
           if (fromId) {
             await getBucketListbyId(fromId).then((res) => {
-              setBucketList(res);
+              setBucketList(res.data);
             });
           }
         };
@@ -136,33 +138,42 @@ export const MoneyTransferDrawer = ({
       case 'FILLUP':
         const getToBucketInfo = async () => {
           if (toId) {
-            await getBucketListbyId(toId).then((res) => {
-              setBucketList(res);
-            });
+            await getBucketListbyId(toId)
+              .then((res) => {
+                setBucketList(res.data);
+              })
+              .catch((err) => {
+                alert(err);
+              });
           }
         };
         getToBucketInfo();
         break;
     }
     const getAccount = async () => {
-      await getAccountInfo().then((res) => {
-        setAccountInfo(res.data);
-      });
+      await getAccountInfo()
+        .then((res) => {
+          setAccountInfo(res.data);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     };
     getAccount();
   }, [transferDrawerOpen]);
 
   useEffect(() => {
-    if (transferType === 'BRINGOUT' && bucketList?.safeBox) {
+    if (transferType === 'BRINGOUT' && bucketList) {
       setFromBalance({ title: bucketList.title, balance: bucketList.safeBox });
     }
-    if (transferType === 'FILLUP' && bucketList?.safeBox) {
+    if (transferType === 'FILLUP' && bucketList) {
       setToBalance({ title: bucketList.title, balance: bucketList.safeBox });
     }
   }, [bucketList]);
 
   useEffect(() => {
-    if (accountInfo?.balance) {
+    if (accountInfo) {
+      console.log('hi');
       switch (transferType) {
         case 'BRINGOUT':
         case 'RECEIVE':
@@ -179,7 +190,7 @@ export const MoneyTransferDrawer = ({
           break;
       }
     }
-  }, [accountInfo]);
+  }, [accountInfo, setAccountInfo]);
 
   console.log('🚀 ~ useEffect ~ transferType:', transferType);
 

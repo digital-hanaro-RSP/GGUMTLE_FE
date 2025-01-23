@@ -13,6 +13,7 @@ type CreateBucketStoreState = {
   allocateAmount: number | undefined;
   goalAmount: number | undefined;
   memo: string | undefined;
+  originId: number | undefined;
 };
 
 type CreateBucketStoreAction = {
@@ -27,6 +28,7 @@ type CreateBucketStoreAction = {
   setAllocateAmount: (value: number) => void;
   setGoalAmount: (value: number) => void;
   setMemo: (value: string) => void;
+  setOriginId: (value: number) => void;
   reset: () => void;
 };
 
@@ -42,6 +44,7 @@ const initialState: CreateBucketStoreState = {
   allocateAmount: undefined,
   goalAmount: undefined,
   memo: undefined,
+  originId: undefined,
 };
 
 const useCreateBucketStore = create<
@@ -59,6 +62,7 @@ const useCreateBucketStore = create<
   setAllocateAmount: (value) => set({ allocateAmount: value }),
   setGoalAmount: (value) => set({ goalAmount: value }),
   setMemo: (value) => set({ memo: value }),
+  setOriginId: (value) => set({ originId: value }),
   reset: () => {
     set(initialState);
   },

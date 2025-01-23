@@ -1,4 +1,5 @@
 import {
+  bucketListTagType,
   changeBucketListStatusReq,
   createBucketListReq,
 } from '@/types/BucketList';
@@ -41,7 +42,7 @@ export const useBucketListApi = () => {
 
   /** bucketlist 수정 hook */
   const editBucketListbyId = async (bid: number, data: createBucketListReq) => {
-    return await fetchApi(`/bucketlist/${bid}`, {
+    return await fetchApi(`/buckets/${bid}`, {
       method: 'PUT',
       body: JSON.stringify(data),
     });
@@ -49,16 +50,19 @@ export const useBucketListApi = () => {
 
   /** bucketlist 삭제 hook */
   const deleteBucketListbyId = async (bid: number) => {
-    return await fetchApi(`/bucketlist/${bid}`, {
+    return await fetchApi(`/buckets/${bid}`, {
       method: 'DELETE',
     });
   };
 
   /** 추천 bucketlist 받기 hook */
-  const getRecommendBucklist = async () => {
-    return await fetchApi('/bucketlist/recommendation', {
-      method: 'GET',
-    });
+  const getRecommendBucklist = async (tagType?: bucketListTagType) => {
+    return await fetchApi(
+      `/buckets/recommendation${tagType ? `?tagType=${tagType}` : ''}`,
+      {
+        method: 'GET',
+      }
+    );
   };
 
   return {
