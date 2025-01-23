@@ -130,8 +130,15 @@ export default function RecommendBucketPage() {
     api.scrollTo(index);
   };
 
-  const onClickRecommend = (title: string, bucketType?: string) => {
-    router.push(`/bucket-list/create?title=${title}&tagType=${bucketType}`);
+  const onClickRecommend = (
+    title: string,
+    id: number,
+    followers: number,
+    bucketType?: string
+  ) => {
+    router.push(
+      `/bucket-list/create?title=${title}&tagType=${bucketType}&id=${id}&followers=${followers}`
+    );
   };
 
   return (
@@ -169,7 +176,12 @@ export default function RecommendBucketPage() {
                     {buckets.recommendations.map((bucket, index) => (
                       <button
                         onClick={() =>
-                          onClickRecommend(bucket.title, buckets.tagType)
+                          onClickRecommend(
+                            bucket.title,
+                            bucket.id,
+                            bucket.followers,
+                            buckets.tagType
+                          )
                         }
                         key={index}
                         className='py-3 px-4 rounded-lg flex flex-row items-center w-full'
