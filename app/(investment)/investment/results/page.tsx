@@ -141,7 +141,7 @@ export default function ResultsPage() {
           </div>
 
           <div className='bg-gray-50 p-6 rounded-lg mb-8'>
-            <p className='text-md text-slate-500 text-center leading-relaxed whitespace-pre-line'>
+            <p className='text-sm text-slate-500 text-center leading-relaxed whitespace-pre-line'>
               {investmentType.description}
             </p>
           </div>
