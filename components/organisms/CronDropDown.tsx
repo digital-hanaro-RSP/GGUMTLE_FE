@@ -18,7 +18,7 @@ type CycleDropDownProps = {
 export const CycleDropDown = ({ disable }: CycleDropDownProps) => {
   const { cycleOpt1, setCycleOpt1, setCycleOpt2 } = useCreateBucketStore();
   const cycle1 = new Map([
-    ['Default', '선택'],
+    ['DEFAULT', '선택'],
     ['Daily', '매일'],
     ['Weekly', '매주'],
     ['Monthly', '매월'],
@@ -28,7 +28,7 @@ export const CycleDropDown = ({ disable }: CycleDropDownProps) => {
     if (key === 'Monthly') {
       setCycleOpt2('1');
     } else {
-      setCycleOpt2('Default');
+      setCycleOpt2('DEFAULT');
     }
   };
   return (
@@ -41,7 +41,7 @@ export const CycleDropDown = ({ disable }: CycleDropDownProps) => {
           >
             <div className='flex flex-row'>
               <div className='flex-grow w-full flex justify-center items-center break-keep'>
-                {cycle1.get(cycleOpt1)}
+                {cycle1.get(cycleOpt1 ?? 'DEFAULT')}
               </div>
               <div className='flex justify-end items-center flex-grow '>
                 <IoIosArrowDown />
@@ -70,14 +70,14 @@ export const CycleDropDown = ({ disable }: CycleDropDownProps) => {
 export const WeeklyDropDown = ({ disable }: CycleDropDownProps) => {
   const { cycleOpt2, setCycleOpt2 } = useCreateBucketStore();
   const weekly = new Map([
-    ['Default', '선택'],
-    ['Mon', '월요일'],
-    ['Tue', '화요일'],
-    ['Wed', '수요일'],
-    ['Thu', '목요일'],
-    ['Fri', '금요일'],
-    ['Sat', '토요일'],
-    ['Sun', '일요일'],
+    ['DEFAULT', '선택'],
+    ['1', '월요일'],
+    ['2', '화요일'],
+    ['3', '수요일'],
+    ['4', '목요일'],
+    ['5', '금요일'],
+    ['6', '토요일'],
+    ['0', '일요일'],
   ]);
   return (
     <>
@@ -89,7 +89,7 @@ export const WeeklyDropDown = ({ disable }: CycleDropDownProps) => {
           >
             <div className='flex flex-row'>
               <div className='flex-grow w-full flex justify-center items-center break-keep'>
-                {weekly.get(cycleOpt2)}
+                {weekly.get(cycleOpt2 ?? 'DEFAULT')}
               </div>
               <div className='flex justify-end items-center flex-grow '>
                 <IoIosArrowDown />

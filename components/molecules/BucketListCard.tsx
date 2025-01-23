@@ -7,7 +7,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
-import { bucketListStatus } from '@/types/BucketList';
+import {
+  bucketListStatus,
+  changeBucketListStatusReq,
+} from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsThreeDots } from 'react-icons/bs';
@@ -50,7 +53,6 @@ export const BucketListCard = ({
   showPercent = true,
   onClick,
 }: BucketListCardProps) => {
-  const { changeBucketListStatus } = useBucketListApi();
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
 
@@ -96,32 +98,6 @@ export const BucketListCard = ({
     }
   };
 
-  const complete = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bucketId: number
-  ) => {
-    e.stopPropagation();
-    const data: bucketListStatus = {
-      status: 'DONE',
-    };
-    await changeBucketListStatus(bucketId, data).then(() => {
-      router.push(`/bucket-list/complete?howto=${howTo}`);
-    });
-  };
-
-  const hold = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bucketId: number
-  ) => {
-    e.stopPropagation();
-    const data: bucketListStatus = {
-      status: 'HOLD',
-    };
-    await changeBucketListStatus(bucketId, data).then(() => {
-      window.location.reload();
-    });
-  };
-
   const handleClick = () => {
     if (showPercent && !isSelectMode) router.push(`/bucket-list/${bucketId}`);
     if (isSelectMode) {
@@ -131,7 +107,7 @@ export const BucketListCard = ({
 
   const handleTransferClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    type: 'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
+    type: 'BRINGOUT' | 'FILLUP'
   ) => {
     e.stopPropagation();
     setTransferDrawerOpen(true);
@@ -139,8 +115,28 @@ export const BucketListCard = ({
   };
 
   const [transferType, setTransferType] = useState<
-    'SEND' | 'RETRIEVE' | 'BRINGOUT' | 'FILLUP'
-  >('FILLUP');
+    'BRINGOUT' | 'FILLUP' | undefined
+  >();
+
+  const { changeBucketListStatus } = useBucketListApi();
+
+  const changeStatus = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    bid: number,
+    status: bucketListStatus
+  ) => {
+    e.stopPropagation();
+    const formData: changeBucketListStatusReq = {
+      status: status,
+    };
+    await changeBucketListStatus(bid, formData)
+      .then(() => {
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   return (
     <>
@@ -193,11 +189,20 @@ export const BucketListCard = ({
                     <DropdownMenuContent className='text-center w-10 z-[105]'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem onClick={(e) => complete(e, bucketId)}>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'DONE')}
+                      >
                         완료하기
                       </DropdownMenuItem>
-                      <DropdownMenuItem onClick={(e) => hold(e, bucketId)}>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'HOLD')}
+                      >
                         보류하기
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'DOING')}
+                      >
+                        진행하기
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -238,13 +243,24 @@ export const BucketListCard = ({
         {children}
       </Card>
       <div>
-        <MoneyTransferDrawer
-          transferDrawerOpen={transferDrawerOpen}
-          setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
-          transferType={transferType}
-          toId={1}
-          fromId={1}
-        />
+        {transferType === 'BRINGOUT' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'BRINGOUT'}
+            toId={undefined}
+            fromId={bucketId}
+          />
+        )}
+        {transferType === 'FILLUP' && (
+          <MoneyTransferDrawer
+            transferDrawerOpen={transferDrawerOpen}
+            setTransferDrawerOpen={(open) => setTransferDrawerOpen(open)}
+            transferType={'FILLUP'}
+            toId={bucketId}
+            fromId={undefined}
+          />
+        )}
       </div>
     </>
   );

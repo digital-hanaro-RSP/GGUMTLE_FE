@@ -24,25 +24,31 @@ export const Default: Story = {
   args: {
     postId: 1,
     id: 1,
-    userId: 'user123',
     content: '댓글 내용입니다.',
     createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    isLiked: false,
+    liked: false,
     userBriefInfo: {
       name: '홍길동',
       profileImage: 'https://picsum.photos/36/36',
       nickname: '길동이',
     },
     likeCount: 5,
+    mine: false,
   },
 };
 
 export const LikedComment: Story = {
   args: {
     ...Default.args,
-    isLiked: true,
+    liked: true,
     likeCount: 10,
+  },
+};
+
+export const MyComment: Story = {
+  args: {
+    ...Default.args,
+    mine: true,
   },
 };
 

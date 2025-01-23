@@ -8,60 +8,35 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import useRecommendBucketStore from '@/store/useRecommendBucketStore';
+import { bucketListTagType, RecommendBucketListType } from '@/types/BucketList';
 import { FiPlusCircle } from 'react-icons/fi';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-const data = [
-  {
-    bucketType: 'DO',
-    recommendations: [
-      { title: '하와이 여행', followers: 1500 },
-      { title: '프랑스 와인 투어', followers: 1200 },
-      { title: '제주도 한 달 살기', followers: 950 },
-    ],
-  },
-  {
-    bucketType: 'BE',
-    recommendations: [
-      { title: '하와이 여행', followers: 1500 },
-      { title: '프랑스 와인 투어', followers: 1200 },
-      { title: '제주도 한 달 살기', followers: 950 },
-    ],
-  },
-  {
-    bucketType: 'HAVE',
-    recommendations: [
-      { title: '스카이다이빙', followers: 2000 },
-      { title: '클래식 피아노 배우기', followers: 1800 },
-      { title: '서핑 배우기', followers: 1100 },
-    ],
-  },
-  {
-    bucketType: 'GO',
-    recommendations: [
-      { title: '스카이다이빙', followers: 2000 },
-      { title: '클래식 피아노 배우기', followers: 1800 },
-      { title: '서핑 배우기', followers: 1100 },
-    ],
-  },
-  {
-    bucketType: 'LEARN',
-    recommendations: [
-      { title: '스카이다이빙', followers: 2000 },
-      { title: '클래식 피아노 배우기', followers: 1800 },
-      { title: '서핑 배우기', followers: 1100 },
-    ],
-  },
-];
-
 export default function RecommendBucketPage() {
   const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState<number>(0);
+  const {
+    Popular,
+    Do,
+    Be,
+    Go,
+    Have,
+    Learn,
+    setPopular,
+    setDo,
+    setBe,
+    setGo,
+    setHave,
+    setLearn,
+    reset,
+  } = useRecommendBucketStore();
 
-  const bgColor = (type: string) => {
+  const bgColor = (type?: string) => {
     switch (type) {
       case 'DO':
         return '#FFF89F';
@@ -78,6 +53,22 @@ export default function RecommendBucketPage() {
     }
   };
 
+  const getRecommendation = async (
+    setData: (res: RecommendBucketListType[]) => void,
+    tagType?: bucketListTagType
+  ) => {
+    await getRecommendBucklist(tagType)
+      .then((res) => {
+        setData(res.data);
+      })
+      .catch((err) => alert(err));
+  };
+
+  useEffect(() => {
+    reset();
+    getRecommendation(setPopular);
+  }, []);
+
   const bucketType = [
     '인기',
     '해보고싶다',
@@ -87,7 +78,9 @@ export default function RecommendBucketPage() {
     '배우고 싶다',
   ];
 
-  console.log(api?.selectedScrollSnap());
+  const allType = [Popular, Do, Be, Have, Go, Learn];
+
+  const { getRecommendBucklist } = useBucketListApi();
 
   useEffect(() => {
     if (!api) return;
@@ -98,26 +91,53 @@ export default function RecommendBucketPage() {
     });
   }, [api]);
 
-  const allRecommendations = data.flatMap((bucket) =>
-    bucket.recommendations.map((item) => ({
-      ...item,
-      bucketType: bucket.bucketType,
-    }))
-  );
-
-  // followers 기준으로 정렬
-  const sortedRecommendations = allRecommendations.sort(
-    (a, b) => b.followers - a.followers
-  );
-
   const onClickMenuBar = (index: number) => {
     if (!api) return;
+
+    switch (index) {
+      case 0:
+        if (Popular.length === 0) {
+          getRecommendation(setPopular);
+        }
+        break;
+      case 1:
+        if (Do.length === 0) {
+          getRecommendation(setDo, 'DO');
+        }
+        break;
+      case 2:
+        if (Be.length === 0) {
+          getRecommendation(setBe, 'BE');
+        }
+        break;
+      case 3:
+        if (Have.length === 0) {
+          getRecommendation(setHave, 'HAVE');
+        }
+        break;
+      case 4:
+        if (Go.length === 0) {
+          getRecommendation(setGo, 'GO');
+        }
+        break;
+      case 5:
+        if (Learn.length === 0) {
+          getRecommendation(setLearn, 'LEARN');
+        }
+        break;
+    }
+
     api.scrollTo(index);
   };
 
-  const onClickRecommend = (title: string, bucketType: string) => {
+  const onClickRecommend = (
+    title: string,
+    id: number,
+    followers: number,
+    bucketType?: string
+  ) => {
     router.push(
-      `/bucket-list/create?title=${title}&tagType=${bucketType}`
+      `/bucket-list/create?title=${title}&tagType=${bucketType}&id=${id}&followers=${followers}`
     );
   };
 
@@ -149,46 +169,33 @@ export default function RecommendBucketPage() {
         </div>
         <Carousel setApi={setApi}>
           <CarouselContent>
-            <CarouselItem>
-              <div className='flex flex-col gap-3 pt-3'>
-                {sortedRecommendations.map((item, index) => (
-                  <button
-                    onClick={() =>
-                      onClickRecommend(item.title, item.bucketType)
-                    }
-                    key={index}
-                    className='py-3 px-4 rounded-lg flex flex-row items-center'
-                    style={{ backgroundColor: bgColor(item.bucketType) }}
-                  >
-                    <FiPlusCircle className='mr-2 bg-gray-200 rounded-full' />
-                    {item.title}
-                    <small className='ml-2 text-gray-500'>
-                      {item.followers}명
-                    </small>
-                  </button>
+            {allType.map((item, index) => (
+              <CarouselItem key={index} className='w-full flex flex-col gap-3'>
+                {item.map((buckets, index) => (
+                  <div key={index} className='w-full flex flex-col gap-3'>
+                    {buckets.recommendations.map((bucket, index) => (
+                      <button
+                        onClick={() =>
+                          onClickRecommend(
+                            bucket.title,
+                            bucket.id,
+                            bucket.followers,
+                            buckets.tagType
+                          )
+                        }
+                        key={index}
+                        className='py-3 px-4 rounded-lg flex flex-row items-center w-full'
+                        style={{ backgroundColor: bgColor(buckets.tagType) }}
+                      >
+                        <FiPlusCircle className='mr-2 bg-gray-200 rounded-full' />
+                        {bucket.title}
+                        <small className='ml-2 text-gray-500'>
+                          {bucket.followers}명
+                        </small>
+                      </button>
+                    ))}
+                  </div>
                 ))}
-              </div>
-            </CarouselItem>
-            {data.map((tag) => (
-              <CarouselItem key={tag.bucketType}>
-                <div className='flex flex-col gap-3 pt-3'>
-                  {tag.recommendations.map((recommend, index) => (
-                    <button
-                      onClick={() =>
-                        onClickRecommend(recommend.title, tag.bucketType)
-                      }
-                      key={index}
-                      className='py-3 px-4 rounded-lg flex flex-row items-center'
-                      style={{ backgroundColor: bgColor(tag.bucketType) }}
-                    >
-                      <FiPlusCircle className='mr-2 bg-gray-200 rounded-full' />
-                      {recommend.title}
-                      <small className='ml-2 text-gray-500'>
-                        {recommend.followers}명
-                      </small>
-                    </button>
-                  ))}
-                </div>
               </CarouselItem>
             ))}
           </CarouselContent>

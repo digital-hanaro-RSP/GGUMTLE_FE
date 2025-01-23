@@ -5,30 +5,92 @@ import Header from '@/components/atoms/Header';
 import { ImageInputRef } from '@/components/atoms/Inputs';
 import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
 import TextArea from '@/components/atoms/TextArea';
-import GroupCard from '@/components/molecules/GroupCard';
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-} from '@/components/ui/drawer';
+// import {
+//   Drawer,
+//   DrawerContent,
+//   DrawerHeader,
+//   DrawerTitle,
+// } from '@/components/ui/drawer';
 import { Switch } from '@/components/ui/switch';
-import { Group, Post } from '@/types/Community';
-import { IoIosArrowDown } from 'react-icons/io';
-import { useState } from 'react';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import { useParams, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { checkImageSize, parsePostData } from '@/lib/utils';
 
 export default function EditPostPage() {
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(
-    MockGroups[0] // 임시 추후 postMockData.groupId 를 통해 fetch 해서 group 가져올것
-  );
-  const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string[]>(
-    postMockData.imageUrls
-  );
-  const [content, setContent] = useState(postMockData.content);
-  const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(
-    postMockData.snapshot ? true : false
-  );
+  const param = useParams();
+  const searchParams = useSearchParams();
+  const groupId = searchParams.get('group');
+  const { getPost, editPost, uploadImages } = useCommunityApi();
+  const [selectedBucketList, setSelectedBucketList] = useState<number[]>([]);
+  const router = useRouter();
+
+  const [selectedImage, setSelectedImage] = useState<(string | File)[]>([]);
+  const [content, setContent] = useState('');
+  const [isPortfolioIncluded, setIsPortfolioIncluded] =
+    useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const postRes = await getPost(Number(groupId), Number(param.postId));
+      const parseData = parsePostData(postRes);
+      console.log(parseData);
+      setSelectedImage(parseData.imageUrls);
+      setContent(parseData.content);
+      setSelectedBucketList(parseData.snapShot.bucketLists);
+      setIsPortfolioIncluded(
+        parseData.snapShot.goalPortfolio && parseData.snapShot.currentPortfolio
+          ? true
+          : false
+      );
+    };
+    fetchPost();
+  }, [param, searchParams, groupId]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // 1. 새로운 이미지(File 객체)와 기존 이미지(URL 문자열) 분리
+      const newFiles = selectedImage.filter(
+        (image): image is File => image instanceof File
+      );
+      const existingUrls = selectedImage.filter(
+        (image): image is string => typeof image === 'string'
+      );
+
+      // 2. 새로운 이미지만 업로드
+      let finalImageUrls = [...existingUrls];
+      if (newFiles.length > 0) {
+        const uploadedUrls = await uploadImages(newFiles);
+        finalImageUrls = [...finalImageUrls, ...uploadedUrls];
+      }
+
+      // 3. 최종 이미지 URL 배열을 JSON 문자열로 변환
+      const imageUrlsString = JSON.stringify(finalImageUrls);
+
+      // 4. 스냅샷 생성 (create 페이지와 동일한 형식)
+      const snapshot = JSON.stringify({
+        bucketId: selectedBucketList ? [] : [],
+        portfolio: isPortfolioIncluded,
+      });
+
+      // 5. 수정 API 호출
+      await editPost(
+        Number(groupId),
+        Number(param.postId),
+        imageUrlsString,
+        content,
+        snapshot
+      );
+
+      router.push(`/community/group/${groupId}/post/${param.postId}`);
+    } catch (error) {
+      console.error('포스트 수정 실패:', error);
+    }
+  };
+
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
@@ -36,13 +98,19 @@ export default function EditPostPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setSelectedImage([...selectedImage, imageUrl]);
+      if (!checkImageSize(file)) {
+        return;
+      }
+      setSelectedImage((prev) => [...prev, file]); // File 객체를 직접 저장
     }
   };
 
-  const handleImageRemove = (imageUrl: string) => {
-    setSelectedImage(selectedImage.filter((url) => url !== imageUrl));
+  const handleImageRemove = (index: number) => {
+    setSelectedImage((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const handleDisabled = () => {
+    return content === '';
   };
 
   return (
@@ -51,30 +119,6 @@ export default function EditPostPage() {
 
       {/* 이미지 입력 칸 간격이 너무 좁아서 간격 7 -> 10으로 조정했습니다. */}
       <div className='flex flex-col gap-[20px] w-full px-[20px]'>
-        {/* 꿈모임 선택 */}
-        <div
-          className='flex flex-col gap-[10px]'
-          onClick={() => setIsOpenGroupDrawer(true)}
-        >
-          <p className='text-[18px] font-bold'>
-            글을 작성할 꿈모임을 선택해주세요
-          </p>
-          <div className='flex p-[20px] h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
-            <p
-              className={`text-[14px] ${selectedGroup === null ? 'text-primary-placeholder' : 'text-black'}`}
-            >
-              {selectedGroup === null
-                ? '선택된 꿈모임이 없습니다'
-                : selectedGroup.name}
-            </p>
-            <IoIosArrowDown
-              width={20}
-              height={20}
-              className='-rotate-90 text-black'
-            />
-          </div>
-        </div>
-
         {/* 버킷리스트 선택 */}
         <div className='flex flex-col gap-[10px]'>
           <p className='text-[18px] font-bold'>
@@ -101,11 +145,13 @@ export default function EditPostPage() {
         <div className='flex flex-col gap-[10px]'>
           <p className='text-[18px] font-bold'>이미지를 선택해주세요 (선택)</p>
           <div className='flex flex-wrap gap-[20px]'>
-            {selectedImage.map((image) => (
+            {selectedImage.map((image, index) => (
               <ShowSelectedImage
-                key={image}
-                imageUrl={image}
-                onRemove={() => handleImageRemove(image)}
+                key={index}
+                imageUrl={
+                  image instanceof File ? URL.createObjectURL(image) : image
+                }
+                onRemove={() => handleImageRemove(index)}
               />
             ))}
             {selectedImage.length < 4 && (
@@ -120,149 +166,14 @@ export default function EditPostPage() {
           <TextArea type='post' value={content} onChange={onChangeContent} />
         </div>
 
-        <Button className='w-full' isDisabled={true}>
+        <Button
+          className='w-full'
+          isDisabled={handleDisabled()}
+          onClick={handleSubmit}
+        >
           완료
         </Button>
       </div>
-
-      {/* 꿈모임 선택 Drawer */}
-      <Drawer
-        open={isOpenGroupDrawer}
-        onOpenChange={(open) => setIsOpenGroupDrawer(open)}
-      >
-        <DrawerContent className='h-[60%] max-h-[60%] max-w-screen-md mx-auto flex flex-col gap-[20px] px-[10px] pb-[10px] overflow-hidden'>
-          <DrawerHeader>
-            <DrawerTitle>글을 작성할 꿈모임을 선택해주세요</DrawerTitle>
-          </DrawerHeader>
-          {/* 스크롤 영역 */}
-          <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-            {MockGroups.map((group) => (
-              <GroupCard
-                key={group.id}
-                {...group}
-                onClick={() => {
-                  setSelectedGroup(group);
-                  setIsOpenGroupDrawer(false);
-                }}
-                rightIcon={false}
-              />
-            ))}
-          </div>
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 }
-
-const postMockData: Post = {
-  id: 1,
-  userId: '058140b5-4688-4290-8387-e6aafa655416',
-  groupId: 1,
-  imageUrls: [],
-  content:
-    '안녕하세요!\n\n오늘 처음으로 꿈틀 서비스를 시작했어요.\n버킷리스트도 작성해보고, 자산 관리도 시작했네요.\n\n앞으로 열심히 모으면서 제 버킷리스트를 하나씩 이뤄나가고 싶어요!\n다들 화이팅하세요 😊',
-  createdAt: '2025-01-10 16:30',
-  updatedAt: '2025-01-10 16:30',
-  postType: 'POST' as const,
-  likeCount: 5,
-  commentCount: 3,
-  userBriefInfo: {
-    name: '김꿈틀',
-    profileImage: 'https://picsum.photos/36/36',
-    nickname: '김꿈틀',
-  },
-  isLiked: true,
-};
-
-const MockGroups: Group[] = [
-  {
-    id: 1,
-    name: '그룹 1',
-    category: '여행',
-    description: '그룹 1 설명',
-    imageUrl: 'https://picsum.photos/699/699',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 2,
-    name: '그룹 2',
-    category: '재테크',
-    description: '그룹 2 설명',
-    imageUrl: 'https://picsum.photos/698/698',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 3,
-    name: '그룹 3',
-    category: '노후',
-    description: '그룹 3 설명',
-    imageUrl: 'https://picsum.photos/697/697',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 4,
-    name: '그룹 4',
-    category: '교육',
-    description: '그룹 4 설명',
-    imageUrl: 'https://picsum.photos/695/695',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 5,
-    name: '그룹 5',
-    category: '취미',
-    description: '그룹 5 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 6,
-    name: '그룹 6',
-    category: '취미',
-    description: '그룹 6 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 7,
-    name: '그룹 7',
-    category: '취미',
-    description: '그룹 7 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 8,
-    name: '그룹 8',
-    category: '취미',
-    description: '그룹 8 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 9,
-    name: '그룹 9',
-    category: '취미',
-    description: '그룹 9 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-];

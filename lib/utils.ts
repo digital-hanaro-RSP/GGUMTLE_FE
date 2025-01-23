@@ -1,3 +1,4 @@
+import { PostResponse } from '@/types/Community';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -65,4 +66,69 @@ export const parseIntWithoutCommas = (inputValue: string) => {
   const numericValue = inputValue.replace(/[^0-9]/g, '');
   const parsedValue = numericValue ? parseInt(numericValue, 10) : 0;
   return parsedValue;
+};
+
+export const parsePostData = (post: PostResponse) => {
+  const parsedSnapShot =
+    typeof post.snapShot === 'string'
+      ? JSON.parse(post.snapShot)
+      : (post.snapShot ?? null);
+
+  const parsedImageUrls =
+    typeof post.imageUrls === 'string'
+      ? JSON.parse(post.imageUrls)
+      : (post.imageUrls ?? []);
+
+  return {
+    ...post,
+    snapShot: parsedSnapShot ? JSON.parse(parsedSnapShot) : null,
+    imageUrls: parsedImageUrls ? JSON.parse(parsedImageUrls) : [],
+  };
+};
+
+export const encodeImageUrl = (imageInfo: { name: string; size: number }) => {
+  const fileName = imageInfo.name;
+  const fileNameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.'));
+  const fileExt = fileName.substring(fileName.lastIndexOf('.'));
+  const encodedFileName = encodeURIComponent(fileNameWithoutExt);
+
+  return `${process.env.NEXT_PUBLIC_IMAGE_BASE_URL}${encodedFileName}${fileExt}`;
+};
+
+export const checkImageSize = (
+  newFile: File,
+  existingFiles: File[] = []
+): boolean => {
+  const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB
+  const totalSizeSoFar = existingFiles.reduce((acc, cur) => acc + cur.size, 0);
+  const newFileSize = newFile.size;
+
+  if (totalSizeSoFar + newFileSize > MAX_TOTAL_SIZE) {
+    alert('이미지는 10MB 이하로 업로드해 주세요.');
+    return false;
+  }
+  return true;
+};
+
+export const calculatePercent = (
+  howTo: 'EFFORT' | 'WILL' | 'MONEY' | undefined,
+  goalAmount?: number,
+  currentAmount?: number,
+  goalDate?: Date,
+  createdAt?: Date
+): number => {
+  if (howTo === 'MONEY' && goalAmount && currentAmount) {
+    return Math.min((100 * currentAmount) / goalAmount, 100);
+  } else if (createdAt) {
+    const now = new Date().getTime();
+    const start = createdAt.getTime();
+    const goal = goalDate?.getTime() ?? 0;
+
+    const elapsed = now - start;
+    const totalDuration = goal - start;
+    return Math.min((100 * elapsed) / totalDuration, 100);
+  }
+  throw new Error(
+    "Invalid parameters or missing 'createdAt' for non-MONEY types."
+  );
 };

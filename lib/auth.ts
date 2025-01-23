@@ -1,6 +1,49 @@
 import NextAuth from 'next-auth';
 import type { User } from 'next-auth';
+import type { JWT } from 'next-auth/jwt';
 import CredentialsProvider from 'next-auth/providers/credentials';
+
+interface RefreshTokenResponse {
+  data: {
+    accessToken: string;
+    refreshToken: string;
+  };
+  code: number;
+}
+
+async function refreshToken(token: JWT): Promise<JWT> {
+  try {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/data/auth/refresh`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          refreshToken: token.refreshToken,
+        }),
+      }
+    );
+
+    const data = (await response.json()) as RefreshTokenResponse;
+
+    if (!response.ok) throw data;
+
+    return {
+      ...token,
+      jwt: data.data.accessToken,
+      refreshToken: data.data.refreshToken,
+      expiresAt: Math.floor(Date.now() / 1000 + 60 * 60), // 60분으로 설정
+    };
+  } catch (error) {
+    console.error('RefreshAccessTokenError:', error);
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    };
+  }
+}
 
 export const {
   handlers: { GET, POST },
@@ -17,7 +60,6 @@ export const {
       },
       async authorize(credentials): Promise<User | null> {
         if (!credentials?.tel || !credentials?.password) return null;
-
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_API_URL}/data/auth/tokens`,
@@ -32,9 +74,7 @@ export const {
               }),
             }
           );
-
           const data = await response.json();
-
           if (response.ok && data.code === 200) {
             return {
               id: String(credentials.tel),
@@ -44,7 +84,6 @@ export const {
               refreshToken: data.data.refreshToken,
             } as User;
           }
-
           return null;
         } catch (error: unknown) {
           console.error('Authorization error:', error);
@@ -56,46 +95,30 @@ export const {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.jwt = user.jwt;
-        token.id = user.id;
-        token.permission = user.permission;
-        token.refreshToken = user.refreshToken;
+        return {
+          jwt: user.jwt,
+          id: user.id,
+          permission: user.permission,
+          refreshToken: user.refreshToken,
+          expiresAt: Math.floor(Date.now() / 1000 + 60 * 60), // 60분으로 설정
+        } as JWT;
       }
 
-      const shouldRefreshTime = token.exp ? Math.round(token.exp - 60 * 5) : 0;
-      if (shouldRefreshTime > 0) return token;
-
-      try {
-        const response = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/data/auth/refresh`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              refreshToken: token.refreshToken,
-            }),
-          }
-        );
-
-        const data = await response.json();
-
-        if (response.ok && data.code === 200) {
-          return {
-            ...token,
-            jwt: data.data.accessToken,
-            refreshToken: data.data.refreshToken,
-          };
-        }
-
-        return token;
-      } catch (error) {
-        console.error('Token refresh error:', error);
+      const currentTimestamp = Date.now() / 1000;
+      if (currentTimestamp < token.expiresAt) {
         return token;
       }
+
+      return refreshToken(token);
     },
     async session({ session, token }) {
+      if (token.error) {
+        return {
+          ...session,
+          error: token.error,
+        };
+      }
+
       session.user = {
         ...session.user,
         jwt: token.jwt as string,
@@ -110,6 +133,6 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 1시간
+    maxAge: 60 * 60, // 60분으로 수정
   },
 });
