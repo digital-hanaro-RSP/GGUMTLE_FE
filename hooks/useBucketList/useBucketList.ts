@@ -13,7 +13,7 @@ export const useBucketListApi = () => {
     data: changeBucketListStatusReq
   ) => {
     return await fetchApi(`/buckets/${bid}`, {
-      method: 'POST',
+      method: 'PATCH',
       body: JSON.stringify(data),
     });
   };

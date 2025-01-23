@@ -120,14 +120,18 @@ export const BucketListCard = ({
 
   const { changeBucketListStatus } = useBucketListApi();
 
-  const changeStatus = async (bid: number, status: bucketListStatus) => {
+  const changeStatus = async (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    bid: number,
+    status: bucketListStatus
+  ) => {
+    e.stopPropagation();
     const formData: changeBucketListStatusReq = {
       status: status,
     };
     await changeBucketListStatus(bid, formData)
-      .then((res) => {
-        console.log(res);
-        router.refresh();
+      .then(() => {
+        window.location.reload();
       })
       .catch((err) => {
         alert(err);
@@ -185,8 +189,21 @@ export const BucketListCard = ({
                     <DropdownMenuContent className='text-center w-10 z-[105]'>
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem>완료하기</DropdownMenuItem>
-                      <DropdownMenuItem>보류하기</DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'DONE')}
+                      >
+                        완료하기
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'HOLD')}
+                      >
+                        보류하기
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={(e) => changeStatus(e, bucketId, 'DOING')}
+                      >
+                        진행하기
+                      </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>

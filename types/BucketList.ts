@@ -52,7 +52,7 @@ export type createBucketListReq = {
   title?: string;
   tagType?: bucketListTagType;
   isDueSet?: boolean;
-  dueDate?: Date;
+  dueDate?: string;
   howTo?: bucketListHowTo;
   isAutoAllocate?: boolean;
   allocateAmount?: number;
