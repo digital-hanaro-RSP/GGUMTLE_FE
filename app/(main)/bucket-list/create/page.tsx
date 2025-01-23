@@ -78,7 +78,7 @@ export default function BucketListRegisterPage() {
       title: title,
       tagType: tagType,
       isDueSet: isDueDate,
-      dueDate: date?.toISOString(),
+      dueDate: date?.toISOString().split('T')[0],
       howTo: howTo,
       isAutoAllocate: autoAllocate,
       allocateAmount: allocateAmount,
