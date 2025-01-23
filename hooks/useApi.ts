@@ -1,30 +1,36 @@
 import { useSession } from 'next-auth/react';
+import { usePathname } from 'next/navigation';
 
 export const useApi = () => {
-  // jwt 연결 후 주석 제거하기
   const { data: session } = useSession();
-
+  const pathname = usePathname();
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
   const fetchApi = async (apiRoute: string, options: RequestInit = {}) => {
-    if (!session?.user?.jwt) {
+    const url = `${baseUrl}/data${apiRoute}`;
+    const headers = new Headers(options.headers);
+
+    // JWT 체크가 필요없는 경로 목록
+    const publicRoutes = ['/sign-up/profile'];
+    const isPublicRoute = publicRoutes.includes(pathname);
+
+    // public route가 아닐 경우에만 JWT 체크
+    if (!isPublicRoute && !session?.user?.jwt) {
       throw new Error('No JWT token found');
     }
 
-    const url = `${baseUrl}/data${apiRoute}`;
+    // JWT가 있는 경우에만 Authorization 헤더 추가
+    if (session?.user?.jwt) {
+      headers.set('Authorization', `Bearer ${session.user.jwt}`);
+    }
 
-    // 헤더 설정
-    const headers = new Headers(options.headers);
-    headers.set('Authorization', `Bearer ${session.user.jwt}`);
     headers.set('Content-Type', 'application/json');
 
-    // 요청 실행
     const response = await fetch(url, {
       ...options,
       headers,
     });
 
-    // 응답 체크
     if (!response.ok) {
       throw new Error(`API request failed: ${response.statusText}`);
     }

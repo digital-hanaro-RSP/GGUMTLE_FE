@@ -9,7 +9,7 @@ export const useAdsApi = () => {
   const memoizedFetchApi = useMemo(() => fetchApi, [fetchApi]);
 
   const getAds = useCallback(async (): Promise<AdsResponse> => {
-    const response = await memoizedFetchApi('/api/ads', {
+    const response = await memoizedFetchApi('/ads/main', {
       method: 'GET',
     });
     return response;
