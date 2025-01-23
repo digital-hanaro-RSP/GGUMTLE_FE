@@ -18,14 +18,15 @@ import {
 } from '@/components/ui/drawer';
 import { Switch } from '@/components/ui/switch';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
 import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { checkImageSize } from '@/lib/utils';
 
 export default function CreatePostPage() {
-  const [myGroups, setMyGroups] = useState<Group[]>([]);
+  const searchParams = useSearchParams();
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
   const [selectedBucketList, setSelectedBucketList] =
@@ -37,6 +38,27 @@ export default function CreatePostPage() {
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
   const { createPost, getMyGroups, uploadImages } = useCommunityApi();
   const router = useRouter();
+
+  const {
+    data: myGroups,
+    isLoading,
+    lastElementObserver,
+  } = useInfiniteScroll<Group>({
+    fetchData: ({ limit, offset }) => getMyGroups(limit, offset, '', ''),
+    limit: 10,
+  });
+
+  useEffect(() => {
+    const groupId = searchParams.get('groupId');
+    if (groupId && myGroups.length > 0) {
+      const initialGroup = myGroups.find(
+        (group) => group.id === Number(groupId)
+      );
+      if (initialGroup) {
+        setSelectedGroup(initialGroup);
+      }
+    }
+  }, [searchParams, myGroups]);
 
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
@@ -74,39 +96,51 @@ export default function CreatePostPage() {
   const handleSubmit = async () => {
     if (!selectedGroup || !selectedGroup.id) return;
 
-    try {
-      const encodedUrls = await uploadImages(selectedFiles);
-      const imageUrls = JSON.stringify(encodedUrls);
+    if (selectedFiles.length > 0) {
+      try {
+        const encodedUrls = await uploadImages(selectedFiles);
+        const imageUrls = JSON.stringify(encodedUrls);
 
-      const snapshot = JSON.stringify({
-        // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
-        bucketId: selectedBucketList ? [] : [],
-        portfolio: isPortfolioIncluded,
-      });
+        const snapshot = JSON.stringify({
+          // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
+          bucketId: selectedBucketList ? [] : [],
+          portfolio: isPortfolioIncluded,
+        });
 
-      const response = await createPost(
-        selectedGroup?.id,
-        imageUrls,
-        content,
-        snapshot
-      );
+        const response = await createPost(
+          selectedGroup?.id,
+          imageUrls,
+          content,
+          snapshot
+        );
 
-      console.log('응답 : ' + response);
-      router.push(`/community/group/${selectedGroup.id}`);
-    } catch (error) {
-      console.error('게시물 작성 실패:', error);
+        console.log('응답 : ' + response);
+        router.push(`/community/group/${selectedGroup.id}`);
+      } catch (error) {
+        console.error('게시물 작성 실패:', error);
+      }
+    } else {
+      try {
+        const snapshot = JSON.stringify({
+          // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
+          bucketId: selectedBucketList ? [] : [],
+          portfolio: isPortfolioIncluded,
+        });
+
+        const response = await createPost(
+          selectedGroup?.id,
+          '[]',
+          content,
+          snapshot
+        );
+
+        console.log('응답 : ' + response);
+        router.push(`/community/group/${selectedGroup.id}`);
+      } catch (error) {
+        console.error('게시물 작성 실패:', error);
+      }
     }
   };
-
-  useEffect(() => {
-    const fetchMyGroups = async () => {
-      await getMyGroups(30, 0, '', '').then((res) => {
-        setMyGroups(res);
-        console.log(res);
-      });
-    };
-    fetchMyGroups();
-  }, []);
 
   return (
     <div className='flex flex-col gap-[20px] w-full'>
@@ -151,7 +185,7 @@ export default function CreatePostPage() {
               className={`text-[14px] ${selectedBucketList === null ? 'text-primary-placeholder' : 'text-black'}`}
             >
               {selectedBucketList === null
-                ? '선택된 꿈모임이 없습니다'
+                ? '선택된 버킷리스트가 없습니다'
                 : selectedBucketList.title}
             </p>
             <IoIosArrowDown
@@ -217,19 +251,29 @@ export default function CreatePostPage() {
           <DrawerHeader>
             <DrawerTitle>글을 작성할 꿈모임을 선택해주세요</DrawerTitle>
           </DrawerHeader>
-          {/* 스크롤 영역 */}
           <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-            {myGroups.map((group) => (
-              <GroupCard
+            {myGroups.map((group, index) => (
+              <div
                 key={group.id}
-                {...group}
-                onClick={() => {
-                  setSelectedGroup(group);
-                  setIsOpenGroupDrawer(false);
-                }}
-                rightIcon={false}
-              />
+                ref={index === myGroups.length - 1 ? lastElementObserver : null}
+              >
+                <GroupCard
+                  {...group}
+                  onClick={() => {
+                    setSelectedGroup(group);
+                    setIsOpenGroupDrawer(false);
+                  }}
+                  rightIcon={false}
+                />
+              </div>
             ))}
+            {isLoading && (
+              <div className='w-full flex justify-center mt-[20px]'>
+                <div className='dot-loading'>
+                  <div className='middle-dot'></div>
+                </div>
+              </div>
+            )}
           </div>
         </DrawerContent>
       </Drawer>

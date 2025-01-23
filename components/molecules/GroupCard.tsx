@@ -43,12 +43,11 @@ export default function GroupCard({
     <Card onClick={handleClick} className={cn(className)}>
       <div className='flex gap-[20px] height-[80px] items-center justify-between'>
         <div className='flex gap-[20px] items-center'>
-          <div className='w-[80px] h-[80px] rounded-[10px] overflow-hidden'>
+          <div className='w-[80px] h-[80px] relative rounded-[10px] overflow-hidden'>
             <Image
               src={`${imageUrl}`}
               alt='group image'
-              width={80}
-              height={80}
+              fill
               className='object-cover'
             />
           </div>

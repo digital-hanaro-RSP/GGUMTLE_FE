@@ -13,38 +13,49 @@ export type Snapshot = {
   currentPortfolio: CurrentPortfolio;
 };
 
-// 백엔드에서 보내주는 타입은 string.. 이 문제를 어떻게 해결?
 export type Post = {
   id: number;
-  userId: string;
   groupId: number;
-  snapShot?: Snapshot;
+  snapShot: Snapshot;
   imageUrls: string[];
   content: string;
   createdAt: string;
   updatedAt: string;
   postType: 'POST' | 'NEWS';
-  likeCount?: number;
-  commentCount?: number;
+  likeCount: number;
+  commentCount: number;
   userBriefInfo: UserBriefInfo;
-  isLiked?: boolean;
+  liked: boolean;
+  mine: boolean;
 };
 
 // api 응답용
 export type PostResponse = {
-  data: Post[];
+  id: number;
+  groupId: number;
+  snapShot: string;
+  imageUrls: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  postType: 'POST' | 'NEWS';
+  likeCount: number;
+  commentCount: number;
+  userBriefInfo: UserBriefInfo;
+  liked: boolean;
+  mine: boolean;
 };
 
 export type Comment = {
   id: number;
   postId: number;
-  userId: string;
   content: string;
   createdAt: string;
   updatedAt: string;
-  isLiked: boolean;
+  liked: boolean;
   userBriefInfo: UserBriefInfo;
   likeCount: number;
+  mine: boolean;
 };
 
 export type CommentResponse = {
