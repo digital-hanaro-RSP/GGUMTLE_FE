@@ -16,6 +16,7 @@ export default function PostIdPage() {
   const [isGroupMember, setIsGroupMember] = useState(false);
   const [commentTrigger, setCommentTrigger] = useState(0); // 댓글 추가 트리거
   const param = useParams();
+
   const { getPost, getComments, createComment, isMember } = useCommunityApi();
 
   // 멤버십 확인
@@ -75,6 +76,18 @@ export default function PostIdPage() {
     }
   };
 
+  const handleCommentDelete = () => {
+    setPost((prev) =>
+      prev
+        ? {
+            ...prev,
+            commentCount: Math.max((prev.commentCount || 0) - 1, 0),
+          }
+        : null
+    );
+    setCommentTrigger((prev) => prev + 1);
+  };
+
   return (
     <div className='flex flex-col gap-[20px] w-full'>
       {post && <Post {...post} isDetailPage={true} />}
@@ -93,7 +106,7 @@ export default function PostIdPage() {
                 delay: index * 0.1,
               }}
             >
-              <CommentCard {...comment} />
+              <CommentCard {...comment} onDelete={handleCommentDelete} />
               {index !== comments.length - 1 && (
                 <div className='h-[1px] w-[calc(100%-80px)] bg-[#D9D9D9] mx-auto mt-[25px]'></div>
               )}

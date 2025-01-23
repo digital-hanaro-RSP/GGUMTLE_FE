@@ -1,3 +1,4 @@
+import { PostResponse } from '@/types/Community';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -67,7 +68,7 @@ export const parseIntWithoutCommas = (inputValue: string) => {
   return parsedValue;
 };
 
-export const parsePostData = (post: any) => {
+export const parsePostData = (post: PostResponse) => {
   const parsedSnapShot =
     typeof post.snapShot === 'string'
       ? JSON.parse(post.snapShot)

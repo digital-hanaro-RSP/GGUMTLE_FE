@@ -1,5 +1,5 @@
 import { useApi } from '@/hooks/useApi';
-import { Comment, Group, Image, Post, PostResponse } from '@/types/Community';
+import { Comment, Group, Image, PostResponse } from '@/types/Community';
 import { encodeImageUrl } from '@/lib/utils';
 
 export const useCommunityApi = () => {
@@ -10,19 +10,41 @@ export const useCommunityApi = () => {
     groupId: number,
     offset: number,
     limit: number
-  ): Promise<Post[]> => {
+  ): Promise<PostResponse[]> => {
     const response = await fetchApi(
       `/community/group/${groupId}/post?offset=${offset}&limit=${limit}`
     );
     return response.data.content;
   };
 
-  const getPost = async (groupId: number, postId: number): Promise<Post> => {
+  const getPost = async (
+    groupId: number,
+    postId: number
+  ): Promise<PostResponse> => {
     const response = await fetchApi(
       `/community/group/${groupId}/post/${postId}`
     );
 
     return response.data;
+  };
+
+  const editPost = async (
+    groupId: number,
+    postId: number,
+    imageUrls: string,
+    content: string,
+    snapShot: string
+  ): Promise<void> => {
+    const options: RequestInit = {
+      method: 'PATCH',
+      body: JSON.stringify({
+        imageUrls,
+        content,
+        snapShot,
+      }),
+    };
+
+    await fetchApi(`/community/group/${groupId}/post/${postId}`, options);
   };
 
   const deletePost = async (groupId: number, postId: number): Promise<void> => {
@@ -89,33 +111,19 @@ export const useCommunityApi = () => {
   };
 
   // 리턴 타입으로 200만 받음
-  const plusCommentLike = async (
-    groupId: number,
-    postId: number,
-    commentId: number
-  ): Promise<void> => {
+  const plusCommentLike = async (commentId: number): Promise<void> => {
     const options: RequestInit = {
       method: 'POST',
     };
-    await fetchApi(
-      `/community/group/${groupId}/post/${postId}/comment/${commentId}/like`,
-      options
-    );
+    await fetchApi(`/community/comment/${commentId}/like`, options);
   };
 
   // 리턴 타입으로 200만 받음
-  const minusCommentLike = async (
-    groupId: number,
-    postId: number,
-    commentId: number
-  ): Promise<void> => {
+  const minusCommentLike = async (commentId: number): Promise<void> => {
     const options: RequestInit = {
       method: 'DELETE',
     };
-    await fetchApi(
-      `/community/group/${groupId}/post/${postId}/comment/${commentId}/dislike`,
-      options
-    );
+    await fetchApi(`/community/comment/${commentId}/dislike`, options);
   };
   const createGroup = async (
     name: string,
@@ -270,6 +278,7 @@ export const useCommunityApi = () => {
   return {
     getPosts,
     getPost,
+    editPost,
     deletePost,
     getComments,
     plusLike,

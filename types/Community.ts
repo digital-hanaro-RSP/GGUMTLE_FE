@@ -31,7 +31,19 @@ export type Post = {
 
 // api 응답용
 export type PostResponse = {
-  data: Post[];
+  id: number;
+  groupId: number;
+  snapShot: string;
+  imageUrls: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  postType: 'POST' | 'NEWS';
+  likeCount: number;
+  commentCount: number;
+  userBriefInfo: UserBriefInfo;
+  liked: boolean;
+  mine: boolean;
 };
 
 export type Comment = {

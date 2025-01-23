@@ -23,7 +23,8 @@ export default function CommentCard({
   userBriefInfo,
   likeCount: initialLikeCount,
   mine,
-}: Comment) {
+  onDelete,
+}: Comment & { onDelete?: () => void }) {
   const params = useParams();
   const { groupId: tempGroupId } = params;
   const [isLiked, setIsLiked] = useState(initialIsLiked);
@@ -41,11 +42,11 @@ export default function CommentCard({
       if (newLikeState) {
         // 좋아요
         console.log('plusCommentLike');
-        await plusCommentLike(groupId, postId, id);
+        await plusCommentLike(id);
       } else {
         // 좋아요 취소
         console.log('minusCommentLike');
-        await minusCommentLike(groupId, postId, id);
+        await minusCommentLike(id);
       }
 
       // API 성공 시에만 state 업데이트
@@ -58,7 +59,12 @@ export default function CommentCard({
   };
 
   const handleDelete = async () => {
-    await delelteComment(id);
+    try {
+      await delelteComment(id);
+      onDelete?.();
+    } catch (error) {
+      console.error('댓글 삭제 실패:', error);
+    }
   };
 
   return (
@@ -88,7 +94,6 @@ export default function CommentCard({
                 <BsThreeDots />
               </DropdownMenuTrigger>
               <DropdownMenuContent className=' min-w-[30px] w-fit px-[10px]'>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleDelete}>삭제</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

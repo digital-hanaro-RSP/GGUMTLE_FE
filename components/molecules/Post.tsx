@@ -151,7 +151,7 @@ export default function Post({
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push(`/community/edit/post/${id}`);
+                    router.push(`/community/edit/post/${id}?group=${groupId}`);
                   }}
                 >
                   수정
