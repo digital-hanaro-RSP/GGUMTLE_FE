@@ -85,7 +85,7 @@ export const MoneyTransferDrawer = ({
           });
         break;
       case 'FILLUP':
-        await fillUpMoneyFromDreamAccount(formData, fromId, toId)
+        await fillUpMoneyFromDreamAccount(formData, accountInfo?.id, toId)
           .then(() => {
             setTransferSuccess(true);
           })
@@ -94,7 +94,7 @@ export const MoneyTransferDrawer = ({
           });
         break;
       case 'BRINGOUT':
-        await bringOutMoneyToDreamAccount(formData, toId, fromId)
+        await bringOutMoneyToDreamAccount(formData, toId, accountInfo?.id)
           .then(() => {
             setTransferSuccess(true);
           })
