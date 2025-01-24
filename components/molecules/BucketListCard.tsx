@@ -11,7 +11,6 @@ import {
   bucketListHowTo,
   bucketListStatus,
   bucketListTagType,
-  changeBucketListStatusReq,
 } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
@@ -20,7 +19,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { cn } from '@/lib/utils';
+import { changeStatus, cn, dDayCalculator } from '@/lib/utils';
 import { Button } from '../atoms/Button';
 import { Card } from '../atoms/Card';
 import ColorChip from '../atoms/ColorChips';
@@ -29,6 +28,8 @@ import { MoneyTransferDrawer } from '../organisms/MoneyTransferDrawer';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
+  isDueDate?: boolean;
+  dueDate?: Date;
   howTo: bucketListHowTo;
   dataPercent: number;
   title: string;
@@ -55,11 +56,14 @@ export const BucketListCard = ({
   children,
   showPercent = true,
   status,
+  dueDate,
+  isDueDate,
   onClick,
 }: BucketListCardProps) => {
+  console.log('🚀 ~ dueDate:', dueDate);
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
-
+  console.log('🚀 ~ isDueDate:', isDueDate);
   const data = {
     datasets: [
       {
@@ -124,28 +128,6 @@ export const BucketListCard = ({
 
   const { changeBucketListStatus } = useBucketListApi();
 
-  const changeStatus = async (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    bid: number,
-    Newstatus: bucketListStatus
-  ) => {
-    e.stopPropagation();
-    const formData: changeBucketListStatusReq = {
-      status: Newstatus,
-    };
-    await changeBucketListStatus(bid, formData)
-      .then(() => {
-        if (Newstatus === 'DONE')
-          router.push(`/bucket-list/complete?howto=${howTo}&title=${title}`);
-        else {
-          window.location.reload();
-        }
-      })
-      .catch((err) => {
-        alert(err);
-      });
-  };
-
   return (
     <>
       <Card className={cn('flex-col', className)} onClick={handleClick}>
@@ -186,7 +168,16 @@ export const BucketListCard = ({
             )}
           >
             <div className='flex flex-row gap-1 w-full'>
-              <ColorChip color='gray'>언제까지</ColorChip>
+              {isDueDate && dueDate ? (
+                <ColorChip color='gray' className='text-lg'>
+                  D{dDayCalculator(new Date(dueDate.toString()))}
+                </ColorChip>
+              ) : (
+                <ColorChip color='gray' className='text-lg'>
+                  언젠가
+                </ColorChip>
+              )}
+
               <ColorChip color={tagType}>{getTagType(tagType)}</ColorChip>
               {isSelectMode !== true && (
                 <div className='flex-grow justify-end items-end flex'>
@@ -198,19 +189,46 @@ export const BucketListCard = ({
                       <DropdownMenuLabel>상태 변경하기</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        onClick={(e) => changeStatus(e, bucketId, 'DONE')}
+                        onClick={(e) =>
+                          changeStatus(
+                            e,
+                            bucketId,
+                            'DONE',
+                            howTo,
+                            title,
+                            changeBucketListStatus
+                          )
+                        }
                         className={cn(status === 'DONE' && 'hidden')}
                       >
                         완료하기
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={(e) => changeStatus(e, bucketId, 'HOLD')}
+                        onClick={(e) =>
+                          changeStatus(
+                            e,
+                            bucketId,
+                            'HOLD',
+                            howTo,
+                            title,
+                            changeBucketListStatus
+                          )
+                        }
                         className={cn(status === 'HOLD' && 'hidden')}
                       >
                         보류하기
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={(e) => changeStatus(e, bucketId, 'DOING')}
+                        onClick={(e) =>
+                          changeStatus(
+                            e,
+                            bucketId,
+                            'DOING',
+                            howTo,
+                            title,
+                            changeBucketListStatus
+                          )
+                        }
                         className={cn(status === 'DOING' && 'hidden')}
                       >
                         진행하기

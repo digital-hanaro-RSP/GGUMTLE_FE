@@ -174,6 +174,8 @@ export default function BucketListPage() {
                       tagType={item.tagType}
                       bucketId={item.id}
                       status={item.status}
+                      isDueDate={item.isDueSet}
+                      dueDate={item.dueDate}
                     />
                   </div>
                 ))}
@@ -234,6 +236,8 @@ export default function BucketListPage() {
                         tagType={item.tagType}
                         bucketId={item.id}
                         status={item.status}
+                        isDueDate={item.isDueSet}
+                        dueDate={item.dueDate}
                       />
                     </div>
                   </div>
@@ -265,6 +269,8 @@ export default function BucketListPage() {
                         tagType={item.tagType}
                         bucketId={item.id}
                         status={item.status}
+                        isDueDate={item.isDueSet}
+                        dueDate={item.dueDate}
                       />
                     </div>
                   </div>

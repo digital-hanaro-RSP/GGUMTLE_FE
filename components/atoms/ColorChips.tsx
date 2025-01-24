@@ -25,7 +25,7 @@ export default function ColorChip({
   return (
     <div
       className={cn(
-        'items-center text-center rounded-3xl px-2 py-[2px] w-fit text-[11px] font-medium',
+        'items-center text-center rounded-3xl px-2 py-[2px] w-fit font-medium',
         bgColor,
         className
       )}
