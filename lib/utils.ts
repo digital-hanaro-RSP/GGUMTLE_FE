@@ -1,3 +1,8 @@
+import {
+  bucketListHowTo,
+  bucketListStatus,
+  changeBucketListStatusReq,
+} from '@/types/BucketList';
 import { PostResponse } from '@/types/Community';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -69,6 +74,7 @@ export const parseIntWithoutCommas = (inputValue: string) => {
 };
 
 export const parsePostData = (post: PostResponse) => {
+  console.log('🚀 ~ parsePostData ~ post:', post);
   const parsedSnapShot =
     typeof post.snapShot === 'string'
       ? JSON.parse(post.snapShot)
@@ -77,7 +83,7 @@ export const parsePostData = (post: PostResponse) => {
   const parsedImageUrls =
     typeof post.imageUrls === 'string'
       ? JSON.parse(post.imageUrls)
-      : (post.imageUrls ?? []);
+      : (post.imageUrls ?? null); //이 코드가 맞는지 모르겠는데 사진이 없는 post에서 JSON.parse에서 오류가 나타남.
 
   return {
     ...post,
@@ -117,18 +123,69 @@ export const calculatePercent = (
   goalDate?: Date,
   createdAt?: Date
 ): number => {
-  if (howTo === 'MONEY' && goalAmount && currentAmount) {
+  console.log('🚀 ~ howTo:', howTo);
+  if (
+    howTo === 'MONEY' &&
+    goalAmount !== undefined &&
+    currentAmount !== undefined
+  ) {
     return Math.min((100 * currentAmount) / goalAmount, 100);
   } else if (createdAt) {
     const now = new Date().getTime();
     const start = createdAt.getTime();
     const goal = goalDate?.getTime() ?? 0;
 
-    const elapsed = now - start;
+    const elapsed = Math.max(now - start, 0);
     const totalDuration = goal - start;
-    return Math.min((100 * elapsed) / totalDuration, 100);
+    return Math.min(Math.max((100 * elapsed) / totalDuration, 0), 100);
   }
   throw new Error(
     "Invalid parameters or missing 'createdAt' for non-MONEY types."
   );
+};
+
+export const dDayCalculator = (targetDate: Date | undefined): string => {
+  const today: Date = new Date();
+  if (targetDate) {
+    const diffInMilliseconds: number = targetDate.getTime() - today.getTime();
+    const diffInDays: number = Math.ceil(
+      diffInMilliseconds / (1000 * 60 * 60 * 24)
+    );
+    return diffInDays > 0
+      ? `-${diffInDays}`
+      : diffInDays < 0
+        ? `+${diffInDays}`
+        : '-Day';
+  }
+  return '언젠가';
+};
+
+export const changeStatus = async (
+  e:
+    | React.MouseEvent<HTMLDivElement, MouseEvent>
+    | React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  bid: number,
+  Newstatus: bucketListStatus,
+  howTo: bucketListHowTo,
+  title: string,
+  changeBucketListStatus: (
+    bid: number,
+    formData: changeBucketListStatusReq
+  ) => Promise<void>
+) => {
+  e.stopPropagation();
+  const formData: changeBucketListStatusReq = {
+    status: Newstatus,
+  };
+  await changeBucketListStatus(bid, formData)
+    .then(() => {
+      if (Newstatus === 'DONE')
+        window.location.href = `/bucket-list/complete?howto=${howTo}&title=${title}`;
+      else {
+        window.location.reload();
+      }
+    })
+    .catch((err) => {
+      alert(err);
+    });
 };

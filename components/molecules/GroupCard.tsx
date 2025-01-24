@@ -18,9 +18,11 @@ type GroupCardProps = Group & {
   onClick?: () => void;
   rightIcon?: boolean;
   className?: string;
+  ref?: React.Ref<HTMLDivElement>;
 };
 
 export default function GroupCard({
+  ref,
   id,
   name,
   category,
@@ -40,7 +42,7 @@ export default function GroupCard({
   };
 
   return (
-    <Card onClick={handleClick} className={cn(className)}>
+    <Card onClick={handleClick} className={cn(className)} ref={ref}>
       <div className='flex gap-[20px] height-[80px] items-center justify-between'>
         <div className='flex gap-[20px] items-center'>
           <div className='w-[80px] h-[80px] relative rounded-[10px] overflow-hidden'>

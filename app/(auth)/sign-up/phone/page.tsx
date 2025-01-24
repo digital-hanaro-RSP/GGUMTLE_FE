@@ -130,10 +130,13 @@ export default function PhonePage() {
       console.log('Response:', response.status, data); // 디버깅용
 
       if (response.status === 200) {
-        alert('문자가 발송되었습니다. 잠시만 기다려주세요.');
         setShowVerification(true); // 순서 변경
         setTimeLeft(180);
         setTimerExpired(false);
+
+        setTimeout(() => {
+          alert('문자가 발송되었습니다. 잠시만 기다려주세요.');
+        }, 100);
 
         setTimeout(() => {
           setButtonText('인증번호 받기');

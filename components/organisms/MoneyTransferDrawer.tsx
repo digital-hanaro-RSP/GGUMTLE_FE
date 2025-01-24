@@ -71,8 +71,8 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'RECEIVE':
@@ -80,26 +80,26 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'FILLUP':
-        await fillUpMoneyFromDreamAccount(formData, fromId, toId)
+        await fillUpMoneyFromDreamAccount(formData, accountInfo?.id, toId)
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'BRINGOUT':
-        await bringOutMoneyToDreamAccount(formData, toId, fromId)
+        await bringOutMoneyToDreamAccount(formData, toId, accountInfo?.id)
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
     }
@@ -129,7 +129,7 @@ export const MoneyTransferDrawer = ({
         const getFROMBucketInfo = async () => {
           if (fromId) {
             await getBucketListbyId(fromId).then((res) => {
-              setBucketList(res.data);
+              setBucketList(res);
             });
           }
         };
@@ -140,7 +140,7 @@ export const MoneyTransferDrawer = ({
           if (toId) {
             await getBucketListbyId(toId)
               .then((res) => {
-                setBucketList(res.data);
+                setBucketList(res);
               })
               .catch((err) => {
                 alert(err);
@@ -153,7 +153,7 @@ export const MoneyTransferDrawer = ({
     const getAccount = async () => {
       await getAccountInfo()
         .then((res) => {
-          setAccountInfo(res.data);
+          setAccountInfo(res);
         })
         .catch((err) => {
           alert(err);
