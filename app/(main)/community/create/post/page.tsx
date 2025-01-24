@@ -316,6 +316,7 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '새로운 기술 배우기',
     tagType: 'DO',
     bucketId: 1,
+    status: 'DOING',
   },
   {
     isSelectMode: false,
@@ -325,6 +326,7 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '여행을 떠나기',
     tagType: 'DO',
     bucketId: 2,
+    status: 'DOING',
   },
   {
     isSelectMode: false,
@@ -334,6 +336,7 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '책 10권 읽기',
     tagType: 'DO',
     bucketId: 3,
+    status: 'DOING',
   },
   {
     isSelectMode: false,
@@ -343,6 +346,7 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '운동 루틴 완성',
     tagType: 'DO',
     bucketId: 4,
+    status: 'DOING',
   },
   {
     isSelectMode: false,
@@ -352,6 +356,7 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '외국어 공부',
     tagType: 'DO',
     bucketId: 5,
+    status: 'DOING',
   },
   {
     isSelectMode: false,
@@ -361,5 +366,6 @@ const MockBucketLists: BucketListCardProps[] = [
     title: '음악 연주 배우기',
     tagType: 'DO',
     bucketId: 6,
+    status: 'DOING',
   },
 ];
