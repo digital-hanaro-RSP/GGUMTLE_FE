@@ -67,7 +67,7 @@ export default function BucketListPage() {
     const fetchBucketList = async () => {
       await getAllBucketList()
         .then((res) => {
-          setBucketLists(res.data);
+          setBucketLists(res);
         })
         .catch((err) => {
           alert(err);
@@ -76,7 +76,7 @@ export default function BucketListPage() {
     const fetchAccountInfo = async () => {
       await getAccountInfo()
         .then((res) => {
-          setAccountInfo(res.data);
+          setAccountInfo(res);
         })
         .catch((err) => {
           alert(err);

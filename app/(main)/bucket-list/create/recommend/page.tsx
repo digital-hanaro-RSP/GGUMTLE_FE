@@ -59,7 +59,7 @@ export default function RecommendBucketPage() {
   ) => {
     await getRecommendBucklist(tagType)
       .then((res) => {
-        setData(res.data);
+        setData(res);
       })
       .catch((err) => alert(err));
   };
