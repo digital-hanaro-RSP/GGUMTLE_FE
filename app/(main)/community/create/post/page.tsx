@@ -17,8 +17,10 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer';
 import { Switch } from '@/components/ui/switch';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
+import { getAllBucketListRes } from '@/types/BucketList';
 import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -29,14 +31,17 @@ export default function CreatePostPage() {
   const searchParams = useSearchParams();
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
-  const [selectedBucketList, setSelectedBucketList] =
-    useState<BucketListCardProps | null>(null);
+  const [bucketLists, setBucketLists] = useState<getAllBucketListRes[]>([]);
+  const [selectedBucketList, setSelectedBucketList] = useState<
+    getAllBucketListRes[]
+  >([]);
   const [isOpenBucketListDrawer, setIsOpenBucketListDrawer] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [content, setContent] = useState('');
   const [isPortfolioIncluded, setIsPortfolioIncluded] = useState(false);
   const { createPost, getMyGroups, uploadImages } = useCommunityApi();
+  const { getAllBucketList } = useBucketListApi();
   const router = useRouter();
 
   const {
@@ -48,8 +53,14 @@ export default function CreatePostPage() {
     limit: 10,
   });
 
+  const fetchBucketList = async () => {
+    const tempData = await getAllBucketList();
+    setBucketLists(tempData.data);
+  };
+
   useEffect(() => {
     const groupId = searchParams.get('groupId');
+    fetchBucketList();
     if (groupId && myGroups.length > 0) {
       const initialGroup = myGroups.find(
         (group) => group.id === Number(groupId)
@@ -103,9 +114,14 @@ export default function CreatePostPage() {
 
         const snapshot = JSON.stringify({
           // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
-          bucketId: selectedBucketList ? [] : [],
+          bucketId:
+            bucketLists.length > 0
+              ? selectedBucketList.map((bucket) => bucket.id)
+              : [],
           portfolio: isPortfolioIncluded,
         });
+
+        console.log(snapshot);
 
         const response = await createPost(
           selectedGroup?.id,
@@ -141,6 +157,11 @@ export default function CreatePostPage() {
       }
     }
   };
+
+  useEffect(() => {
+    console.log('All Bucket Lists:', bucketLists);
+    console.log('Selected Bucket Lists:', selectedBucketList);
+  }, [selectedBucketList, bucketLists]);
 
   return (
     <div className='flex flex-col gap-[20px] w-full'>
@@ -181,13 +202,36 @@ export default function CreatePostPage() {
             글을 작성할 버킷리스트를 선택해주세요 (선택)
           </p>
           <div className='flex p-[20px] h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
-            <p
-              className={`text-[14px] ${selectedBucketList === null ? 'text-primary-placeholder' : 'text-black'}`}
-            >
-              {selectedBucketList === null
-                ? '선택된 버킷리스트가 없습니다'
-                : selectedBucketList.title}
-            </p>
+            <div className=''>
+              {selectedBucketList.length === 0 ? (
+                <p className='text-[14px] text-primary-placeholder'>
+                  선택된 버킷리스트가 없습니다
+                </p>
+              ) : (
+                <div className='flex gap-2 flex-wrap'>
+                  {selectedBucketList.map((bucketList) => (
+                    <div
+                      key={bucketList.id}
+                      className='flex items-center gap-1 bg-gray-100 px-2 py-1 rounded'
+                    >
+                      <span className='text-[14px]'>{bucketList.title}</span>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedBucketList((prev) =>
+                            prev.filter((item) => item.id !== bucketList.id)
+                          );
+                        }}
+                        className='ml-1 text-gray-500 hover:text-gray-700'
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <IoIosArrowDown
               width={20}
               height={20}
@@ -289,17 +333,37 @@ export default function CreatePostPage() {
           </DrawerHeader>
           {/* 스크롤 영역 */}
           <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-            {MockBucketLists.map((bucketList) => (
-              <BucketListCard
-                key={bucketList.bucketId}
-                {...bucketList}
-                onClick={() => {
-                  setSelectedBucketList(bucketList);
-                  setIsOpenBucketListDrawer(false);
-                }}
-                isSelectMode={true}
-              />
-            ))}
+            {bucketLists.length > 0 &&
+              bucketLists
+                .filter(
+                  (bucketList) => !selectedBucketList.includes(bucketList)
+                )
+                .map((bucketList) => (
+                  <BucketListCard
+                    key={bucketList.id}
+                    {...bucketList}
+                    safeBox={bucketList.safeBox}
+                    howTo={bucketList.howTo}
+                    dataPercent={
+                      30
+                      //   calculatePercent(
+                      //   item.howTo,
+                      //   item.goalAmount,
+                      //   item.safeBox,
+                      //   new Date(item.dueDate),
+                      //   new Date(item.createdAt)
+                      // )
+                    }
+                    title={bucketList.title}
+                    tagType={bucketList.tagType}
+                    bucketId={bucketList.id}
+                    onClick={() => {
+                      setSelectedBucketList((prev) => [...prev, bucketList]);
+                      setIsOpenBucketListDrawer(false);
+                    }}
+                    isSelectMode={true}
+                  />
+                ))}
           </div>
         </DrawerContent>
       </Drawer>
@@ -307,59 +371,59 @@ export default function CreatePostPage() {
   );
 }
 
-const MockBucketLists: BucketListCardProps[] = [
-  {
-    isSelectMode: false,
-    safeBox: 40000,
-    howTo: 'EFFORT',
-    dataPercent: 80,
-    title: '새로운 기술 배우기',
-    tagType: 'DO',
-    bucketId: 1,
-  },
-  {
-    isSelectMode: false,
-    safeBox: 50000,
-    howTo: 'MONEY',
-    dataPercent: 60,
-    title: '여행을 떠나기',
-    tagType: 'DO',
-    bucketId: 2,
-  },
-  {
-    isSelectMode: false,
-    safeBox: 30000,
-    howTo: 'MONEY',
-    dataPercent: 70,
-    title: '책 10권 읽기',
-    tagType: 'DO',
-    bucketId: 3,
-  },
-  {
-    isSelectMode: false,
-    safeBox: 45000,
-    howTo: 'MONEY',
-    dataPercent: 85,
-    title: '운동 루틴 완성',
-    tagType: 'DO',
-    bucketId: 4,
-  },
-  {
-    isSelectMode: false,
-    safeBox: 60000,
-    howTo: 'MONEY',
-    dataPercent: 90,
-    title: '외국어 공부',
-    tagType: 'DO',
-    bucketId: 5,
-  },
-  {
-    isSelectMode: false,
-    safeBox: 35000,
-    howTo: 'MONEY',
-    dataPercent: 50,
-    title: '음악 연주 배우기',
-    tagType: 'DO',
-    bucketId: 6,
-  },
-];
+// const MockBucketLists: BucketListCardProps[] = [
+//   {
+//     isSelectMode: false,
+//     safeBox: 40000,
+//     howTo: 'EFFORT',
+//     dataPercent: 80,
+//     title: '새로운 기술 배우기',
+//     tagType: 'DO',
+//     bucketId: 1,
+//   },
+//   {
+//     isSelectMode: false,
+//     safeBox: 50000,
+//     howTo: 'MONEY',
+//     dataPercent: 60,
+//     title: '여행을 떠나기',
+//     tagType: 'DO',
+//     bucketId: 2,
+//   },
+//   {
+//     isSelectMode: false,
+//     safeBox: 30000,
+//     howTo: 'MONEY',
+//     dataPercent: 70,
+//     title: '책 10권 읽기',
+//     tagType: 'DO',
+//     bucketId: 3,
+//   },
+//   {
+//     isSelectMode: false,
+//     safeBox: 45000,
+//     howTo: 'MONEY',
+//     dataPercent: 85,
+//     title: '운동 루틴 완성',
+//     tagType: 'DO',
+//     bucketId: 4,
+//   },
+//   {
+//     isSelectMode: false,
+//     safeBox: 60000,
+//     howTo: 'MONEY',
+//     dataPercent: 90,
+//     title: '외국어 공부',
+//     tagType: 'DO',
+//     bucketId: 5,
+//   },
+//   {
+//     isSelectMode: false,
+//     safeBox: 35000,
+//     howTo: 'MONEY',
+//     dataPercent: 50,
+//     title: '음악 연주 배우기',
+//     tagType: 'DO',
+//     bucketId: 6,
+//   },
+// ];
