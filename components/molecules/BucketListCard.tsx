@@ -8,7 +8,9 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import {
+  bucketListHowTo,
   bucketListStatus,
+  bucketListTagType,
   changeBucketListStatusReq,
 } from '@/types/BucketList';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -27,13 +29,14 @@ import { MoneyTransferDrawer } from '../organisms/MoneyTransferDrawer';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export interface BucketListCardProps {
-  howTo: 'EFFORT' | 'MONEY' | 'WILL';
+  howTo: bucketListHowTo;
   dataPercent: number;
   title: string;
-  tagType: 'HAVE' | 'DO' | 'BE' | 'GO' | 'LEARN' | 'DEFAULT';
+  tagType: bucketListTagType;
   safeBox?: number;
   isSelectMode?: boolean; //커뮤니티 용인지 체크
   bucketId: number;
+  status: bucketListStatus;
   children?: React.ReactNode;
   showPercent?: boolean;
   className?: string;
@@ -51,6 +54,7 @@ export const BucketListCard = ({
   bucketId,
   children,
   showPercent = true,
+  status,
   onClick,
 }: BucketListCardProps) => {
   const router = useRouter();
@@ -123,15 +127,19 @@ export const BucketListCard = ({
   const changeStatus = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
     bid: number,
-    status: bucketListStatus
+    Newstatus: bucketListStatus
   ) => {
     e.stopPropagation();
     const formData: changeBucketListStatusReq = {
-      status: status,
+      status: Newstatus,
     };
     await changeBucketListStatus(bid, formData)
       .then(() => {
-        window.location.reload();
+        if (Newstatus === 'DONE')
+          router.push(`/bucket-list/complete?howto=${howTo}&title=${title}`);
+        else {
+          window.location.reload();
+        }
       })
       .catch((err) => {
         alert(err);
@@ -191,16 +199,19 @@ export const BucketListCard = ({
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={(e) => changeStatus(e, bucketId, 'DONE')}
+                        className={cn(status === 'DONE' && 'hidden')}
                       >
                         완료하기
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={(e) => changeStatus(e, bucketId, 'HOLD')}
+                        className={cn(status === 'HOLD' && 'hidden')}
                       >
                         보류하기
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={(e) => changeStatus(e, bucketId, 'DOING')}
+                        className={cn(status === 'DOING' && 'hidden')}
                       >
                         진행하기
                       </DropdownMenuItem>

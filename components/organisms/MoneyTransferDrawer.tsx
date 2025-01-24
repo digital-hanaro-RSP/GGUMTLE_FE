@@ -129,7 +129,7 @@ export const MoneyTransferDrawer = ({
         const getFROMBucketInfo = async () => {
           if (fromId) {
             await getBucketListbyId(fromId).then((res) => {
-              setBucketList(res.data);
+              setBucketList(res);
             });
           }
         };
@@ -140,7 +140,7 @@ export const MoneyTransferDrawer = ({
           if (toId) {
             await getBucketListbyId(toId)
               .then((res) => {
-                setBucketList(res.data);
+                setBucketList(res);
               })
               .catch((err) => {
                 alert(err);
@@ -153,7 +153,7 @@ export const MoneyTransferDrawer = ({
     const getAccount = async () => {
       await getAccountInfo()
         .then((res) => {
-          setAccountInfo(res.data);
+          setAccountInfo(res);
         })
         .catch((err) => {
           alert(err);

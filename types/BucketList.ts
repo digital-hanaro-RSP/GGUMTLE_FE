@@ -80,3 +80,8 @@ export type createBucketListReq = {
 export type changeBucketListStatusReq = {
   status: bucketListStatus;
 };
+
+export type shareBucketlistCompleteReq = {
+  content: string;
+  postType: 'NEWS';
+};

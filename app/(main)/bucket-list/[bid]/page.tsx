@@ -30,7 +30,7 @@ export default function BucketListDetail({
     const fetchBucketListbyId = async () => {
       await getBucketListbyId(params.bid)
         .then((res) => {
-          setBucketList(res.data);
+          setBucketList(res);
         })
         .catch((err) => {
           alert(err);
@@ -61,6 +61,7 @@ export default function BucketListDetail({
               title={bucketList?.title}
               tagType={bucketList?.tagType}
               bucketId={bucketList?.id}
+              status={bucketList.status}
             >
               <div className='pt-10'>
                 <ProgressBar

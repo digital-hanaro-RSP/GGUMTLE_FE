@@ -69,6 +69,7 @@ export const parseIntWithoutCommas = (inputValue: string) => {
 };
 
 export const parsePostData = (post: PostResponse) => {
+  console.log('🚀 ~ parsePostData ~ post:', post);
   const parsedSnapShot =
     typeof post.snapShot === 'string'
       ? JSON.parse(post.snapShot)
@@ -77,7 +78,7 @@ export const parsePostData = (post: PostResponse) => {
   const parsedImageUrls =
     typeof post.imageUrls === 'string'
       ? JSON.parse(post.imageUrls)
-      : (post.imageUrls ?? []);
+      : (post.imageUrls ?? null); //이 코드가 맞는지 모르겠는데 사진이 없는 post에서 JSON.parse에서 오류가 나타남.
 
   return {
     ...post,
