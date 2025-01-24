@@ -71,7 +71,7 @@ export const useBucketListApi = () => {
     gid: number,
     data: shareBucketlistCompleteReq
   ) => {
-    return await fetchApi(`community/group/${gid}/post/share`, {
+    return await fetchApi(`/community/group/${gid}/post/share`, {
       method: 'POST',
       body: JSON.stringify(data),
     });

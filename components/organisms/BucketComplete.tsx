@@ -1,15 +1,11 @@
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
+import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
+import { useUserApi } from '@/hooks/useUser/useUser';
+import { shareBucketlistCompleteReq } from '@/types/BucketList';
 import { Group } from '@/types/Community';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '../atoms/Button';
@@ -69,14 +65,30 @@ export const CompleteSendingMoney = () => {
 
 export const ShareToGroup = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [showBtn, setShowBtn] = useState<boolean>(false);
+  const [title, setTitle] = useState<string | null>(null);
+  const [userNickname, setUserNickName] = useState<string>();
+  const { getUserInfo } = useUserApi();
   useEffect(() => {
+    const UserInfo = async () => {
+      await getUserInfo()
+        .then((res) => {
+          setUserNickName(res.nickname);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    UserInfo();
+    const paramTitle = searchParams.get('title');
+    setTitle(paramTitle);
     const timer = setTimeout(() => {
       setShowBtn(true);
     }, 2000);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   return (
     <>
@@ -98,7 +110,7 @@ export const ShareToGroup = () => {
               <p className='text-center break-all'>
                 <strong className='text-[15px] font-bold'>OOO님 &quot;</strong>
                 <strong className='text-[16px] text-primary-main font-bold '>
-                  (히말라야)
+                  {title}
                 </strong>
                 <strong className='text-[15px] font-bold'>
                   &quot; 버킷리스트 달성!
@@ -113,10 +125,7 @@ export const ShareToGroup = () => {
               unoptimized
             />
           </div>
-          <GroupListDrawer
-            selectedGroup={selectedGroup}
-            setSelectedGroup={setSelectedGroup}
-          />
+          <GroupListDrawer title={title ?? ''} nickname={userNickname ?? ''} />
         </Card>
         <Button
           onClick={() => router.push('/bucket-list')}
@@ -131,25 +140,44 @@ export const ShareToGroup = () => {
 };
 
 type GroupListDrawerProps = {
-  selectedGroup: Group | null;
-  setSelectedGroup: (group: Group | null) => void;
+  title: string;
+  nickname: string;
 };
 
-export const GroupListDrawer = ({
-  selectedGroup,
-  setSelectedGroup,
-}: GroupListDrawerProps) => {
+export const GroupListDrawer = ({ title, nickname }: GroupListDrawerProps) => {
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
   const [isCompleteSharing, setIsCompleteSharing] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
-  const onClickShare = () => {
+
+  const { shareBucketlistComplete } = useBucketListApi();
+  const { getMyGroups } = useCommunityApi();
+
+  const {
+    data: myGroups,
+    isLoading,
+    lastElementObserver,
+  } = useInfiniteScroll<Group>({
+    fetchData: ({ limit, offset }) => getMyGroups(limit, offset, '', ''),
+    limit: 10,
+  });
+
+  useEffect(() => {}, []);
+
+  const onClickShare = async (gid: number) => {
     if (selectedGroup !== null) {
-      
-      setIsCompleteSharing(true);
-      return;
+      const formData: shareBucketlistCompleteReq = {
+        content: `${nickname}님 ${title} 버킷리스트 달성!`,
+        postType: 'NEWS',
+      };
+      await shareBucketlistComplete(gid, formData)
+        .then(() => {
+          setIsCompleteSharing(true);
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
-    setIsModalOpen(true);
     return;
   };
   return (
@@ -166,14 +194,24 @@ export const GroupListDrawer = ({
       <DrawerContent className='h-[80%] max-h-[80%] max-w-screen-md mx-auto flex flex-col gap-[0px] px-[10px] pb-[60px] overflow-hidden'>
         {!isCompleteSharing ? (
           <>
+            {isLoading && (
+              <div className='w-full flex justify-center mt-[20px]'>
+                <div className='dot-loading'>
+                  <div className='middle-dot'></div>
+                </div>
+              </div>
+            )}
             <DrawerHeader>
               <DrawerTitle>글을 공유할 꿈모임을 선택해주세요</DrawerTitle>
             </DrawerHeader>
             {/* 스크롤 영역 */}
             <div className='flex-1 overflow-y-auto flex flex-col gap-[20px]'>
-              {MockGroups.map((group) => (
+              {myGroups.map((group, index) => (
                 <GroupCard
                   key={group.id}
+                  ref={
+                    index === myGroups.length - 1 ? lastElementObserver : null
+                  }
                   {...group}
                   onClick={() => {
                     setSelectedGroup(group);
@@ -189,35 +227,15 @@ export const GroupListDrawer = ({
               ))}
             </div>
             <DrawerFooter className='flex flex-col justify-center items-center gap-0 py-0'>
-              <AlertDialog
-                open={isModalOpen}
-                onOpenChange={(open) => setIsModalOpen(open)}
-              >
-                <AlertDialogContent className='bg-white'>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>꿈 모임을 선택해주세요.</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      공유하기 위해서는 꿈 모임 1개를 꼭 선택해주셔야 해요.
-                      <Image
-                        src={'/image/gif/noData.gif'}
-                        alt=''
-                        width={150}
-                        height={150}
-                        className='mx-auto'
-                      />
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>확인했어요</AlertDialogCancel>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-              <Button
-                onClick={onClickShare}
-                className='p-4 rounded-xl text-[15px] btn-lg bg-primary-main text-white mt-3'
-              >
-                공유하기
-              </Button>
+              {selectedGroup && (
+                <Button
+                  onClick={() => onClickShare(selectedGroup.id)}
+                  className='p-4 rounded-xl text-[15px] btn-lg bg-primary-main text-white mt-3 animate-fadeIn'
+                >
+                  공유하기
+                </Button>
+              )}
+
               <DrawerClose className='p-4 rounded-xl text-[15px] btn-lg bg-primary-disable text-white mt-3'>
                 취소하기
               </DrawerClose>
@@ -253,96 +271,3 @@ export const GroupListDrawer = ({
     </Drawer>
   );
 };
-
-const MockGroups: Group[] = [
-  {
-    id: 1,
-    name: '그룹 1',
-    category: '여행',
-    description: '그룹 1 설명',
-    imageUrl: 'https://picsum.photos/699/699',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 2,
-    name: '그룹 2',
-    category: '재테크',
-    description: '그룹 2 설명',
-    imageUrl: 'https://picsum.photos/698/698',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 3,
-    name: '그룹 3',
-    category: '노후',
-    description: '그룹 3 설명',
-    imageUrl: 'https://picsum.photos/697/697',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 4,
-    name: '그룹 4',
-    category: '교육',
-    description: '그룹 4 설명',
-    imageUrl: 'https://picsum.photos/695/695',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 5,
-    name: '그룹 5',
-    category: '취미',
-    description: '그룹 5 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 6,
-    name: '그룹 6',
-    category: '취미',
-    description: '그룹 6 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 7,
-    name: '그룹 7',
-    category: '취미',
-    description: '그룹 7 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 8,
-    name: '그룹 8',
-    category: '취미',
-    description: '그룹 8 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-  {
-    id: 9,
-    name: '그룹 9',
-    category: '취미',
-    description: '그룹 9 설명',
-    imageUrl: 'https://picsum.photos/700/700',
-    memberCount: 10,
-    createdAt: '2021-01-01',
-    updatedAt: '2021-01-01',
-  },
-];

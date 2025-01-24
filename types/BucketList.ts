@@ -83,5 +83,5 @@ export type changeBucketListStatusReq = {
 
 export type shareBucketlistCompleteReq = {
   content: string;
-  postType: 'POST';
+  postType: 'NEWS';
 };

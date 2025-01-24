@@ -173,6 +173,7 @@ export default function BucketListPage() {
                       title={item.title}
                       tagType={item.tagType}
                       bucketId={item.id}
+                      status={item.status}
                     />
                   </div>
                 ))}
@@ -232,6 +233,7 @@ export default function BucketListPage() {
                         title={item.title}
                         tagType={item.tagType}
                         bucketId={item.id}
+                        status={item.status}
                       />
                     </div>
                   </div>
@@ -252,19 +254,17 @@ export default function BucketListPage() {
                         isSelectMode={false}
                         safeBox={item.safeBox}
                         howTo={item.howTo}
-                        dataPercent={
-                          30
-                          //   calculatePercent(
-                          //   item.howTo,
-                          //   item.goalAmount,
-                          //   item.safeBox,
-                          //   new Date(item.dueDate),
-                          //   new Date(item.createdAt)
-                          // )
-                        }
+                        dataPercent={calculatePercent(
+                          item.howTo,
+                          item.goalAmount,
+                          item.safeBox,
+                          new Date(item.dueDate),
+                          new Date(item.createdAt)
+                        )}
                         title={item.title}
                         tagType={item.tagType}
                         bucketId={item.id}
+                        status={item.status}
                       />
                     </div>
                   </div>
