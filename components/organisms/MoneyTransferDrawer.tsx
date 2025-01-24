@@ -71,8 +71,8 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'RECEIVE':
@@ -80,8 +80,8 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'FILLUP':
@@ -89,8 +89,8 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
       case 'BRINGOUT':
@@ -98,8 +98,8 @@ export const MoneyTransferDrawer = ({
           .then(() => {
             setTransferSuccess(true);
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('금액이 부족합니다.');
           });
         break;
     }

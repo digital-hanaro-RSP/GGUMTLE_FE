@@ -52,7 +52,7 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
           />
           <div
             className={cn(
-              'right-0 top-[68px] absolute transition duration-1000 font-semibold text-lg text-primary-main bg-white px-1 rounded-md',
+              'right-0 top-[68px] absolute transition duration-1000 font-semibold text-lg text-primary-main bg-transparent px-1 rounded-md backdrop-blur-lg bg-opacity-30',
               showPercent ? 'opacity-100' : 'opacity-0'
             )}
           >
