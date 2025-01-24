@@ -141,6 +141,6 @@ export const {
   },
   session: {
     strategy: 'jwt',
-    maxAge: 60 * 60, // 60분으로 수정
+    maxAge: 24 * 60 * 60, // 60분으로 수정
   },
 });
