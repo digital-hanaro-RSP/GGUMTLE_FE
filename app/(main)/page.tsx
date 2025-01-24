@@ -7,6 +7,7 @@ import { usePortfolioApi } from '@/hooks/usePortfolio/usePortfolio';
 import { AdsResponse } from '@/types/Ads';
 import { PortfolioResponse } from '@/types/Portfolio';
 import { InvestmentTypeResponse, InvestmentType } from '@/types/Portfolio';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 const investmentTypeConfig = {
@@ -85,16 +86,25 @@ export default function MainPage() {
 
   return (
     <div className='max-w-screen-md mx-auto'>
-      <h1 className='font-cookie text-lg text-primary-main p-4'>
-        꿈에 틀을 잡다, 꿈틀
-      </h1>
+      <div className='flex items-center justify-between p-4'>
+        <h1 className='font-cookie text-lg animate-gradient bg-gradient-to-r from-primary-main via-[#92BEA9] to-primary-main bg-[length:200%_auto] bg-clip-text text-transparent'>
+          꿈에 틀을 잡다, 꿈틀
+        </h1>
+        <Image
+          src='/image/logo/logo.png'
+          alt='꿈틀 로고'
+          className='h-6 w-auto ml-2'
+          width={50}
+          height={50}
+        />
+      </div>
 
       {isLoading ? (
         <div className='flex justify-center items-center min-h-screen'>
           로딩 중...
         </div>
       ) : (
-        <div className='space-y-2'>
+        <div className=''>
           {/* 포트폴리오 섹션 */}
           <section className='bg-[#FBFBFB] p-6 shadow-[0px_2px_8px_0px_rgba(136,137,157,0.30)]'>
             <h2 className='text-lg font-bold mb-2'>
