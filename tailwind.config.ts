@@ -18,6 +18,7 @@ const config: Config = {
         fadeIn: 'fadeIn 0.6s ease-out forwards',
         fadeOut: 'fadeOut 1.5s ease-out forwards',
         'bounce-slow': 'bounce-slow 1.5s infinite',
+        gradient: 'gradient 3s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -37,6 +38,9 @@ const config: Config = {
             transform: 'translateY(0)',
             animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)',
           },
+        },
+        gradient: {
+          to: { 'background-position': '200% center' },
         },
       },
       colors: {

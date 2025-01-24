@@ -2,9 +2,17 @@
 
 import { Button, ImgButton } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
+import {
+  DropCard,
+  DropCardItem,
+  DropCardItemList,
+  DropDownTrigger,
+} from '@/components/molecules/DropCard';
 import { NicknameEditModal } from '@/components/molecules/NicknameEditModal';
 import { PasswordEditModal } from '@/components/molecules/PasswordEditModal';
 import { useUserApi } from '@/hooks/useUser/useUser';
+import { signOut } from 'next-auth/react';
+import { IoMenu } from 'react-icons/io5';
 import { useEffect, useRef, useState } from 'react';
 
 interface UserInfo {
@@ -80,6 +88,10 @@ export default function MyPage() {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
+  };
+
   if (isLoading) {
     return (
       <div className='h-[100vh] flex items-center justify-center overflow-hidden'>
@@ -99,6 +111,30 @@ export default function MyPage() {
   return (
     <div className='min-h-[calc(100vh-58px)] flex items-center justify-center overflow-hidden'>
       <div className='w-full max-w-2xl px-4 py-6 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]'>
+        <div className='relative w-full'>
+          <div className='absolute right-0 top-0'>
+            <DropCard>
+              <DropDownTrigger className='text-2xl pl-4 py-[2px] hover:bg-gray-100 rounded-md'>
+                <IoMenu />
+              </DropDownTrigger>
+              <DropCardItemList
+                direction='down'
+                isBlur={true}
+                className='w-24 right-1 mt-1'
+              >
+                <DropCardItem
+                  className='bg-gray-100 px-4 py-2 hover:bg-gray-200 whitespace-nowrap'
+                  onClick={handleLogout}
+                >
+                  로그아웃
+                </DropCardItem>
+                <DropCardItem className='bg-gray-100 px-4 py-2 hover:bg-gray-200 whitespace-nowrap'>
+                  회원탈퇴
+                </DropCardItem>
+              </DropCardItemList>
+            </DropCard>
+          </div>
+        </div>
         <div className='flex flex-col items-center gap-2 mb-1'>
           <h1 className='text-2xl font-bold text-center'>
             {userInfo.name}님의 정보

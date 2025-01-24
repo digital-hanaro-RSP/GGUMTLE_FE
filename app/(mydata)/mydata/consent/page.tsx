@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { AgreementBox } from '@/components/molecules/AgreementBox';
 import { TermsModal } from '@/components/molecules/TermsModal';
 import { useMyDataApi } from '@/hooks/useMyData/useMyData';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -16,6 +17,8 @@ export default function ConsentPage() {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const { data: session, update } = useSession();
+
   const handleConsentSuccess = async () => {
     if (!isChecked) {
       alert('모든 항목에 동의해주세요.');
@@ -25,6 +28,16 @@ export default function ConsentPage() {
     try {
       const response = await updatePermission();
       if (response.permission === 1) {
+        // session의 user만 업데이트
+        await update({
+          ...session,
+          user: {
+            ...session?.user,
+            permission: 1,
+          },
+        });
+
+        console.log(response.permission);
         router.push('/mydata/sync');
       } else {
         alert('마이데이터 권한 설정에 실패했습니다.');
@@ -43,7 +56,7 @@ export default function ConsentPage() {
           </h1>
           <div className='w-60 h-60'>
             <video
-              src={'/image/video/file.mp4'}
+              src='/image/video/file.mp4'
               autoPlay
               loop
               muted

@@ -111,10 +111,17 @@ export const PortfolioCard = ({
   const [selectedPortfolio, setSelectedPortfolio] = useState<
     'goal' | 'current'
   >('goal');
-  const [hoveredSection, setHoveredSection] = useState<string | null>(null);
+  const [hoveredSection, setHoveredSection] = useState<string | null>('입출금');
 
   const handleToggleDetail = () => {
-    setIsExpanded((prev) => !prev);
+    setIsExpanded((prev) => {
+      if (!prev) {
+        setHoveredSection('입출금');
+      } else {
+        setHoveredSection(null);
+      }
+      return !prev;
+    });
   };
 
   const handleChartClick = (type: 'goal' | 'current') => {
