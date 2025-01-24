@@ -113,8 +113,9 @@ jobs:
       - name: restart next
         run: |
           ssh ec2-user@${{ secrets.WAS }} '
-            cd /home/ec2-user/workspace &&
-            rm -rf GGUMTLE_FE/.next
-            unzip next.zip -d GGUMTLE_FE
+            cd /home/ec2-user/workspace/GGUMTLE_FE &&
+            rm -rf .next/*
+            rmdir .next
+            unzip next.zip
             pm2 reload ggumtle-next
           '
