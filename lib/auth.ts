@@ -93,14 +93,22 @@ export const {
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
+      // update 호출 시 session 데이터로 token 업데이트
+      if (trigger === 'update' && session?.user) {
+        return {
+          ...token,
+          permission: session.user.permission,
+        };
+      }
+
       if (user) {
         return {
           jwt: user.jwt,
           id: user.id,
           permission: user.permission,
           refreshToken: user.refreshToken,
-          expiresAt: Math.floor(Date.now() / 1000 + 60 * 60), // 60분으로 설정
+          expiresAt: Math.floor(Date.now() / 1000 + 60 * 60),
         } as JWT;
       }
 
