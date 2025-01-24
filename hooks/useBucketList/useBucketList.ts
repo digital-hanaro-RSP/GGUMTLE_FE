@@ -2,6 +2,7 @@ import {
   bucketListTagType,
   changeBucketListStatusReq,
   createBucketListReq,
+  shareBucketlistCompleteReq,
 } from '@/types/BucketList';
 import { useApi } from '../useApi';
 
@@ -65,6 +66,17 @@ export const useBucketListApi = () => {
     );
   };
 
+  /** bucketlist 완료 공유 */
+  const shareBucketlistComplete = async (
+    gid: number,
+    data: shareBucketlistCompleteReq
+  ) => {
+    return await fetchApi(`community/group/${gid}/post/share`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  };
+
   return {
     changeBucketListStatus,
     getAllBucketList,
@@ -73,5 +85,6 @@ export const useBucketListApi = () => {
     editBucketListbyId,
     deleteBucketListbyId,
     getRecommendBucklist,
+    shareBucketlistComplete,
   };
 };

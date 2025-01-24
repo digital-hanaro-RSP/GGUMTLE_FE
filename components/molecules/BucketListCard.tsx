@@ -131,7 +131,10 @@ export const BucketListCard = ({
     };
     await changeBucketListStatus(bid, formData)
       .then(() => {
-        window.location.reload();
+        if (status === 'DONE') router.push('/bucket-list/complete');
+        else {
+          window.location.reload();
+        }
       })
       .catch((err) => {
         alert(err);

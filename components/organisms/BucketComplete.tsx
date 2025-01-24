@@ -145,6 +145,7 @@ export const GroupListDrawer = ({
   const router = useRouter();
   const onClickShare = () => {
     if (selectedGroup !== null) {
+      
       setIsCompleteSharing(true);
       return;
     }
