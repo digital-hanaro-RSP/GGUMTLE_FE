@@ -23,7 +23,7 @@ export default function BucketListDetail({
   params: { bid: number };
 }) {
   const router = useRouter();
-  const { getBucketListbyId } = useBucketListApi();
+  const { getBucketListbyId, deleteBucketListbyId } = useBucketListApi();
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
 
   useEffect(() => {
@@ -40,6 +40,21 @@ export default function BucketListDetail({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { changeBucketListStatus } = useBucketListApi();
+
+  const deleteBucket = () => {
+    const del = async () => {
+      if (bucketList?.id) {
+        await deleteBucketListbyId(bucketList?.id)
+          .then(() => {
+            router.push('/bucket-list');
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
+    };
+    del();
+  };
   return (
     <>
       <div>
@@ -128,7 +143,16 @@ export default function BucketListDetail({
                     direction='up'
                     className='items-center gap-3 bottom-16'
                   >
-                    <DropCardItem>
+                    <DropCardItem onClick={() => deleteBucket()}>
+                      <div className='bg-white text-primary-error btn-lg p-4 rounded-xl text-[15px]'>
+                        삭제하기
+                      </div>
+                    </DropCardItem>
+                    <DropCardItem
+                      onClick={() =>
+                        router.push(`/bucket-list/edit/${bucketList.id}`)
+                      }
+                    >
                       <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                         수정하기
                       </div>
