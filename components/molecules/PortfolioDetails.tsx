@@ -26,7 +26,9 @@ export const PortfolioDetails = ({
   isGoal: boolean;
   onHover: (section: string | null) => void;
 }) => {
-  const [selectedSection, setSelectedSection] = useState<string | null>(null);
+  const [selectedSection, setSelectedSection] = useState<string | null>(
+    '입출금'
+  );
 
   const handleClick = (name: string) => {
     if (selectedSection === name) {
