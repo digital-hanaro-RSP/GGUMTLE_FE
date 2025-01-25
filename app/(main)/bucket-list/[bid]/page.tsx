@@ -15,7 +15,7 @@ import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { calculatePercent } from '@/lib/utils';
+import { calculatePercent, changeStatus, cn } from '@/lib/utils';
 
 export default function BucketListDetail({
   params,
@@ -23,14 +23,14 @@ export default function BucketListDetail({
   params: { bid: number };
 }) {
   const router = useRouter();
-  const { getBucketListbyId } = useBucketListApi();
+  const { getBucketListbyId, deleteBucketListbyId } = useBucketListApi();
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
 
   useEffect(() => {
     const fetchBucketListbyId = async () => {
       await getBucketListbyId(params.bid)
         .then((res) => {
-          setBucketList(res.data);
+          setBucketList(res);
         })
         .catch((err) => {
           alert(err);
@@ -39,7 +39,22 @@ export default function BucketListDetail({
     fetchBucketListbyId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  const { changeBucketListStatus } = useBucketListApi();
 
+  const deleteBucket = () => {
+    const del = async () => {
+      if (bucketList?.id) {
+        await deleteBucketListbyId(bucketList?.id)
+          .then(() => {
+            router.push('/bucket-list');
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
+    };
+    del();
+  };
   return (
     <>
       <div>
@@ -61,6 +76,7 @@ export default function BucketListDetail({
               title={bucketList?.title}
               tagType={bucketList?.tagType}
               bucketId={bucketList?.id}
+              status={bucketList.status}
             >
               <div className='pt-10'>
                 <ProgressBar
@@ -76,7 +92,7 @@ export default function BucketListDetail({
               <div className='pt-8 pl-20 pb-20 z-11 relative'>
                 <div className='bg-[#F4F6F8]'>
                   <h1 className='font-semibold text-3xl'>
-                    홍길동님의 <br /> 예상 완료 기간은?
+                    고객님의 <br /> 예상 완료 기간은?
                   </h1>
                   <div className='ml-1 pt-2'>
                     <small className='text-gray-500'>
@@ -127,19 +143,69 @@ export default function BucketListDetail({
                     direction='up'
                     className='items-center gap-3 bottom-16'
                   >
-                    <DropCardItem>
+                    <DropCardItem onClick={() => deleteBucket()}>
+                      <div className='bg-white text-primary-error btn-lg p-4 rounded-xl text-[15px]'>
+                        삭제하기
+                      </div>
+                    </DropCardItem>
+                    <DropCardItem
+                      onClick={() =>
+                        router.push(`/bucket-list/edit/${bucketList.id}`)
+                      }
+                    >
                       <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                         수정하기
                       </div>
                     </DropCardItem>
-                    <DropCardItem>
+                    <DropCardItem
+                      onClick={(e) =>
+                        changeStatus(
+                          e,
+                          bucketList.id,
+                          'DONE',
+                          bucketList.howTo,
+                          bucketList.title,
+                          changeBucketListStatus
+                        )
+                      }
+                      className={cn(bucketList.status === 'DONE' && 'hidden')}
+                    >
                       <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                         완료하기
                       </div>
                     </DropCardItem>
-                    <DropCardItem>
+                    <DropCardItem
+                      onClick={(e) =>
+                        changeStatus(
+                          e,
+                          bucketList.id,
+                          'HOLD',
+                          bucketList.howTo,
+                          bucketList.title,
+                          changeBucketListStatus
+                        )
+                      }
+                      className={cn(bucketList.status === 'HOLD' && 'hidden')}
+                    >
                       <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
                         보류하기
+                      </div>
+                    </DropCardItem>
+                    <DropCardItem
+                      onClick={(e) =>
+                        changeStatus(
+                          e,
+                          bucketList.id,
+                          'DOING',
+                          bucketList.howTo,
+                          bucketList.title,
+                          changeBucketListStatus
+                        )
+                      }
+                      className={cn(bucketList.status === 'DOING' && 'hidden')}
+                    >
+                      <div className='bg-white text-black btn-lg p-4 rounded-xl text-[15px]'>
+                        진행하기
                       </div>
                     </DropCardItem>
                   </DropCardItemList>

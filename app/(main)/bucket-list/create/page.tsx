@@ -22,6 +22,7 @@ export default function BucketListRegisterPage() {
   const {
     setTitle,
     setTagType,
+    setOriginId,
     reset,
     title,
     tagType,
@@ -34,6 +35,7 @@ export default function BucketListRegisterPage() {
     allocateAmount,
     goalAmount,
     memo,
+    originId,
   } = useCreateBucketStore();
 
   const createCronCode = (
@@ -43,11 +45,11 @@ export default function BucketListRegisterPage() {
     if (autoAllocate) {
       switch (cycleOpt1) {
         case 'Daily':
-          return '0 9 * * * ';
+          return '0 1 * * * ';
         case 'Weekly':
-          return `0 9 * * ${cycleOpt2}`;
+          return `0 1 * * ${cycleOpt2}`;
         case 'Monthly':
-          return `0 9 ${cycleOpt2} * *`;
+          return `0 1 ${cycleOpt2} * *`;
       }
     }
   };
@@ -55,6 +57,7 @@ export default function BucketListRegisterPage() {
   useEffect(() => {
     const getTag = searchParams.get('tagType');
     const getTitle = searchParams.get('title');
+    const getOriginId = searchParams.get('id');
 
     const getTagType = (tag: string | null): bucketListTagType | undefined => {
       switch (tag) {
@@ -70,6 +73,8 @@ export default function BucketListRegisterPage() {
     };
     setTagType(getTagType(getTag));
     setTitle(getTitle ?? '');
+    setOriginId(parseInt(getOriginId ?? ''));
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -85,9 +90,9 @@ export default function BucketListRegisterPage() {
       cronCycle: createCronCode(cycleOpt1, cycleOpt2),
       goalAmount: goalAmount,
       memo: memo,
-      isRecommended: false, //추후 보완 필요
-      // followers: 0, //추후 보완 필요
-      // safeBox: 0, //추후 보완 필요
+      isRecommended: false,
+      originId: originId,
+      // safeBox: 0,
     };
     await createBucketList(formData)
       .then((res) => {

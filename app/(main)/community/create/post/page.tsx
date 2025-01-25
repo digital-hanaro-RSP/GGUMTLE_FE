@@ -55,7 +55,7 @@ export default function CreatePostPage() {
 
   const fetchBucketList = async () => {
     const tempData = await getAllBucketList();
-    setBucketLists(tempData.data);
+    setBucketLists(tempData);
   };
 
   useEffect(() => {

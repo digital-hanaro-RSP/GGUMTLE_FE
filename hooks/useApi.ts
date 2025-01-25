@@ -2,7 +2,7 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 
 export const useApi = () => {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const pathname = usePathname();
   const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -16,7 +16,8 @@ export const useApi = () => {
 
     // public route가 아닐 경우에만 JWT 체크
     if (!isPublicRoute && !session?.user?.jwt) {
-      throw new Error('No JWT token found');
+      update();
+      if (!session?.user.jwt) throw new Error('No JWT token found');
     }
 
     // JWT가 있는 경우에만 Authorization 헤더 추가

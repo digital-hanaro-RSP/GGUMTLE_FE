@@ -1,10 +1,10 @@
 name: GGUMTLE FE CI/CD
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [develop]
   push:
-    branches: [ main ]
-  
+    branches: [main]
+
 jobs:
   test-build:
     if: github.event_name == 'pull_request'
@@ -18,7 +18,7 @@ jobs:
         with:
           version: 9
           run_install: false
-      
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -57,11 +57,10 @@ jobs:
       - name: Install dependencies
         working-directory: .
         run: pnpm install
-      
+
       - name: set .env
         working-directory: .
         run: |
-          echo "${{ secrets.ENV }}"
           echo "${{ secrets.ENV }}" > .env
           echo .env
 
@@ -78,14 +77,14 @@ jobs:
           ls -l .next || echo ".next directory not found"
           echo "Checking GGUMTLE_FE directory:"
           ls -l ./GGUMTLE_FE || echo "GGUMTLE_FE directory not found"
-          
+
       - name: Ensure output directory exists
         working-directory: .
         run: mkdir -p ./GGUMTLE_FE
 
-      - name: zip next
+      - name: zip next, env, next.config.mjs, pnpm-lock
         working-directory: .
-        run: zip -rq ./GGUMTLE_FE/next.zip .next .env
+        run: zip -rq ./GGUMTLE_FE/next.zip .next .env next.config.mjs pnpm-lock.yaml
 
       - name: Verify next.zip exists
         working-directory: .
@@ -108,15 +107,15 @@ jobs:
       - name: scp next to was
         working-directory: .
         run: |
-          scp ./GGUMTLE_FE/next.zip ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/
-          # scp -r ./public ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/GGUMTLE_FE/
+          scp ./GGUMTLE_FE/next.zip ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/GGUMTLE_FE/
+          scp -r ./public ec2-user@${{ secrets.WAS }}:/home/ec2-user/workspace/GGUMTLE_FE/
 
       - name: restart next
         run: |
           ssh ec2-user@${{ secrets.WAS }} '
-            cd /home/ec2-user/workspace &&
-            rm -rf GGUMTLE_FE/.next
-            unzip next.zip -d GGUMTLE_FE
-            # echo "${{ secrets.ENV }}" > GGUMTLE_FE/.env
+            cd /home/ec2-user/workspace/GGUMTLE_FE &&
+            rm -rf .next/*
+            rmdir .next
+            unzip next.zip
             pm2 reload ggumtle-next
           '

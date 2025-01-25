@@ -2,6 +2,17 @@ export type bucketListStatus = 'DOING' | 'DONE' | 'HOLD';
 export type bucketListTagType = 'DO' | 'GO' | 'HAVE' | 'BE' | 'LEARN';
 export type bucketListHowTo = 'MONEY' | 'EFFORT' | 'WILL';
 
+export type RecommendationType = {
+  id: number;
+  title: string;
+  followers: number;
+};
+
+export type RecommendBucketListType = {
+  tagType: bucketListTagType | undefined;
+  recommendations: RecommendationType[];
+};
+
 export type getAllBucketListRes = {
   id: number;
   title: string;
@@ -68,4 +79,9 @@ export type createBucketListReq = {
 
 export type changeBucketListStatusReq = {
   status: bucketListStatus;
+};
+
+export type shareBucketlistCompleteReq = {
+  content: string;
+  postType: 'NEWS';
 };

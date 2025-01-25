@@ -2,7 +2,7 @@ import { SupportCardProps } from '@/components/molecules/SuppportCard';
 
 export const supportEduData: SupportCardProps[] = [
   {
-    src: '/support/edu/speak.png',
+    src: '/support/edu/Speak.png',
     title: '여행 영어 초급 배우기',
     desc1: '외국어 > 영어',
     desc2: '스픽 >',
@@ -23,7 +23,7 @@ export const supportEduData: SupportCardProps[] = [
     url: 'https://class101.net/ko',
   },
   {
-    src: '/support/edu/speak.png',
+    src: '/support/edu/Speak.png',
     title: '여행 영어 중급 배우기',
     desc1: '외국어 > 영어',
     desc2: '스픽 >',
@@ -44,7 +44,7 @@ export const supportEduData: SupportCardProps[] = [
     url: 'https://class101.net/ko',
   },
   {
-    src: '/support/edu/speak.png',
+    src: '/support/edu/Speak.png',
     title: '중국어 기초 배우기',
     desc1: '외국어 > 중국어',
     desc2: '스픽 >',
@@ -58,7 +58,7 @@ export const supportEduData: SupportCardProps[] = [
     url: 'https://www.sssd.co.kr/main',
   },
   {
-    src: '/support/edu/speak.png',
+    src: '/support/edu/Speak.png',
     title: '중국어 초급 배우기',
     desc1: '외국어 > 중국어',
     desc2: '스픽 >',
@@ -79,7 +79,7 @@ export const supportEduData: SupportCardProps[] = [
     url: 'https://www.sssd.co.kr/main',
   },
   {
-    src: '/support/edu/speak.png',
+    src: '/support/edu/Speak.png',
     title: '여행 일본어 초급 배우기',
     desc1: '외국어 > 일본어',
     desc2: '스픽 >',
@@ -110,7 +110,7 @@ export const supportJobData: SupportCardProps[] = [
     url: 'https://www.hanabank.com',
   },
   {
-    src: '/support/job/Starbucks.png',
+    src: '/support/job/StarBucks.png',
     title: '스타벅스 바리스타',
     desc1: '카페, 베이커리',
     desc2: '스타벅스 코리아 >',
