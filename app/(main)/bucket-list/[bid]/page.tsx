@@ -25,7 +25,8 @@ export default function BucketListDetail({
   params: { bid: number };
 }) {
   const router = useRouter();
-  const { getBucketListbyId, deleteBucketListbyId } = useBucketListApi();
+  const { getBucketListbyId, deleteBucketListbyId, changeBucketListStatus } =
+    useBucketListApi();
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
 
   useEffect(() => {
@@ -41,7 +42,6 @@ export default function BucketListDetail({
     fetchBucketListbyId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { changeBucketListStatus } = useBucketListApi();
   const { getAccountInfo, bringOutMoneyToDreamAccount } = useDreamAccountApi();
 
   const deleteBucket = () => {
