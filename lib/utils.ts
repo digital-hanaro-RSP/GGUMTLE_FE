@@ -74,16 +74,37 @@ export const parseIntWithoutCommas = (inputValue: string) => {
 };
 
 export const parsePostData = (post: PostResponse) => {
-  // console.log('🚀 ~ parsePostData ~ post:', post);
-  const parsedSnapShot =
-    typeof post.snapShot === 'string'
-      ? JSON.parse(post.snapShot)
-      : (post.snapShot ?? null);
+  // 백엔드에서 이중으로 인코딩된 문자열을 주기에 두 번 파싱을 시도했지만 배포된 상태에서는(파싱 문제가 맞다면) 오류가 발생하기에
+  // 조건문을 추가해서 파싱을 하기로 결정
 
-  const parsedImageUrls =
+  const jsonParse = (data: string | null) => {
+    if (!data) return null;
+    try {
+      return JSON.parse(data);
+    } catch (error) {
+      console.error('JSON 파싱중 에러 발생:', error);
+      return null;
+    }
+  };
+
+  // 첫 번째 파싱
+  let parsedSnapShot =
+    typeof post.snapShot === 'string'
+      ? jsonParse(post.snapShot)
+      : post.snapShot;
+  let parsedImageUrls =
     typeof post.imageUrls === 'string'
-      ? JSON.parse(post.imageUrls)
-      : (post.imageUrls ?? null); //이 코드가 맞는지 모르겠는데 사진이 없는 post에서 JSON.parse에서 오류가 나타남.
+      ? jsonParse(post.imageUrls)
+      : post.imageUrls;
+
+  // 이중으로 인코딩된 경우 두 번째 파싱 시도
+  if (typeof parsedSnapShot === 'string') {
+    parsedSnapShot = jsonParse(parsedSnapShot);
+  }
+
+  if (typeof parsedImageUrls === 'string') {
+    parsedImageUrls = jsonParse(parsedImageUrls);
+  }
 
   return {
     ...post,

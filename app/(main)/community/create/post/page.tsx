@@ -22,7 +22,7 @@ import { Group } from '@/types/Community';
 import { IoIosArrowDown } from 'react-icons/io';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { checkImageSize } from '@/lib/utils';
+import { calculatePercent, checkImageSize } from '@/lib/utils';
 
 export default function CreatePostPage() {
   const searchParams = useSearchParams();
@@ -341,16 +341,13 @@ export default function CreatePostPage() {
                     {...bucketList}
                     safeBox={bucketList.safeBox}
                     howTo={bucketList.howTo}
-                    dataPercent={
-                      30
-                      //   calculatePercent(
-                      //   item.howTo,
-                      //   item.goalAmount,
-                      //   item.safeBox,
-                      //   new Date(item.dueDate),
-                      //   new Date(item.createdAt)
-                      // )
-                    }
+                    dataPercent={calculatePercent(
+                      bucketList.howTo,
+                      bucketList.goalAmount,
+                      bucketList.safeBox,
+                      new Date(bucketList.dueDate),
+                      new Date(bucketList.createdAt)
+                    )}
                     title={bucketList.title}
                     tagType={bucketList.tagType}
                     bucketId={bucketList.id}
