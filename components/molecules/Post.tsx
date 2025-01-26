@@ -18,7 +18,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
-import { getRelativeTimeString } from '@/lib/utils';
+import { calculatePercent, getRelativeTimeString } from '@/lib/utils';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 import { BucketListCard } from './BucketListCard';
@@ -205,11 +205,17 @@ export default function Post({
                         {...bucketList}
                         safeBox={bucketList.safeBox}
                         howTo={bucketList.howTo}
-                        dataPercent={30}
+                        dataPercent={calculatePercent(
+                          bucketList.howTo,
+                          bucketList.goalAmount,
+                          bucketList.safeBox,
+                          new Date(bucketList.dueDate),
+                          new Date(bucketList.createdAt)
+                        )}
                         title={bucketList.title}
                         tagType={bucketList.tagType}
                         bucketId={bucketList.id}
-                        isSelectMode={false}
+                        isSelectMode={true}
                       />
                     </SwiperSlide>
                   )

@@ -42,6 +42,10 @@ export default function GroupLayout({
   };
 
   const handleLeaveGroup = async () => {
+    // 이 부분 shadcn으로 할지 고민해보자
+    const isConfirmed = window.confirm('정말 그룹을 탈퇴하시겠습니까?');
+    if (!isConfirmed) return;
+
     await leaveGroup(groupId);
     router.push('/community/main/mygroup');
     // fetchIsMember();
