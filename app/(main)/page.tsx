@@ -85,7 +85,7 @@ export default function MainPage() {
   }, [getPortfolio, getInvestmentType, getAds, isLoading]);
 
   return (
-    <div className='max-w-screen-md mx-auto'>
+    <div className='max-w-screen-md mx-auto min-h-screen'>
       <div className='flex items-center justify-between p-4'>
         <h1 className='font-cookie text-lg animate-gradient bg-gradient-to-r from-primary-main via-[#92BEA9] to-primary-main bg-[length:200%_auto] bg-clip-text text-transparent'>
           꿈에 틀을 잡다, 꿈틀
@@ -100,11 +100,11 @@ export default function MainPage() {
       </div>
 
       {isLoading ? (
-        <div className='flex justify-center items-center min-h-screen'>
+        <div className='flex justify-center items-center h-[calc(100vh-4rem)]'>
           로딩 중...
         </div>
       ) : (
-        <div className=''>
+        <div className='px-4 pb-4'>
           {/* 포트폴리오 섹션 */}
           <section className='bg-[#FBFBFB] p-6 shadow-[0px_2px_8px_0px_rgba(136,137,157,0.30)]'>
             <h2 className='text-lg font-bold mb-2'>
