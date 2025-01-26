@@ -160,6 +160,7 @@ export const MoneyTransferDrawer = ({
         });
     };
     getAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transferDrawerOpen]);
 
   useEffect(() => {
@@ -169,6 +170,7 @@ export const MoneyTransferDrawer = ({
     if (transferType === 'FILLUP' && bucketList) {
       setToBalance({ title: bucketList.title, balance: bucketList.safeBox });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bucketList]);
 
   useEffect(() => {
@@ -190,6 +192,7 @@ export const MoneyTransferDrawer = ({
           break;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInfo, setAccountInfo]);
 
   console.log('🚀 ~ useEffect ~ transferType:', transferType);
