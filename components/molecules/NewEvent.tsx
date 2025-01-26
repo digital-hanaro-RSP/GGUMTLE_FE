@@ -10,14 +10,14 @@ export default function NewEvent({ content, userBriefInfo }: Post) {
         width={36}
         height={36}
       />
-      <div className='flex '>
+      <div className='flex flex-col items-center'>
         <span className='text-[15px] font-bold'>
-          {userBriefInfo.nickname} &quot;
+          {userBriefInfo.nickname}님
         </span>
         <span className='text-[16px] text-primary-main font-bold '>
           {content}
         </span>
-        <span className='text-[15px] font-bold'>&quot; 버킷리스트 달성!</span>
+        <span className='text-[15px] font-bold'>버킷리스트 달성!</span>
       </div>
       <Image
         src='/image/popperReverse.gif'
