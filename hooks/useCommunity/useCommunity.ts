@@ -1,5 +1,12 @@
 import { useApi } from '@/hooks/useApi';
-import { Comment, Group, Image, PostResponse } from '@/types/Community';
+import { GroupAd } from '@/types/Ads';
+import {
+  Comment,
+  Group,
+  Image,
+  IsMember,
+  PostResponse,
+} from '@/types/Community';
 import { encodeImageUrl } from '@/lib/utils';
 
 export const useCommunityApi = () => {
@@ -222,7 +229,7 @@ export const useCommunityApi = () => {
     return response;
   };
 
-  const isMember = async (groupId: number): Promise<boolean> => {
+  const isMember = async (groupId: number): Promise<IsMember> => {
     const response = await fetchApi(
       `/community/groupMember/${groupId}/membership`
     );
@@ -282,6 +289,11 @@ export const useCommunityApi = () => {
     }
   };
 
+  const getAdvertisement = async (groupId: number): Promise<GroupAd> => {
+    const res = await fetchApi(`/community/group/${groupId}/advertisement`);
+    return res.data;
+  };
+
   return {
     getPosts,
     getPost,
@@ -305,5 +317,6 @@ export const useCommunityApi = () => {
     uploadImages,
     createComment,
     delelteComment,
+    getAdvertisement,
   };
 };

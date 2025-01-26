@@ -3,25 +3,38 @@
 import Post from '@/components/molecules/Post';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
+import { GroupAd } from '@/types/Ads';
 import { PostResponse } from '@/types/Community';
 import { Post as PostType } from '@/types/Community';
 import { domAnimation, LazyMotion, m } from 'motion/react';
+import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { parsePostData } from '@/lib/utils';
 
 export default function GroupIdPage() {
   const [posts, setPosts] = useState<PostType[]>([]);
+  const [advertisement, setAdvertisement] = useState<GroupAd | null>(null);
 
   const params = useParams();
   const groupId = Number(params.groupId);
-  const { getPosts } = useCommunityApi();
+  const { getPosts, getAdvertisement } = useCommunityApi();
 
   const { data, isLoading, lastElementObserver } =
     useInfiniteScroll<PostResponse>({
       fetchData: ({ limit, offset }) => getPosts(groupId, offset, limit),
       dependencies: [],
     });
+
+  useEffect(() => {
+    const fetchGetAd = async () => {
+      const res = await getAdvertisement(groupId);
+      // console.log('fetchGetAd ', res);
+      setAdvertisement(res);
+    };
+
+    fetchGetAd();
+  }, []);
 
   useEffect(() => {
     if (Array.isArray(data)) {
@@ -51,6 +64,24 @@ export default function GroupIdPage() {
             className='cursor-pointer'
           >
             <Post {...post} onDelete={() => handlePostDelete(post.id)} />
+            {advertisement && index > 0 && (index + 1) % 5 === 0 ? (
+              <div
+                onClick={() => window.open(advertisement?.link, '_blank')}
+                style={{
+                  width: '100%',
+                  height: '100px',
+                  position: 'relative',
+                  marginTop: '20px',
+                }}
+              >
+                <Image
+                  src={advertisement?.bannerImageUrl}
+                  layout='fill'
+                  objectFit='fill'
+                  alt='advertisement'
+                />
+              </div>
+            ) : null}
           </m.div>
         ))}
         {isLoading && (
