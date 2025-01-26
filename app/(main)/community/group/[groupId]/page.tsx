@@ -1,5 +1,6 @@
 'use client';
 
+import NewEvent from '@/components/molecules/NewEvent';
 import Post from '@/components/molecules/Post';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
@@ -63,7 +64,12 @@ export default function GroupIdPage() {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className='cursor-pointer'
           >
-            <Post {...post} onDelete={() => handlePostDelete(post.id)} />
+            {post.postType === 'POST' ? (
+              <Post {...post} onDelete={() => handlePostDelete(post.id)} />
+            ) : (
+              <NewEvent {...post} />
+            )}
+
             {advertisement && index > 0 && (index + 1) % 5 === 0 ? (
               <div
                 onClick={() => window.open(advertisement?.link, '_blank')}
