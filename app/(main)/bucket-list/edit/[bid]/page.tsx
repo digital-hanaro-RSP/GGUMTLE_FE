@@ -85,7 +85,7 @@ export default function BucketListEdit({
       title: title,
       tagType: tagType,
       isDueSet: isDueDate,
-      dueDate: date?.toISOString().split('T')[0],
+      dueDate: date?.toString().split('T')[0],
       howTo: howTo,
       isAutoAllocate: autoAllocate,
       allocateAmount: allocateAmount,
@@ -96,6 +96,10 @@ export default function BucketListEdit({
       originId: originId,
       // safeBox: 0,
     };
+    console.log(
+      '🚀 ~ updateBucket ~ formData: createBucketListReq.memo:',
+      memo
+    );
     await editBucketListbyId(params.bid, formData)
       .then((res) => {
         console.log(res);
@@ -176,7 +180,7 @@ export default function BucketListEdit({
           )}
         >
           <Button size='lg' isDisabled={!activateButton()}>
-            생성하기
+            수정하기
           </Button>
         </div>
       </form>
