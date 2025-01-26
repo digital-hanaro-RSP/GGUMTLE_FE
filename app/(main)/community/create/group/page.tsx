@@ -74,7 +74,7 @@ export default function CreateGroupPage() {
         encodedUrls[0]
       );
 
-      router.push('/community/main/mygroup');
+      router.replace('/community/main/mygroup');
     } catch (error) {
       console.error('그룹 생성 실패:', error);
     }
