@@ -24,7 +24,7 @@ export default function PostIdPage() {
     const checkMembership = async () => {
       try {
         const res = await isMember(Number(param.groupId));
-        setIsGroupMember(res);
+        setIsGroupMember(res.isMember);
       } catch (error) {
         console.error('멤버십 확인 중 오류 발생:', error);
         setIsGroupMember(false);
