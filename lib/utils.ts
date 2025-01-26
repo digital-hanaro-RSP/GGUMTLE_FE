@@ -74,7 +74,7 @@ export const parseIntWithoutCommas = (inputValue: string) => {
 };
 
 export const parsePostData = (post: PostResponse) => {
-  console.log('🚀 ~ parsePostData ~ post:', post);
+  // console.log('🚀 ~ parsePostData ~ post:', post);
   const parsedSnapShot =
     typeof post.snapShot === 'string'
       ? JSON.parse(post.snapShot)
