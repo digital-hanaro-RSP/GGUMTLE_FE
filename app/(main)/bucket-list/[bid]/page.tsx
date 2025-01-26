@@ -89,7 +89,7 @@ export default function BucketListDetail({
                   )}
                 />
               </div>
-              <div className='pt-8 pl-20 pb-20 z-11 relative'>
+              <div className='pt-8 pb-20 z-11 relative'>
                 <div className='bg-[#F4F6F8]'>
                   <h1 className='font-semibold text-3xl'>
                     고객님의 <br /> 예상 완료 기간은?
@@ -112,7 +112,7 @@ export default function BucketListDetail({
                     </small>
                   </div>
                 </div>
-                <div className='w-full flex justify-end items-center bg-none absolute top-28 right-10'>
+                <div className='w-full flex justify-end items-center bg-none'>
                   <video
                     className='w-96'
                     src='/image/video/pig.mp4'

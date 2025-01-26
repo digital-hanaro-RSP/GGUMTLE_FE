@@ -310,9 +310,10 @@ export const CreateBucketHowTo = () => {
             disable={!autoAllocate}
             ref={allocateAmountinputRef}
             onChange={onAllocateAmountChange}
+            placeHolder='자동이체 금액 입력'
           />
         </div>
-        <MoneyInputRef ref={goalAmountinputRef} onChange={onGoalAmountChange} />
+        <MoneyInputRef ref={goalAmountinputRef} onChange={onGoalAmountChange} placeHolder='목표금액 입력'/>
       </div>
     </div>
   );
