@@ -25,6 +25,12 @@ interface ApiResponse {
   data: UserResponse;
 }
 
+interface DeleteResponse {
+  code: number;
+  message: string;
+  data: null;
+}
+
 export const useUserApi = () => {
   const { fetchApi } = useApi();
 
@@ -46,8 +52,15 @@ export const useUserApi = () => {
     [fetchApi]
   );
 
+  const deleteUser = useCallback(async (): Promise<void> => {
+    (await fetchApi('/user', {
+      method: 'DELETE',
+    })) as DeleteResponse;
+  }, [fetchApi]);
+
   return {
     getUserInfo,
     updateUserInfo,
+    deleteUser,
   };
 };
