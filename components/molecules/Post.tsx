@@ -53,7 +53,7 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
-
+  console.log('snapShot', snapShot);
   const { plusLike, minusLike, deletePost } = useCommunityApi();
 
   const handleLikeClick = async () => {

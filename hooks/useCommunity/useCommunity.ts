@@ -1,4 +1,5 @@
 import { useApi } from '@/hooks/useApi';
+import { GroupAd } from '@/types/Ads';
 import { Comment, Group, Image, PostResponse } from '@/types/Community';
 import { encodeImageUrl } from '@/lib/utils';
 
@@ -282,6 +283,11 @@ export const useCommunityApi = () => {
     }
   };
 
+  const getAdvertisement = async (groupId: number): Promise<GroupAd> => {
+    const res = await fetchApi(`/community/group/${groupId}/advertisement`);
+    return res.data;
+  };
+
   return {
     getPosts,
     getPost,
@@ -305,5 +311,6 @@ export const useCommunityApi = () => {
     uploadImages,
     createComment,
     delelteComment,
+    getAdvertisement,
   };
 };

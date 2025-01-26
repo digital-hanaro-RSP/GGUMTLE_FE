@@ -43,7 +43,8 @@ export default function GroupLayout({
 
   const handleLeaveGroup = async () => {
     await leaveGroup(groupId);
-    fetchIsMember();
+    router.push('/community/main/mygroup');
+    // fetchIsMember();
   };
 
   return (

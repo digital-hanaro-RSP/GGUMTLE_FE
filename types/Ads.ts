@@ -13,3 +13,11 @@ export type AdsResponse = {
   message: string;
   data: Ad;
 };
+
+export type GroupAd = {
+  id: number;
+  localtionType: string;
+  adType: string;
+  bannerImageUrl: string;
+  link: string;
+};
