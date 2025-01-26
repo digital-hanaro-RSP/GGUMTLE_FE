@@ -10,6 +10,8 @@ import {
 } from '@/components/molecules/DropCard';
 import { ProgressBar } from '@/components/molecules/ProgressBar';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
+import { transferReq } from '@/types/Account';
 import { getBucketListbyIdRes } from '@/types/BucketList';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -40,16 +42,38 @@ export default function BucketListDetail({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const { changeBucketListStatus } = useBucketListApi();
+  const { getAccountInfo, bringOutMoneyToDreamAccount } = useDreamAccountApi();
 
   const deleteBucket = () => {
     const del = async () => {
       if (bucketList?.id) {
-        await deleteBucketListbyId(bucketList?.id)
-          .then(() => {
-            router.push('/bucket-list');
+        await getAccountInfo()
+          .then(async (res) => {
+            if (bucketList.safeBox) {
+              const formData: transferReq = {
+                amount: bucketList.safeBox,
+              };
+              await bringOutMoneyToDreamAccount(formData, res.id, params.bid)
+                .then(async () => {
+                  await deleteBucketListbyId(bucketList?.id)
+                    .then(() => {
+                      alert(
+                        '삭제에 성공했습니다. 잔액은 꿈 계좌로 이동시켜드릴게요.'
+                      );
+                      router.push('/bucket-list');
+                    })
+                    .catch((err) => {
+                      alert(err);
+                    });
+                })
+                .catch(() => {
+                  alert('돈을 내보내는데 실패했습니다.');
+                  window.location.reload();
+                });
+            }
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('삭제에 실패했습니다.');
           });
       }
     };
