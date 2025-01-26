@@ -7,6 +7,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import { getAllBucketListRes } from '@/types/BucketList';
 import { Post as PostType } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
 import 'swiper/css';
@@ -20,6 +21,7 @@ import { useEffect, useRef, useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
 import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
+import { BucketListCard } from './BucketListCard';
 import { PortfolioCard } from './PortfolioCard';
 
 // TODO
@@ -51,7 +53,7 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
-  console.log('imageUrls : ', imageUrls, Array.isArray(imageUrls));
+  console.log('@@@@@@@@ snapShot @@@@@@@@', snapShot);
 
   // console.log('snapShot : ', snapShot);
   // console.log('currentPortfolio : ', snapShot?.currentPortfolio);
@@ -60,7 +62,6 @@ export default function Post({
   const { plusLike, minusLike, deletePost } = useCommunityApi();
 
   const handleLikeClick = async () => {
-    console.log('이게 찍힐라나');
     const newLikeState = !isLiked;
     try {
       if (newLikeState) {
@@ -191,7 +192,35 @@ export default function Post({
         {snapShot &&
           Array.isArray(snapShot.bucketLists) &&
           snapShot.bucketLists.length > 0 && (
-            <div className='mt-4'>{/* 버킷리스트 */}</div>
+            <div className='w-full z-0'>
+              <Swiper
+                modules={[Pagination]}
+                pagination={{
+                  clickable: true,
+                }}
+                spaceBetween={20}
+                slidesPerView={1}
+                className='w-full [&_.swiper-pagination-bullet]:bg-gray-300 [&_.swiper-pagination-bullet-active]:!bg-primary-main'
+              >
+                {snapShot.bucketLists.map(
+                  (bucketList: getAllBucketListRes, idx: number) => (
+                    <SwiperSlide key={idx}>
+                      <BucketListCard
+                        key={bucketList.id}
+                        {...bucketList}
+                        safeBox={bucketList.safeBox}
+                        howTo={bucketList.howTo}
+                        dataPercent={30}
+                        title={bucketList.title}
+                        tagType={bucketList.tagType}
+                        bucketId={bucketList.id}
+                        isSelectMode={false}
+                      />
+                    </SwiperSlide>
+                  )
+                )}
+              </Swiper>
+            </div>
           )}
 
         {snapShot && snapShot.goalPortfolio && snapShot.currentPortfolio && (

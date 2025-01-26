@@ -5,10 +5,7 @@ import Header from '@/components/atoms/Header';
 import { ImageInputRef } from '@/components/atoms/Inputs';
 import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
 import TextArea from '@/components/atoms/TextArea';
-import {
-  BucketListCard,
-  BucketListCardProps,
-} from '@/components/molecules/BucketListCard';
+import { BucketListCard } from '@/components/molecules/BucketListCard';
 import GroupCard from '@/components/molecules/GroupCard';
 import {
   Drawer,
@@ -131,7 +128,7 @@ export default function CreatePostPage() {
         );
 
         console.log('응답 : ' + response);
-        router.push(`/community/group/${selectedGroup.id}`);
+        router.replace(`/community/group/${selectedGroup.id}`);
       } catch (error) {
         console.error('게시물 작성 실패:', error);
       }
@@ -151,7 +148,7 @@ export default function CreatePostPage() {
         );
 
         console.log('응답 : ' + response);
-        router.push(`/community/group/${selectedGroup.id}`);
+        router.replace(`/community/group/${selectedGroup.id}`);
       } catch (error) {
         console.error('게시물 작성 실패:', error);
       }

@@ -87,8 +87,8 @@ export const parsePostData = (post: PostResponse) => {
 
   return {
     ...post,
-    snapShot: parsedSnapShot ? JSON.parse(parsedSnapShot) : null,
-    imageUrls: parsedImageUrls ? JSON.parse(parsedImageUrls) : [],
+    snapShot: parsedSnapShot,
+    imageUrls: parsedImageUrls ?? [],
   };
 };
 
