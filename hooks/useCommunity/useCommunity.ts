@@ -1,6 +1,12 @@
 import { useApi } from '@/hooks/useApi';
 import { GroupAd } from '@/types/Ads';
-import { Comment, Group, Image, PostResponse } from '@/types/Community';
+import {
+  Comment,
+  Group,
+  Image,
+  IsMember,
+  PostResponse,
+} from '@/types/Community';
 import { encodeImageUrl } from '@/lib/utils';
 
 export const useCommunityApi = () => {
@@ -223,7 +229,7 @@ export const useCommunityApi = () => {
     return response;
   };
 
-  const isMember = async (groupId: number): Promise<boolean> => {
+  const isMember = async (groupId: number): Promise<IsMember> => {
     const response = await fetchApi(
       `/community/groupMember/${groupId}/membership`
     );

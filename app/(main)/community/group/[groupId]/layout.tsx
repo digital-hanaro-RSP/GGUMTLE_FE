@@ -17,11 +17,18 @@ export default function GroupLayout({
   const [isGroupMember, setIsGroupMember] = useState(false);
   const router = useRouter();
   const groupId = Number(params.groupId);
+  const [groupName, setGroupName] = useState('');
 
   const fetchIsMember = async () => {
     try {
       const res = await isMember(groupId);
-      if (res === true) {
+      // 너무 긴 그룹 이름 처리
+      if (res.groupName.length > 20) {
+        setGroupName(`${res.groupName.slice(0, 18)}...`);
+      } else {
+        setGroupName(res.groupName);
+      }
+      if (res.isMember === true) {
         setIsGroupMember(true);
       } else {
         setIsGroupMember(false);
@@ -57,7 +64,7 @@ export default function GroupLayout({
       <div className='fixed top-0 left-0 right-0 z-10'>
         <div className='mx-auto max-w-screen-md'>
           <Header
-            text='꿈그룹'
+            text={groupName}
             showActionButton={true}
             actionLabel={isGroupMember ? '그룹 탈퇴' : '그룹 가입'}
             actionTextColor={isGroupMember ? 'primary-error' : 'primary-main'}

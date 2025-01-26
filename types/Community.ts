@@ -79,6 +79,11 @@ export type Image = {
   size: number;
 };
 
+export type IsMember = {
+  groupName: string;
+  isMember: boolean;
+};
+
 // 게시글 snapshot bucketList
 // export type postBucketList = {
 //   bucketHowTo: bucketListHowTo;
