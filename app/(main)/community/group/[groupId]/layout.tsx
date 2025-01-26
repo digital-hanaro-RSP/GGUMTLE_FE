@@ -22,20 +22,23 @@ export default function GroupLayout({
   const fetchIsMember = async () => {
     try {
       const res = await isMember(groupId);
-      // 너무 긴 그룹 이름 처리
-      if (res.groupName.length > 20) {
-        setGroupName(`${res.groupName.slice(0, 18)}...`);
+
+      if (res?.groupName) {
+        // 너무 긴 그룹 이름 처리
+        if (res.groupName.length > 18) {
+          setGroupName(`${res.groupName.slice(0, 18)}...`);
+        } else {
+          setGroupName(res.groupName);
+        }
       } else {
-        setGroupName(res.groupName);
+        setGroupName('꿈그룹');
       }
-      if (res.isMember === true) {
-        setIsGroupMember(true);
-      } else {
-        setIsGroupMember(false);
-      }
+
+      setIsGroupMember(res?.isMember === true);
     } catch (error) {
       console.error('멤버십 확인 중 오류 발생:', error);
       setIsGroupMember(false);
+      setGroupName('꿈그룹');
     }
   };
 
