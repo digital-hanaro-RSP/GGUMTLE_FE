@@ -78,8 +78,6 @@ export const ImgButton = ({
         alt='Image Button'
         fill
         objectFit='cover'
-        priority
-        unoptimized
       />
     </button>
   );

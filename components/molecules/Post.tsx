@@ -252,8 +252,6 @@ export default function Post({
                       alt={`게시물 이미지 ${idx + 1}`}
                       className='w-full'
                       fill
-                      priority={idx === 0}
-                      unoptimized
                     />
                   </div>
                 </SwiperSlide>

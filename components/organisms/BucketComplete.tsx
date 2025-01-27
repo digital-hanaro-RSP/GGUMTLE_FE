@@ -34,8 +34,6 @@ export const CompleteClapping = () => {
           alt='img'
           width={200}
           height={200}
-          priority
-          unoptimized
         />
       </div>
     </>
@@ -104,8 +102,6 @@ export const ShareToGroup = () => {
               alt='Animated GIF'
               width={36}
               height={36}
-              unoptimized
-              priority
             />
             <div className='flex flex-col'>
               <p className='text-center break-all'>
@@ -123,8 +119,6 @@ export const ShareToGroup = () => {
               alt='Animated GIF'
               width={36}
               height={36}
-              priority
-              unoptimized
             />
           </div>
           <GroupListDrawer title={title ?? ''} nickname={userNickname ?? ''} />

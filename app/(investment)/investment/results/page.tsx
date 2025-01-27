@@ -135,8 +135,6 @@ export default function ResultsPage() {
                 alt={investmentType.type}
                 fill
                 className='object-contain'
-                unoptimized
-                priority
               />
             </div>
           </div>

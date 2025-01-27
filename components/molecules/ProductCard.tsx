@@ -112,8 +112,6 @@ export default function ProductCard({
               src={bannerImageUrl}
               alt={productName}
               className='w-full h-[120px] object-cover rounded-lg'
-              priority
-              unoptimized
             />
           )}
         </div>

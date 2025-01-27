@@ -27,7 +27,6 @@ export const SupportCard = ({
           width={100}
           height={100}
           className='rounded-md'
-          unoptimized
         />
       </Card>
       <div className=''>
