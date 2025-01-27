@@ -102,8 +102,6 @@ export default function SignUpPage() {
               height={80}
               alt={'리스트 아이콘'}
               className='mb-3'
-              unoptimized
-              priority
               style={{ width: 80, height: 80 }}
             />
             <h1 className='text-xl font-bold whitespace-pre-line text-center text-primary-main mb-4'>

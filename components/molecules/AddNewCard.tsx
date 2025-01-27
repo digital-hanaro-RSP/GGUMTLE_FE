@@ -25,8 +25,6 @@ export const AddNewCard = ({
             alt='img'
             width={30}
             height={30}
-            priority
-            unoptimized
           />
         );
       case 'recommendBucket':
@@ -36,8 +34,6 @@ export const AddNewCard = ({
             alt='img'
             width={30}
             height={30}
-            priority
-            unoptimized
           />
         );
       case 'newPost':
@@ -47,8 +43,6 @@ export const AddNewCard = ({
             alt='img'
             width={30}
             height={30}
-            priority
-            unoptimized
           />
         );
       case 'newGroup':
@@ -58,8 +52,6 @@ export const AddNewCard = ({
             alt='img'
             width={50}
             height={50}
-            priority
-            unoptimized
           />
         );
     }

@@ -49,8 +49,6 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
             alt='img'
             width={70}
             height={70}
-            priority
-            unoptimized
           />
           <div
             className={cn(

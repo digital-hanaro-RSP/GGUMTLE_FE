@@ -21,8 +21,6 @@ const UserProfile: ForwardRefRenderFunction<
         width={36}
         height={36}
         className='rounded-full object-cover w-full h-full'
-        priority
-        unoptimized
       />
     </div>
   );
