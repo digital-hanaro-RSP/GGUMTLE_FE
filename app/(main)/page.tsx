@@ -147,11 +147,12 @@ export default function MainPage() {
                 입니다
               </h2>
             )}
-            {portfolioData && (
+            {portfolioData && investmentData && (
               <PortfolioCard
                 currentPortfolio={portfolioData.currentPortfolio}
                 goalPortfolio={portfolioData.goalPortfolio}
                 onPortfolioUpdate={handlePortfolioUpdate}
+                investmentType={investmentData.investmentType}
               />
             )}
           </section>

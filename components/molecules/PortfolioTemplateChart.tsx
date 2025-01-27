@@ -33,12 +33,19 @@ const LABELS = ['입출금', '예적금', '투자', '외화', '연금', '기타'
 
 const chartOptions: DoughnutOptions = {
   cutout: '50%',
+  responsive: true,
+  maintainAspectRatio: true,
+  aspectRatio: 1.5, // 비율 조정으로 더 작은 크기로 렌더링
   plugins: {
     legend: {
       position: 'bottom',
       labels: {
-        padding: 20,
+        padding: 15, // 패딩 감소
         usePointStyle: true,
+        boxWidth: 8, // 범례 크기 축소
+        font: {
+          size: 11, // 폰트 크기 축소
+        },
       },
     },
     tooltip: {
@@ -56,7 +63,6 @@ const chartOptions: DoughnutOptions = {
     },
   },
 };
-
 export const PortfolioTemplateChart = ({
   template,
 }: PortfolioTemplateChartProps) => {
@@ -80,8 +86,18 @@ export const PortfolioTemplateChart = ({
   };
 
   return (
-    <div className='w-full max-w-md mx-auto'>
-      <Doughnut data={chartData} options={chartOptions} />
+    <div className='w-full h-full flex flex-col items-center justify-center max-h-[350px]'>
+      <div
+        className='flex items-center justify-center w-full h-full max-w-2xl relative' // max-w-md에서 max-w-2xl로 변경
+        style={{
+          minHeight: '250px',
+          maxHeight: '290px',
+          width: '100%', // 너비 비율 추가
+          margin: '0 auto', // 중앙 정렬
+        }}
+      >
+        <Doughnut data={chartData} options={chartOptions} />
+      </div>
     </div>
   );
 };

@@ -36,6 +36,7 @@ interface PortfolioCardProps {
   currentPortfolio: CurrentPortfolio;
   goalPortfolio: GoalPortfolio;
   onPortfolioUpdate: () => Promise<void>;
+  investmentType: InvestmentType;
 }
 
 interface CustomChartData {
@@ -143,6 +144,7 @@ export const PortfolioCard = ({
   currentPortfolio,
   goalPortfolio,
   onPortfolioUpdate,
+  investmentType,
 }: PortfolioCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   // selectedPortfolio를 상수로 변경하여 항상 'goal'로 고정
@@ -358,7 +360,8 @@ export const PortfolioCard = ({
         onConfirm={handleConfirm}
         isLoading={isLoading}
         error={error}
-        setError={setError} // 추가
+        setError={setError}
+        currentInvestmentType={investmentType}
       />
     </Card>
   );

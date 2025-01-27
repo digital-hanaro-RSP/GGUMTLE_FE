@@ -13,6 +13,8 @@ interface PortfolioModalProps {
   isLoading: boolean;
   error: string | null;
   setError: (error: string | null) => void;
+  // 새로운 prop 추가
+  currentInvestmentType: InvestmentType;
 }
 
 const investmentTypeConfig = {
@@ -54,6 +56,7 @@ export const PortfolioModal = ({
   isLoading,
   error,
   setError,
+  currentInvestmentType,
 }: PortfolioModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
   const [currentTypeIndex, setCurrentTypeIndex] = useState(0);
@@ -63,12 +66,16 @@ export const PortfolioModal = ({
   const selectedType = investmentTypes[currentTypeIndex];
 
   useEffect(() => {
-    if (isOpen) {
-      setCurrentTypeIndex(0);
+    if (isOpen && currentInvestmentType) {
+      // 현재 투자성향에 해당하는 인덱스 찾기
+      const initialIndex = investmentTypes.findIndex(
+        (type) => type === currentInvestmentType
+      );
+      setCurrentTypeIndex(initialIndex !== -1 ? initialIndex : 0);
       setSelectedTemplate(null);
       setError(null);
     }
-  }, [isOpen, setError]);
+  }, [isOpen, currentInvestmentType, setError]);
 
   useEffect(() => {
     if (selectedType && templates) {
@@ -119,10 +126,10 @@ export const PortfolioModal = ({
   };
 
   return (
-    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'>
+    <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4'>
       <div
         ref={modalRef}
-        className='bg-white rounded-lg p-6 w-[90%] max-w-2xl h-[555px] md:h-[655px] flex flex-col mb-16 md:mb-0'
+        className='bg-white rounded-lg p-6 w-[90%] max-w-2xl max-h-[90vh] flex flex-col mb-16 md:mb-0 overflow-y-auto'
       >
         <h2 className='text-xl font-bold mb-6'>목표 포트폴리오 설정</h2>
 
@@ -138,14 +145,20 @@ export const PortfolioModal = ({
           </div>
         ) : (
           <>
-            <div className='flex-1 flex flex-col justify-between'>
+            <div className='flex-1 flex flex-col justify-between min-h-0 max-h-[60vh]'>
               {/* Chart section */}
-              <div className='flex-1 flex items-center justify-center'>
-                <PortfolioTemplateChart template={selectedTemplate} />
+              <div className='flex-1 flex items-center justify-center overflow-hidden h-[350px]'>
+                {' '}
+                {/* 높이 감소 */}
+                <div className='w-full h-full max-h-[350px]'>
+                  {' '}
+                  {/* 최대 높이 조정 */}
+                  <PortfolioTemplateChart template={selectedTemplate} />
+                </div>
               </div>
 
               {/* Control section */}
-              <div className='flex items-center justify-between px-2 mt-auto'>
+              <div className='flex items-center justify-between px-2 mt-4'>
                 <MoreButton
                   onClick={handlePrevType}
                   direction='left'
