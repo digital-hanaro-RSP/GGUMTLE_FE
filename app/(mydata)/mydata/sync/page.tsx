@@ -71,8 +71,6 @@ export default function SyncPage() {
                 alt=''
                 width={120}
                 height={120}
-                priority
-                unoptimized
               />
             </div>
           </div>

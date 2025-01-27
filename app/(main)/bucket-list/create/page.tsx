@@ -55,7 +55,6 @@ export default function BucketListRegisterPage() {
   };
 
   useEffect(() => {
-    reset();
     const getTag = searchParams.get('tagType');
     const getTitle = searchParams.get('title');
     const getOriginId = searchParams.get('id');

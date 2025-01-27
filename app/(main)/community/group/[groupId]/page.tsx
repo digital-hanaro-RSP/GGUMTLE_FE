@@ -85,8 +85,6 @@ export default function GroupIdPage() {
                   layout='fill'
                   objectFit='fill'
                   alt='advertisement'
-                  priority
-                  unoptimized
                 />
               </div>
             ) : null}

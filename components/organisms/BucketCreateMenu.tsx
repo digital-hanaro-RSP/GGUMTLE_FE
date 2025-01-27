@@ -26,7 +26,7 @@ import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { cn, parseIntWithoutCommas } from '@/lib/utils';
 import { DefaultInputRef } from '../atoms/Inputs';
 import { RadioItem } from '../atoms/RadioItem';
@@ -133,7 +133,6 @@ export const CreateBucketDueDate = () => {
   const clickIsDueDate = (tf: boolean) => {
     setIsDueDate(tf);
   };
-
   return (
     <div
       className={cn(
@@ -152,7 +151,6 @@ export const CreateBucketDueDate = () => {
           id='date-op1'
           name='date'
           onChange={() => clickIsDueDate(false)}
-          checked={isDueDate === false}
         >
           기간 미정
         </RadioItem>
@@ -163,7 +161,6 @@ export const CreateBucketDueDate = () => {
           id='date-op2'
           name='date'
           onChange={() => clickIsDueDate(true)}
-          checked={isDueDate}
         >
           기간 설정
         </RadioItem>
@@ -224,8 +221,6 @@ export const CreateBucketHowTo = () => {
     isDueDate,
     howTo,
     autoAllocate,
-    allocateAmount,
-    goalAmount,
     setAutoAllocate,
     setHowTo,
     setAllocateAmount,
@@ -264,7 +259,6 @@ export const CreateBucketHowTo = () => {
           id='need-op1'
           name='need'
           onChange={() => clickHowTo('MONEY')}
-          checked={howTo === 'MONEY'}
         >
           자금
         </RadioItem>
@@ -275,7 +269,6 @@ export const CreateBucketHowTo = () => {
           id='need-op2'
           name='need'
           onChange={() => clickHowTo('EFFORT')}
-          checked={howTo === 'EFFORT'}
         >
           노력
         </RadioItem>
@@ -286,7 +279,6 @@ export const CreateBucketHowTo = () => {
           id='need-op3'
           name='need'
           onChange={() => clickHowTo('WILL')}
-          checked={howTo === 'WILL'}
         >
           의지
         </RadioItem>
@@ -303,10 +295,7 @@ export const CreateBucketHowTo = () => {
           )}
         >
           <p>정기적으로 쌓기</p>
-          <Switch
-            onCheckedChange={() => setAutoAllocate(!autoAllocate)}
-            checked={autoAllocate}
-          />
+          <Switch onCheckedChange={() => setAutoAllocate(!autoAllocate)} />
         </div>
         <div className={cn('flex flex-row')}>
           <CycleDropDown disable={!autoAllocate} />
@@ -321,16 +310,9 @@ export const CreateBucketHowTo = () => {
             disable={!autoAllocate}
             ref={allocateAmountinputRef}
             onChange={onAllocateAmountChange}
-            value={allocateAmount?.toLocaleString()}
-            placeHolder='자동이체 금액 입력'
           />
         </div>
-        <MoneyInputRef
-          ref={goalAmountinputRef}
-          onChange={onGoalAmountChange}
-          placeHolder='목표금액 입력'
-          value={goalAmount?.toLocaleString()}
-        />
+        <MoneyInputRef ref={goalAmountinputRef} onChange={onGoalAmountChange} />
       </div>
     </div>
   );
@@ -344,9 +326,8 @@ export const CreateBucketMemo = () => {
     allocateAmount,
     goalAmount,
     howTo,
-    memo,
-    setMemo,
   } = useCreateBucketStore();
+  const [memo, setMemo] = useState<string>('');
   const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMemo(e.target.value);
   };
@@ -376,7 +357,7 @@ export const CreateBucketMemo = () => {
     >
       <h1 className='text-xl font-bold'>메모(선택)</h1>
       <div className='flex w-full justify-center items-center'>
-        <TextArea type='memo' value={memo ?? ''} onChange={handleMemoChange} />
+        <TextArea type='memo' value={memo} onChange={handleMemoChange} />
       </div>
     </div>
   );

@@ -51,8 +51,6 @@ export default function GroupCard({
               alt='group image'
               fill
               className='object-cover'
-              priority
-              unoptimized
             />
           </div>
 
