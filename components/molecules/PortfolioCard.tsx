@@ -16,6 +16,7 @@ import {
   Legend,
   ChartOptions,
   Plugin,
+  TooltipItem,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsPencilSquare } from 'react-icons/bs';
@@ -25,10 +26,11 @@ import { PortfolioModal } from './PortfolioModal';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface DoughnutOptions extends ChartOptions<'doughnut'> {
-  cutout?: string | number;
+type CustomDoughnutOptions = ChartOptions<'doughnut'> & {
   centerText?: string;
-}
+  isSelected?: boolean;
+  isExpanded?: boolean;
+};
 
 interface PortfolioCardProps {
   currentPortfolio: CurrentPortfolio;
@@ -36,7 +38,7 @@ interface PortfolioCardProps {
   onPortfolioUpdate: () => Promise<void>;
 }
 
-interface ChartData {
+interface CustomChartData {
   labels: string[];
   datasets: {
     data: number[];
@@ -55,7 +57,11 @@ const CHART_COLORS = {
 
 const LABELS = ['입출금', '예적금', '투자', '외화', '연금', '기타'];
 
-const chartOptions = (centerText: string): DoughnutOptions => ({
+const chartOptions = (
+  centerText: string,
+  isSelected: boolean,
+  isExpanded: boolean
+): CustomDoughnutOptions => ({
   cutout: '50%',
   plugins: {
     legend: {
@@ -64,7 +70,7 @@ const chartOptions = (centerText: string): DoughnutOptions => ({
     tooltip: {
       enabled: true,
       callbacks: {
-        label: (context) => {
+        label: (context: TooltipItem<'doughnut'>) => {
           const value = context.raw as number;
           return `${context.label}: ${value.toLocaleString()}${
             context.dataset.label === '목표' ? '%' : '원'
@@ -80,6 +86,8 @@ const chartOptions = (centerText: string): DoughnutOptions => ({
     },
   },
   centerText,
+  isSelected,
+  isExpanded,
   hover: {
     mode: 'nearest',
     intersect: true,
@@ -94,11 +102,14 @@ const textCenter: Plugin<'doughnut'> = {
   beforeDraw(chart: ChartJS<'doughnut'>) {
     const ctx = chart.canvas.getContext('2d')!;
     const { chartArea } = chart;
-    const text = (chart.options as DoughnutOptions).centerText || '';
+    const options = chart.options as CustomDoughnutOptions;
+    const text = options.centerText || '';
+    // isExpanded 상태를 확인하여 isSelected 값을 결정
+    const isSelected = options.isExpanded ? options.isSelected : false;
 
     ctx.save();
-    ctx.font = 'bold 16px sans-serif';
-    ctx.fillStyle = '#000';
+    ctx.font = isSelected ? 'bold 18px sans-serif' : 'bold 16px sans-serif';
+    ctx.fillStyle = isSelected ? '#069894' : '#5B5B5B';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -221,7 +232,7 @@ export const PortfolioCard = ({
     return <Card className='p-6'>Loading...</Card>;
   }
 
-  const currentChartData: ChartData = {
+  const currentChartData: CustomChartData = {
     labels: LABELS,
     datasets: [
       {
@@ -243,7 +254,7 @@ export const PortfolioCard = ({
     ],
   };
 
-  const goalChartData: ChartData = {
+  const goalChartData: CustomChartData = {
     labels: LABELS,
     datasets: [
       {
@@ -265,13 +276,6 @@ export const PortfolioCard = ({
     ],
   };
 
-  // const LoadingSpinner = () => (
-  //   <div className='flex flex-col items-center justify-center h-[calc(100vh-4rem)] gap-4'>
-  //     <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main'></div>
-  //     <p className='text-gray-600'>데이터를 불러오는 중입니다...</p>
-  //   </div>
-  // );
-
   return (
     <Card className='px-6 py-2'>
       <div className='text-xl font-semibold mb-6'>
@@ -279,24 +283,36 @@ export const PortfolioCard = ({
       </div>
       <div className='flex justify-between gap-4 mb-6'>
         <div
-          className={`w-1/2 flex items-center justify-center ${selectedPortfolio === 'goal' ? '' : ''}`}
+          className={`w-1/2 flex items-center justify-center ${
+            selectedPortfolio === 'goal' && isExpanded ? 'scale-105' : ''
+          }`}
           onClick={() => handleChartClick('goal')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
         >
           <Doughnut
             data={goalChartData}
-            options={chartOptions('목표')}
+            options={chartOptions(
+              '목표',
+              selectedPortfolio === 'goal',
+              isExpanded
+            )}
             plugins={[textCenter]}
           />
         </div>
         <div
-          className={`w-1/2 flex items-center justify-center ${selectedPortfolio === 'current' ? '' : ''}`}
+          className={`w-1/2 flex items-center justify-center ${
+            selectedPortfolio === 'current' && isExpanded ? 'scale-105' : ''
+          }`}
           onClick={() => handleChartClick('current')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
         >
           <Doughnut
             data={currentChartData}
-            options={chartOptions('현재')}
+            options={chartOptions(
+              '현재',
+              selectedPortfolio === 'current',
+              isExpanded
+            )}
             plugins={[textCenter]}
           />
         </div>
