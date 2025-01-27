@@ -24,6 +24,8 @@ export const BankInfoCard = ({
           width={56}
           height={56}
           className='rounded-2xl'
+          priority
+          unoptimized
         />
         <div className='break-keep'>
           <strong>
