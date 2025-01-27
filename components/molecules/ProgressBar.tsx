@@ -33,7 +33,7 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
     }, 1000 / progress);
 
     return () => clearInterval(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showPercent]);
   return (
     <div className='w-full flex flex-col justify-center items-center'>
@@ -49,12 +49,10 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
             alt='img'
             width={70}
             height={70}
-            priority
-            unoptimized
           />
           <div
             className={cn(
-              '-right-1 -top-[40px] absolute transition duration-1000 font-semibold text-lg text-primary-main bg-transparent px-1 rounded-md backdrop-blur-lg bg-opacity-30 floating',
+              'right-0 top-[68px] absolute transition duration-1000 font-semibold text-lg text-primary-main bg-transparent px-1 rounded-md backdrop-blur-lg bg-opacity-30',
               showPercent ? 'opacity-100' : 'opacity-0'
             )}
           >
