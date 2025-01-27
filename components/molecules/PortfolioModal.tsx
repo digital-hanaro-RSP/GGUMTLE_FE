@@ -14,7 +14,7 @@ interface PortfolioModalProps {
   error: string | null;
   setError: (error: string | null) => void;
   // 새로운 prop 추가
-  currentInvestmentType: InvestmentType;
+  currentInvestmentType: InvestmentType | null;
 }
 
 const investmentTypeConfig = {

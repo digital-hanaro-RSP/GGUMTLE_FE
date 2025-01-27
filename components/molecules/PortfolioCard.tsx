@@ -35,8 +35,8 @@ type CustomDoughnutOptions = ChartOptions<'doughnut'> & {
 interface PortfolioCardProps {
   currentPortfolio: CurrentPortfolio;
   goalPortfolio: GoalPortfolio;
-  onPortfolioUpdate: () => Promise<void>;
-  investmentType: InvestmentType;
+  onPortfolioUpdate?: () => Promise<void>; // optional로 변경
+  investmentType?: InvestmentType; // optional로 변경
 }
 
 interface CustomChartData {
@@ -199,7 +199,9 @@ export const PortfolioCard = ({
       setIsLoading(true);
       setError(null);
       await setManualPortfolio(type);
-      await onPortfolioUpdate();
+      if (onPortfolioUpdate) {
+        await onPortfolioUpdate();
+      }
       handleModalClose();
     } catch (err) {
       const errorMessage =
@@ -361,7 +363,7 @@ export const PortfolioCard = ({
         isLoading={isLoading}
         error={error}
         setError={setError}
-        currentInvestmentType={investmentType}
+        currentInvestmentType={investmentType || null}
       />
     </Card>
   );
