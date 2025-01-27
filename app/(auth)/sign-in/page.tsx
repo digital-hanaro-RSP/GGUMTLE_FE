@@ -52,8 +52,6 @@ export default function SignInPage() {
             height={80}
             alt={'로그인 아이콘'}
             className='mb-3'
-            priority
-            unoptimized
           />
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-2'>
             당신의 버킷리스트를 이루는{'\n'}현명한 자산관리의 시작

@@ -253,7 +253,6 @@ export default function Post({
                       className='w-full'
                       fill
                       priority={idx === 0}
-                      unoptimized
                     />
                   </div>
                 </SwiperSlide>
