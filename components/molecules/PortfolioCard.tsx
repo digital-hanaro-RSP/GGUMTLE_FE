@@ -18,6 +18,7 @@ import {
   Plugin,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { BsPencilSquare } from 'react-icons/bs';
 import { useState } from 'react';
 import { PortfolioDetails } from './PortfolioDetails';
 import { PortfolioModal } from './PortfolioModal';
@@ -278,7 +279,7 @@ export const PortfolioCard = ({
       </div>
       <div className='flex justify-between gap-4 mb-6'>
         <div
-          className={`w-1/2 ${selectedPortfolio === 'goal' ? '' : ''}`}
+          className={`w-1/2 flex items-center justify-center ${selectedPortfolio === 'goal' ? '' : ''}`}
           onClick={() => handleChartClick('goal')}
           style={{ cursor: 'pointer' }}
         >
@@ -289,7 +290,7 @@ export const PortfolioCard = ({
           />
         </div>
         <div
-          className={`w-1/2 ${selectedPortfolio === 'current' ? '' : ''}`}
+          className={`w-1/2 flex items-center justify-center ${selectedPortfolio === 'current' ? '' : ''}`}
           onClick={() => handleChartClick('current')}
           style={{ cursor: 'pointer' }}
         >
@@ -308,12 +309,8 @@ export const PortfolioCard = ({
           className='mb-2'
         />
         {isExpanded && (
-          <div
-            className={`transition-all duration-300 ease-in-out ${
-              isExpanded ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0'
-            }`}
-          >
-            <p className='text-gray-700 font-semibold mb-2 text-center'>
+          <div className='mt-2 w-full'>
+            <p className='text-gray-700 font-semibold w-full text-center mb-2'>
               {selectedPortfolio === 'goal'
                 ? '목표 포트폴리오'
                 : '현재 포트폴리오'}
@@ -325,15 +322,16 @@ export const PortfolioCard = ({
               isGoal={selectedPortfolio === 'goal'}
               onHover={setHoveredSection}
             />
-            {isExpanded && selectedPortfolio === 'goal' && (
+            <div className='flex justify-center mt-4'>
               <button
                 onClick={handleModalOpen}
-                className='absolute bottom-0 right-0 bg-primary-main text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2'
+                className='flex items-center gap-2 text-sm text-primary-main hover:text-primary-dark transition-colors focus:outline-none'
                 aria-label='목표 포트폴리오 수정'
               >
-                목표 포트폴리오 수정
+                <BsPencilSquare className='w-4 h-4' />
+                <span>목표 포트폴리오 수정하기</span>
               </button>
-            )}
+            </div>
           </div>
         )}
       </div>
