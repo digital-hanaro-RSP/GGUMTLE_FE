@@ -105,7 +105,6 @@ export const ShareToGroup = () => {
               width={36}
               height={36}
               unoptimized
-              priority
             />
             <div className='flex flex-col'>
               <p className='text-center break-all'>
@@ -123,7 +122,6 @@ export const ShareToGroup = () => {
               alt='Animated GIF'
               width={36}
               height={36}
-              priority
               unoptimized
             />
           </div>
@@ -257,7 +255,6 @@ export const GroupListDrawer = ({ title, nickname }: GroupListDrawerProps) => {
                 width={150}
                 height={150}
                 className='mx-auto'
-                priority
               />
             </div>
             <DrawerFooter className='flex flex-col justify-center items-center gap-0 py-0'>

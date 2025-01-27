@@ -9,8 +9,6 @@ export default function NewEvent({ content, userBriefInfo }: Post) {
         alt='Animated GIF'
         width={36}
         height={36}
-        priority
-        unoptimized
       />
       <div className='flex flex-col items-center'>
         <span className='text-[15px] font-bold'>
@@ -26,8 +24,6 @@ export default function NewEvent({ content, userBriefInfo }: Post) {
         alt='Animated GIF'
         width={36}
         height={36}
-        priority
-        unoptimized
       />
     </div>
   );
