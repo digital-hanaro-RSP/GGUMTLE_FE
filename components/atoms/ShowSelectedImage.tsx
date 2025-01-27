@@ -35,6 +35,7 @@ const ShowSelectedImage: ForwardRefRenderFunction<
         height={100}
         className='object-cover rounded-[10px] w-full h-full'
         priority
+        unoptimized
       />
       <button
         onClick={() => {
