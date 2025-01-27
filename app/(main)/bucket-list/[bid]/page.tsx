@@ -99,7 +99,7 @@ export default function BucketListDetail({
     }
     if (bucketList) {
       const now = new Date();
-      const start = bucketList.createdAt;
+      const start = new Date(bucketList.createdAt);
       const restPercentRatio = Math.floor((100 - percent) / percent);
       const result = (now.getTime() - start.getTime()) * restPercentRatio;
       if (result > 1000 * 60 * 60 * 24 * 30)
@@ -154,7 +154,6 @@ export default function BucketListDetail({
                       <strong className='text-primary-main'>
                         {calculateExpect()}
                       </strong>
-                      <small> 개월</small>
                     </h1>
                     <small className='text-gray-500'>
                       {format(new Date(), 'yyyy년 M월 d일', { locale: ko })}{' '}
