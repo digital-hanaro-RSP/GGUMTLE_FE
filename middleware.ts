@@ -45,7 +45,8 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|image|gif|support|font|api/auth|sign-up|sign-in|start|$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|images|video|api/auth|login|sign-up|sign-in|start|$).*)',
+    '/login',
     '/',
     '/mydata/consent', // consent 페이지 추가
   ],
