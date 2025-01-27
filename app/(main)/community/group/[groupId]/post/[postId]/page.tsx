@@ -5,6 +5,7 @@ import CommentInput from '@/components/molecules/CommentInput';
 import Post from '@/components/molecules/Post';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
+import { useUserApi } from '@/hooks/useUser/useUser';
 import { Comment as CommentType, Post as PostType } from '@/types/Community';
 import { LazyMotion, domAnimation, m } from 'motion/react';
 import { useParams } from 'next/navigation';
@@ -15,10 +16,11 @@ export default function PostIdPage() {
   const [post, setPost] = useState<PostType | null>(null);
   const [isGroupMember, setIsGroupMember] = useState(false);
   const [commentTrigger, setCommentTrigger] = useState(0); // 댓글 추가 트리거
+  const [userImage, setUserImage] = useState<string | null>(null);
   const param = useParams();
 
   const { getPost, getComments, createComment, isMember } = useCommunityApi();
-
+  const { getUserInfo } = useUserApi();
   // 멤버십 확인
   useEffect(() => {
     const checkMembership = async () => {
@@ -45,6 +47,15 @@ export default function PostIdPage() {
 
     fetchPost();
   }, [param.groupId, param.postId]);
+
+  // 임시로 유저 데이터 가져오기 나중에 zustand로 바꾸자
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userData = await getUserInfo();
+      setUserImage(userData.profileImageUrl);
+    };
+    fetchUser();
+  }, []);
 
   const {
     data: comments,
@@ -122,7 +133,9 @@ export default function PostIdPage() {
         </div>
       </LazyMotion>
 
-      {isGroupMember && <CommentInput onClick={handleCreateComment} />}
+      {isGroupMember && (
+        <CommentInput onClick={handleCreateComment} userImage={userImage} />
+      )}
     </div>
   );
 }

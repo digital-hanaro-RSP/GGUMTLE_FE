@@ -1,6 +1,5 @@
 import { IoIosSend } from 'react-icons/io';
 import { useState } from 'react';
-import { Button } from '../atoms/Button';
 import TextArea from '../atoms/TextArea';
 import UserProfile from '../atoms/UserProfile';
 
@@ -16,8 +15,10 @@ import UserProfile from '../atoms/UserProfile';
 
 export default function CommentInput({
   onClick,
+  userImage,
 }: {
   onClick: (comment: string) => void;
+  userImage: string | null;
 }) {
   const [comment, setComment] = useState('');
 
@@ -42,7 +43,9 @@ export default function CommentInput({
   return (
     <div className='fixed bottom-[48px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] w-full h-[90px] bg-white border-t border-[#D9D9D9] z-10'>
       <div className='flex gap-[10px] w-full items-center'>
-        <UserProfile imageUrl={'https://picsum.photos/36/36'} />
+        <UserProfile
+          imageUrl={userImage ?? '/image/icons/default-profile.png'}
+        />
 
         <div className='flex-1 '>
           <TextArea

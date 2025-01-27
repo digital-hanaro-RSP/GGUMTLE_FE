@@ -29,7 +29,7 @@ export const Default: Story = {
     liked: false,
     userBriefInfo: {
       name: '홍길동',
-      profileImage: 'https://picsum.photos/36/36',
+      profileImageUrl: 'https://picsum.photos/36/36',
       nickname: '길동이',
     },
     likeCount: 5,
@@ -65,7 +65,7 @@ export const NoProfileImage: Story = {
     ...Default.args,
     userBriefInfo: {
       name: '프로필 없음',
-      profileImage: '',
+      profileImageUrl: '',
       nickname: '무프로필',
     },
   },
