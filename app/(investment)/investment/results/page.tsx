@@ -136,6 +136,7 @@ export default function ResultsPage() {
                 fill
                 className='object-contain'
                 unoptimized
+                priority
               />
             </div>
           </div>

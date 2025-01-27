@@ -9,20 +9,28 @@ import {
 } from '@/components/organisms/BucketCreateMenu';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import useCreateBucketStore from '@/store/useCreateBucketStore';
-import { bucketListTagType, createBucketListReq } from '@/types/BucketList';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { createBucketListReq, getBucketListbyIdRes } from '@/types/BucketList';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 
-export default function BucketListRegisterPage() {
-  const searchParams = useSearchParams();
-  const { createBucketList } = useBucketListApi();
-  const router = useRouter();
-
+export default function BucketListEdit({
+  params,
+}: {
+  params: { bid: number };
+}) {
   const {
     setTitle,
     setTagType,
-    setOriginId,
+    setDate,
+    setIsDueDate,
+    setHowTo,
+    setAutoAllocate,
+    setCycleOpt1,
+    setCycleOpt2,
+    setAllocateAmount,
+    setGoalAmount,
+    setMemo,
     reset,
     title,
     tagType,
@@ -37,6 +45,22 @@ export default function BucketListRegisterPage() {
     memo,
     originId,
   } = useCreateBucketStore();
+  const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
+  const { getBucketListbyId, editBucketListbyId } = useBucketListApi();
+  useEffect(() => {
+    const fetchBucketListbyId = async () => {
+      await getBucketListbyId(params.bid)
+        .then((res) => {
+          setBucketList(res);
+        })
+        .catch((err) => {
+          alert(err);
+        });
+    };
+    reset();
+    fetchBucketListbyId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const createCronCode = (
     cycleOpt1: string | undefined,
@@ -54,37 +78,14 @@ export default function BucketListRegisterPage() {
     }
   };
 
-  useEffect(() => {
-    reset();
-    const getTag = searchParams.get('tagType');
-    const getTitle = searchParams.get('title');
-    const getOriginId = searchParams.get('id');
+  const router = useRouter();
 
-    const getTagType = (tag: string | null): bucketListTagType | undefined => {
-      switch (tag) {
-        case 'DO':
-        case 'GO':
-        case 'LEARN':
-        case 'BE':
-        case 'HAVE':
-          return tag;
-        default:
-          return undefined;
-      }
-    };
-    setTagType(getTagType(getTag));
-    setTitle(getTitle ?? '');
-    setOriginId(parseInt(getOriginId ?? ''));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const createBucket = async () => {
+  const updateBucket = async () => {
     const formData: createBucketListReq = {
       title: title,
       tagType: tagType,
       isDueSet: isDueDate,
-      dueDate: date?.toISOString().split('T')[0],
+      dueDate: date?.toString().split('T')[0],
       howTo: howTo,
       isAutoAllocate: autoAllocate,
       allocateAmount: allocateAmount,
@@ -95,7 +96,11 @@ export default function BucketListRegisterPage() {
       originId: originId,
       // safeBox: 0,
     };
-    await createBucketList(formData)
+    console.log(
+      '🚀 ~ updateBucket ~ formData: createBucketListReq.memo:',
+      memo
+    );
+    await editBucketListbyId(params.bid, formData)
       .then((res) => {
         console.log(res);
         reset();
@@ -106,6 +111,29 @@ export default function BucketListRegisterPage() {
       });
   };
 
+  useEffect(() => {
+    if (bucketList) {
+      setTitle(bucketList.title);
+      setTagType(bucketList.tagType);
+      setDate(bucketList.dueDate);
+      setIsDueDate(bucketList.isDueSet);
+      setHowTo(bucketList.howTo);
+      setAutoAllocate(bucketList.isAutoAllocate);
+      setAllocateAmount(bucketList.allocateAmount ?? 0);
+      setGoalAmount(bucketList.goalAmount);
+      setMemo(bucketList.memo);
+      const interval = (bucketList.cronCycle ?? '').split(' ');
+      if (interval[2] !== '*') {
+        setCycleOpt1('Monthly');
+        setCycleOpt2(interval[2]);
+      } else if (interval[4] !== '*') {
+        setCycleOpt1('Weekly');
+        setCycleOpt2(interval[4]);
+      } else {
+        setCycleOpt1('Daily');
+      }
+    }
+  }, [bucketList]);
   const activateButton = () => {
     const requiredDefaultVars = [title, tagType, isDueDate, howTo];
     const checkDefaultVars = () => {
@@ -138,23 +166,24 @@ export default function BucketListRegisterPage() {
       !!title && checkDefaultVars() && checkDueDateVars() && checkHowToVars()
     );
   };
-
   return (
-    <form action={createBucket} className='p-4 w-full'>
-      <CreateBucketTitle />
-      <CreateBucketDueDate />
-      <CreateBucketHowTo />
-      <CreateBucketMemo />
-      <div
-        className={cn(
-          'pt-3 w-full flex justify-center items-center',
-          activateButton() ? 'animate-fadeIn' : 'hidden'
-        )}
-      >
-        <Button size='lg' isDisabled={!activateButton()}>
-          생성하기
-        </Button>
-      </div>
-    </form>
+    <>
+      <form action={updateBucket} className='p-4 w-full'>
+        <CreateBucketTitle />
+        <CreateBucketDueDate />
+        <CreateBucketHowTo />
+        <CreateBucketMemo />
+        <div
+          className={cn(
+            'pt-3 w-full flex justify-center items-center',
+            activateButton() ? 'animate-fadeIn' : 'hidden'
+          )}
+        >
+          <Button size='lg' isDisabled={!activateButton()}>
+            수정하기
+          </Button>
+        </div>
+      </form>
+    </>
   );
 }
