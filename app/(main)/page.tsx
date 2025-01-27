@@ -96,6 +96,8 @@ export default function MainPage() {
           className='h-6 w-auto ml-2'
           width={50}
           height={50}
+          priority
+          unoptimized
         />
       </div>
 

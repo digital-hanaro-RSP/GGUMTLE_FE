@@ -148,6 +148,8 @@ export const BucketListCard = ({
                     alt='img'
                     width={40}
                     height={40}
+                    priority
+                    unoptimized
                   />
                 ) : (
                   <Image
@@ -155,6 +157,8 @@ export const BucketListCard = ({
                     alt='img'
                     width={40}
                     height={40}
+                    priority
+                    unoptimized
                   />
                 )}
               </div>

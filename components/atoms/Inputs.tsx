@@ -238,6 +238,8 @@ function ImageInput(
         alt='image'
         width={60}
         height={60}
+        priority
+        unoptimized
       />
       <p className='text-[14px] font-medium text-primary-placeholder'>
         이미지 추가

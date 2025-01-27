@@ -167,6 +167,8 @@ export default function PhonePage() {
             height={60}
             alt={'휴대폰 아이콘'}
             className='mb-3'
+            priority
+            unoptimized
           />
           <h1 className='text-xl font-bold tracking-tighter whitespace-pre-line text-center text-primary-main mb-4'>
             간단한 휴대폰 인증으로{'\n'}본인 확인을 완료하세요

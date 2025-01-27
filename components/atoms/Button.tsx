@@ -73,7 +73,14 @@ export const ImgButton = ({
       )}
       {...props}
     >
-      <Image src={src} alt='Image Button' fill objectFit='cover' />
+      <Image
+        src={src}
+        alt='Image Button'
+        fill
+        objectFit='cover'
+        priority
+        unoptimized
+      />
     </button>
   );
 };
