@@ -28,6 +28,19 @@ export default function BucketListDetail({
   const { getBucketListbyId, deleteBucketListbyId, changeBucketListStatus } =
     useBucketListApi();
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
+  const [percent, setPercent] = useState<number>(0);
+
+  useEffect(() => {
+    setPercent(
+      calculatePercent(
+        bucketList?.howTo,
+        bucketList?.goalAmount,
+        bucketList?.safeBox,
+        new Date(bucketList?.dueDate ?? 0),
+        new Date(bucketList?.createdAt ?? 0)
+      )
+    );
+  }, [bucketList]);
 
   useEffect(() => {
     const fetchBucketListbyId = async () => {
@@ -79,6 +92,23 @@ export default function BucketListDetail({
     };
     del();
   };
+
+  const calculateExpect = () => {
+    if (percent === 0) {
+      return '계산하기 위해 진행이 필요합니다.';
+    }
+    if (bucketList) {
+      const now = new Date();
+      const start = new Date(bucketList.createdAt);
+      const restPercentRatio = Math.floor((100 - percent) / percent);
+      const result = (now.getTime() - start.getTime()) * restPercentRatio;
+      if (result > 1000 * 60 * 60 * 24 * 30)
+        return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
+      return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+    }
+    return '계산하기 위해 진행이 필요합니다.';
+  };
+
   return (
     <>
       <div>
@@ -90,13 +120,7 @@ export default function BucketListDetail({
               isSelectMode={false}
               safeBox={bucketList?.safeBox}
               howTo={bucketList?.howTo}
-              dataPercent={calculatePercent(
-                bucketList?.howTo,
-                bucketList?.goalAmount,
-                bucketList?.safeBox,
-                new Date(bucketList?.dueDate ?? 0),
-                new Date(bucketList?.createdAt ?? 0)
-              )}
+              dataPercent={percent}
               title={bucketList?.title}
               tagType={bucketList?.tagType}
               bucketId={bucketList?.id}
@@ -127,8 +151,9 @@ export default function BucketListDetail({
                   <div className='pt-4 ml-4'>
                     <h1 className='text-5xl font-semibold'>
                       {' '}
-                      <strong className='text-primary-main'>1.6</strong>
-                      <small> 개월</small>
+                      <strong className='text-primary-main'>
+                        {calculateExpect()}
+                      </strong>
                     </h1>
                     <small className='text-gray-500'>
                       {format(new Date(), 'yyyy년 M월 d일', { locale: ko })}{' '}

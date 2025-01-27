@@ -150,7 +150,7 @@ export const calculatePercent = (
     goalAmount !== undefined &&
     currentAmount !== undefined
   ) {
-    return Math.min((100 * currentAmount) / goalAmount, 100);
+    return Math.min(Math.max((100 * currentAmount) / goalAmount, 0), 100);
   } else if (createdAt) {
     const now = new Date().getTime();
     const start = createdAt.getTime();
