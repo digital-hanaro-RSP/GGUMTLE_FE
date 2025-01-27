@@ -18,7 +18,7 @@ export const Default: Story = {
     content: '세계 일주하기',
     userBriefInfo: {
       name: '조민석',
-      profileImage: 'https://picsum.photos/36/36',
+      profileImageUrl: 'https://picsum.photos/36/36',
       nickname: '민조',
     },
   },
@@ -29,7 +29,7 @@ export const LongContent: Story = {
     content: '히말라야 산맥 등반하고 정상에서 일출 보기',
     userBriefInfo: {
       name: '조민석',
-      profileImage: 'https://picsum.photos/36/36',
+      profileImageUrl: 'https://picsum.photos/36/36',
       nickname: '민조',
     },
   },
