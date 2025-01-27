@@ -39,3 +39,31 @@ export interface InvestmentTypeResponse {
   userName: string;
   investmentType: InvestmentType;
 }
+
+export interface PortfolioTemplate {
+  id: number;
+  name: InvestmentType;
+  depositWithdrawalRatio: number;
+  savingTimeDepositRatio: number;
+  investmentRatio: number;
+  foreignCurrencyRatio: number;
+  pensionRatio: number;
+  etcRatio: number;
+}
+
+export interface PortfolioTemplatesResponse {
+  templates: PortfolioTemplate[];
+}
+
+export interface ManualPortfolioResponse {
+  id: number;
+  userId: string;
+  depositWithdrawalRatio: number;
+  savingTimeDepositRatio: number;
+  investmentRatio: number;
+  foreignCurrencyRatio: number;
+  pensionRatio: number;
+  etcRatio: number;
+  createdAt: string;
+  updatedAt: string;
+}

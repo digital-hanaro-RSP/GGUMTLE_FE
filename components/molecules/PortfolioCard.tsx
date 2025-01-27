@@ -2,7 +2,13 @@
 
 import { MoreButton } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
-import { CurrentPortfolio, GoalPortfolio } from '@/types/Portfolio';
+import { usePortfolioApi } from '@/hooks/usePortfolio/usePortfolio';
+import {
+  CurrentPortfolio,
+  GoalPortfolio,
+  InvestmentType,
+  PortfolioTemplate,
+} from '@/types/Portfolio';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -14,6 +20,7 @@ import {
 import { Doughnut } from 'react-chartjs-2';
 import { useState } from 'react';
 import { PortfolioDetails } from './PortfolioDetails';
+import { PortfolioModal } from './PortfolioModal';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -25,6 +32,7 @@ interface DoughnutOptions extends ChartOptions<'doughnut'> {
 interface PortfolioCardProps {
   currentPortfolio: CurrentPortfolio;
   goalPortfolio: GoalPortfolio;
+  onPortfolioUpdate: () => Promise<void>;
 }
 
 interface ChartData {
@@ -54,14 +62,30 @@ const chartOptions = (centerText: string): DoughnutOptions => ({
     },
     tooltip: {
       enabled: true,
+      callbacks: {
+        label: (context) => {
+          const value = context.raw as number;
+          return `${context.label}: ${value.toLocaleString()}${
+            context.dataset.label === '목표' ? '%' : '원'
+          }`;
+        },
+      },
     },
   },
   elements: {
     arc: {
       borderWidth: 0,
+      hoverOffset: 8,
     },
   },
   centerText,
+  hover: {
+    mode: 'nearest',
+    intersect: true,
+  },
+  animation: {
+    duration: 500,
+  },
 });
 
 const textCenter: Plugin<'doughnut'> = {
@@ -106,12 +130,23 @@ const getBackgroundColors = (
 export const PortfolioCard = ({
   currentPortfolio,
   goalPortfolio,
+  onPortfolioUpdate,
 }: PortfolioCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  // selectedPortfolio를 상수로 변경하여 항상 'goal'로 고정
   const [selectedPortfolio, setSelectedPortfolio] = useState<
     'goal' | 'current'
   >('goal');
   const [hoveredSection, setHoveredSection] = useState<string | null>('입출금');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [templates, setTemplates] = useState<PortfolioTemplate[] | null>(null);
+  const { getPortfolioTemplates, setManualPortfolio } = usePortfolioApi();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   const handleToggleDetail = () => {
     setIsExpanded((prev) => {
@@ -128,6 +163,37 @@ export const PortfolioCard = ({
     setSelectedPortfolio(type);
     if (!isExpanded) {
       setIsExpanded(true);
+    }
+  };
+
+  const handleModalOpen = async () => {
+    try {
+      setIsLoading(true);
+      const templatesData = await getPortfolioTemplates();
+      setTemplates(templatesData.templates);
+      setIsModalOpen(true);
+    } catch (err) {
+      setError('템플릿을 불러오는데 실패했습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirm = async (type: InvestmentType) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await setManualPortfolio(type);
+      await onPortfolioUpdate();
+      handleModalClose();
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : '포트폴리오 설정에 실패했습니다.';
+      alert(errorMessage);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -198,42 +264,43 @@ export const PortfolioCard = ({
     ],
   };
 
+  // const LoadingSpinner = () => (
+  //   <div className='flex flex-col items-center justify-center h-[calc(100vh-4rem)] gap-4'>
+  //     <div className='animate-spin rounded-full h-12 w-12 border-b-2 border-primary-main'></div>
+  //     <p className='text-gray-600'>데이터를 불러오는 중입니다...</p>
+  //   </div>
+  // );
+
   return (
     <Card className='px-6 py-2'>
       <div className='text-xl font-semibold mb-6'>
         총 자산: {getTotalAssets().toLocaleString()}원
       </div>
-
       <div className='flex justify-between gap-4 mb-6'>
         <div
-          className='w-1/2'
+          className={`w-1/2 ${selectedPortfolio === 'goal' ? '' : ''}`}
           onClick={() => handleChartClick('goal')}
           style={{ cursor: 'pointer' }}
         >
-          <div className=''>
-            <Doughnut
-              data={goalChartData}
-              options={chartOptions('목표')}
-              plugins={[textCenter]}
-            />
-          </div>
+          <Doughnut
+            data={goalChartData}
+            options={chartOptions('목표')}
+            plugins={[textCenter]}
+          />
         </div>
         <div
-          className='w-1/2'
+          className={`w-1/2 ${selectedPortfolio === 'current' ? '' : ''}`}
           onClick={() => handleChartClick('current')}
           style={{ cursor: 'pointer' }}
         >
-          <div className=''>
-            <Doughnut
-              data={currentChartData}
-              options={chartOptions('현재')}
-              plugins={[textCenter]}
-            />
-          </div>
+          <Doughnut
+            data={currentChartData}
+            options={chartOptions('현재')}
+            plugins={[textCenter]}
+          />
         </div>
       </div>
-
-      <div className='flex flex-col items-center'>
+      <div className='flex flex-col items-center relative'>
         <MoreButton
           size='xs'
           direction={isExpanded ? 'up' : 'down'}
@@ -241,7 +308,11 @@ export const PortfolioCard = ({
           className='mb-2'
         />
         {isExpanded && (
-          <div className='mt-2 w-full'>
+          <div
+            className={`transition-all duration-300 ease-in-out ${
+              isExpanded ? 'opacity-100 max-h-[1000px]' : 'opacity-0 max-h-0'
+            }`}
+          >
             <p className='text-gray-700 font-semibold mb-2 text-center'>
               {selectedPortfolio === 'goal'
                 ? '목표 포트폴리오'
@@ -254,9 +325,27 @@ export const PortfolioCard = ({
               isGoal={selectedPortfolio === 'goal'}
               onHover={setHoveredSection}
             />
+            {isExpanded && selectedPortfolio === 'goal' && (
+              <button
+                onClick={handleModalOpen}
+                className='absolute bottom-0 right-0 bg-primary-main text-white px-4 py-2 rounded-lg hover:bg-primary-dark transition-colors focus:outline-none focus:ring-2 focus:ring-primary-main focus:ring-offset-2'
+                aria-label='목표 포트폴리오 수정'
+              >
+                목표 포트폴리오 수정
+              </button>
+            )}
           </div>
         )}
       </div>
+      <PortfolioModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        templates={templates}
+        onConfirm={handleConfirm}
+        isLoading={isLoading}
+        error={error}
+        setError={setError} // 추가
+      />
     </Card>
   );
 };
