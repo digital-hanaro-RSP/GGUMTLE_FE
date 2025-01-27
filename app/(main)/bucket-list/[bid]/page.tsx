@@ -10,6 +10,8 @@ import {
 } from '@/components/molecules/DropCard';
 import { ProgressBar } from '@/components/molecules/ProgressBar';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
+import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
+import { transferReq } from '@/types/Account';
 import { getBucketListbyIdRes } from '@/types/BucketList';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -23,7 +25,8 @@ export default function BucketListDetail({
   params: { bid: number };
 }) {
   const router = useRouter();
-  const { getBucketListbyId, deleteBucketListbyId } = useBucketListApi();
+  const { getBucketListbyId, deleteBucketListbyId, changeBucketListStatus } =
+    useBucketListApi();
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
 
   useEffect(() => {
@@ -39,17 +42,38 @@ export default function BucketListDetail({
     fetchBucketListbyId();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const { changeBucketListStatus } = useBucketListApi();
+  const { getAccountInfo, bringOutMoneyToDreamAccount } = useDreamAccountApi();
 
   const deleteBucket = () => {
     const del = async () => {
       if (bucketList?.id) {
-        await deleteBucketListbyId(bucketList?.id)
-          .then(() => {
-            router.push('/bucket-list');
+        await getAccountInfo()
+          .then(async (res) => {
+            if (bucketList.safeBox) {
+              const formData: transferReq = {
+                amount: bucketList.safeBox,
+              };
+              await bringOutMoneyToDreamAccount(formData, res.id, params.bid)
+                .then(async () => {
+                  await deleteBucketListbyId(bucketList?.id)
+                    .then(() => {
+                      alert(
+                        '삭제에 성공했습니다. 잔액은 꿈 계좌로 이동시켜드릴게요.'
+                      );
+                      router.push('/bucket-list');
+                    })
+                    .catch((err) => {
+                      alert(err);
+                    });
+                })
+                .catch(() => {
+                  alert('돈을 내보내는데 실패했습니다.');
+                  window.location.reload();
+                });
+            }
           })
-          .catch((err) => {
-            alert(err);
+          .catch(() => {
+            alert('삭제에 실패했습니다.');
           });
       }
     };
@@ -89,7 +113,7 @@ export default function BucketListDetail({
                   )}
                 />
               </div>
-              <div className='pt-8 pl-20 pb-20 z-11 relative'>
+              <div className='pt-8 pb-20 z-11 relative'>
                 <div className='bg-[#F4F6F8]'>
                   <h1 className='font-semibold text-3xl'>
                     고객님의 <br /> 예상 완료 기간은?
@@ -112,7 +136,7 @@ export default function BucketListDetail({
                     </small>
                   </div>
                 </div>
-                <div className='w-full flex justify-end items-center bg-none absolute top-28 right-10'>
+                <div className='w-full flex justify-end items-center bg-none'>
                   <video
                     className='w-96'
                     src='/image/video/pig.mp4'

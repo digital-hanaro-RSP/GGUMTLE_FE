@@ -94,7 +94,7 @@ export const MoneyTransferDrawer = ({
           });
         break;
       case 'BRINGOUT':
-        await bringOutMoneyToDreamAccount(formData, toId, accountInfo?.id)
+        await bringOutMoneyToDreamAccount(formData, accountInfo?.id, fromId)
           .then(() => {
             setTransferSuccess(true);
           })
@@ -160,6 +160,7 @@ export const MoneyTransferDrawer = ({
         });
     };
     getAccount();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [transferDrawerOpen]);
 
   useEffect(() => {
@@ -169,6 +170,7 @@ export const MoneyTransferDrawer = ({
     if (transferType === 'FILLUP' && bucketList) {
       setToBalance({ title: bucketList.title, balance: bucketList.safeBox });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bucketList]);
 
   useEffect(() => {
@@ -190,6 +192,7 @@ export const MoneyTransferDrawer = ({
           break;
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInfo, setAccountInfo]);
 
   console.log('🚀 ~ useEffect ~ transferType:', transferType);
@@ -307,15 +310,15 @@ export const MoneyTransferDrawer = ({
                 >
                   <AlertDialogContent className='bg-white z-[1000]'>
                     <AlertDialogHeader>
-                      <AlertDialogTitle>
+                      <AlertDialogTitle className='break-keep'>
                         입력하신 금액이 맞으신가요?
                       </AlertDialogTitle>
                       <AlertDialogDescription className='text-5xl font-semibold text-primary-main'>
                         {amount}원
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <Button className='p-0' onClick={handleTransfer}>
+                    <AlertDialogFooter className='flex flex-col justify-center items-center '>
+                      <Button className='py-2' onClick={handleTransfer}>
                         네, 맞아요
                       </Button>
                       <AlertDialogCancel className='btn-md rounded-xl text-[15px]'>
