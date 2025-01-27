@@ -35,7 +35,7 @@ const basePost: PostType & { isDetailPage?: boolean; onDelete?: () => void } = {
   commentCount: 3,
   userBriefInfo: {
     name: '김철수',
-    profileImage: 'https://picsum.photos/36/36',
+    profileImageUrl: 'https://picsum.photos/36/36',
     nickname: '김철수',
   },
   liked: false,

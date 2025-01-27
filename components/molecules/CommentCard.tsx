@@ -2,7 +2,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
@@ -74,7 +73,8 @@ export default function CommentCard({
           <div className='flex gap-[20px] items-center'>
             <UserProfile
               imageUrl={
-                userBriefInfo?.profileImage || 'https://picsum.photos/36/36'
+                userBriefInfo?.profileImageUrl ||
+                '/image/icons/default-profile.png'
               }
             />
             <div className='flex flex-col gap-[2px]'>

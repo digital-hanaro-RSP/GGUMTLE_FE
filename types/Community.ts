@@ -3,7 +3,7 @@ import { CurrentPortfolio, GoalPortfolio } from './Portfolio';
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type UserBriefInfo = {
   name: string;
-  profileImage: string;
+  profileImageUrl: string;
   nickname: string;
 };
 
