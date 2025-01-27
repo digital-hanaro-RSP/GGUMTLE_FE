@@ -34,7 +34,6 @@ export default function StartPage() {
             fill
             priority
             className='object-cover'
-            unoptimized
           />
         </div>
       </div>
