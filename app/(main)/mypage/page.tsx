@@ -13,6 +13,7 @@ import { PasswordEditModal } from '@/components/molecules/PasswordEditModal';
 import { useUserApi } from '@/hooks/useUser/useUser';
 import { signOut } from 'next-auth/react';
 import { IoMenu } from 'react-icons/io5';
+import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
 interface UserInfo {
@@ -28,11 +29,12 @@ interface UserInfo {
 }
 
 export default function MyPage() {
+  const router = useRouter();
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditingNickname, setIsEditingNickname] = useState(false);
   const [isEditingPassword, setIsEditingPassword] = useState(false);
-  const { getUserInfo, updateUserInfo } = useUserApi();
+  const { getUserInfo, updateUserInfo, deleteUser } = useUserApi();
 
   const isMounted = useRef(false);
 
@@ -88,6 +90,21 @@ export default function MyPage() {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (
+      window.confirm('정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')
+    ) {
+      try {
+        await deleteUser();
+        await signOut({ redirect: false });
+        router.push('/start');
+      } catch (error) {
+        console.error('Failed to delete account:', error);
+        alert('회원탈퇴 처리 중 오류가 발생했습니다.');
+      }
+    }
+  };
+
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/login' });
   };
@@ -128,7 +145,10 @@ export default function MyPage() {
                 >
                   로그아웃
                 </DropCardItem>
-                <DropCardItem className='bg-gray-100 px-4 py-2 hover:bg-gray-200 whitespace-nowrap'>
+                <DropCardItem
+                  className='bg-gray-100 px-4 py-2 hover:bg-gray-200 whitespace-nowrap'
+                  onClick={handleDeleteAccount}
+                >
                   회원탈퇴
                 </DropCardItem>
               </DropCardItemList>
