@@ -34,8 +34,6 @@ export const CompleteClapping = () => {
           alt='img'
           width={200}
           height={200}
-          priority
-          unoptimized
         />
       </div>
     </>
@@ -104,12 +102,12 @@ export const ShareToGroup = () => {
               alt='Animated GIF'
               width={36}
               height={36}
-              unoptimized
-              priority
             />
             <div className='flex flex-col'>
               <p className='text-center break-all'>
-                <strong className='text-[15px] font-bold'>OOO님 &quot;</strong>
+                <strong className='text-[15px] font-bold'>
+                  ${userNickname}님 &quot;
+                </strong>
                 <strong className='text-[16px] text-primary-main font-bold '>
                   {title}
                 </strong>
@@ -123,11 +121,9 @@ export const ShareToGroup = () => {
               alt='Animated GIF'
               width={36}
               height={36}
-              priority
-              unoptimized
             />
           </div>
-          <GroupListDrawer title={title ?? ''} nickname={userNickname ?? ''} />
+          <GroupListDrawer title={title ?? ''} />
         </Card>
         <Button
           onClick={() => router.push('/bucket-list')}
@@ -143,10 +139,9 @@ export const ShareToGroup = () => {
 
 type GroupListDrawerProps = {
   title: string;
-  nickname: string;
 };
 
-export const GroupListDrawer = ({ title, nickname }: GroupListDrawerProps) => {
+export const GroupListDrawer = ({ title }: GroupListDrawerProps) => {
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [isOpenGroupDrawer, setIsOpenGroupDrawer] = useState(false);
   const [isCompleteSharing, setIsCompleteSharing] = useState(false);
@@ -169,7 +164,7 @@ export const GroupListDrawer = ({ title, nickname }: GroupListDrawerProps) => {
   const onClickShare = async (gid: number) => {
     if (selectedGroup !== null) {
       const formData: shareBucketlistCompleteReq = {
-        content: `${nickname}님 ${title} 버킷리스트 달성!`,
+        content: `${title}`,
         postType: 'NEWS',
       };
       await shareBucketlistComplete(gid, formData)

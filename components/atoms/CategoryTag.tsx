@@ -50,8 +50,6 @@ export default function CategoryTag({
           alt={content}
           width={isSelected ? 50 : 40}
           height={isSelected ? 50 : 40}
-          priority
-          unoptimized
         />
       </div>
       {isContentShow && <p>{content}</p>}
