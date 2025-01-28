@@ -49,7 +49,11 @@ export default function GroupLayout({
   const handleJoinGroup = async () => {
     await joinGroup(groupId);
     fetchIsMember();
-    window.location.reload();
+
+    if (params.postId !== undefined) {
+      // 일단 임시로 상세 글 페이지에서 가입하면 리로드해서 댓글 입력창 표시
+      window.location.reload();
+    }
   };
 
   const handleLeaveGroup = async () => {
