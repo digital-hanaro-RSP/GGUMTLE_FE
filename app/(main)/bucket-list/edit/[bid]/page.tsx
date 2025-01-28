@@ -104,7 +104,7 @@ export default function BucketListEdit({
       .then((res) => {
         console.log(res);
         reset();
-        router.push('/bucket-list');
+        router.push('/bucket-list?getRecommend=true');
       })
       .catch((err) => {
         alert(err);
@@ -133,7 +133,9 @@ export default function BucketListEdit({
         setCycleOpt1('Daily');
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bucketList]);
+
   const activateButton = () => {
     const requiredDefaultVars = [title, tagType, isDueDate, howTo];
     const checkDefaultVars = () => {

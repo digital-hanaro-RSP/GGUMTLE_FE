@@ -73,7 +73,7 @@ export default function BucketListDetail({
                       alert(
                         '삭제에 성공했습니다. 잔액은 꿈 계좌로 이동시켜드릴게요.'
                       );
-                      router.push('/bucket-list');
+                      router.push('/bucket-list?getRecommend=true');
                     })
                     .catch((err) => {
                       alert(err);

@@ -99,7 +99,7 @@ export default function BucketListRegisterPage() {
       .then((res) => {
         console.log(res);
         reset();
-        router.push('/bucket-list');
+        router.push('/bucket-list?getRecommend=true');
       })
       .catch((err) => {
         alert(err);
