@@ -44,7 +44,7 @@ export default function CommentInput({
     <div className='fixed bottom-[48px] left-1/2 -translate-x-1/2  max-w-screen-md flex flex-col gap-[10px] p-[10px] w-full h-[90px] bg-white border-t border-[#D9D9D9] z-10'>
       <div className='flex gap-[10px] w-full items-center'>
         <UserProfile
-          imageUrl={userImage ?? '/image/icons/default-profile.png'}
+          imageUrl={userImage || '/image/icons/default-profile.png'}
         />
 
         <div className='flex-1 '>
