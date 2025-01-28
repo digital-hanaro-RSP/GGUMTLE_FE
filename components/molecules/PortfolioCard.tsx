@@ -2,7 +2,13 @@
 
 import { MoreButton } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
-import { CurrentPortfolio, GoalPortfolio } from '@/types/Portfolio';
+import { usePortfolioApi } from '@/hooks/usePortfolio/usePortfolio';
+import {
+  CurrentPortfolio,
+  GoalPortfolio,
+  InvestmentType,
+  PortfolioTemplate,
+} from '@/types/Portfolio';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -10,24 +16,30 @@ import {
   Legend,
   ChartOptions,
   Plugin,
+  TooltipItem,
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
+import { BsPencilSquare } from 'react-icons/bs';
 import { useState } from 'react';
 import { PortfolioDetails } from './PortfolioDetails';
+import { PortfolioModal } from './PortfolioModal';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-interface DoughnutOptions extends ChartOptions<'doughnut'> {
-  cutout?: string | number;
+type CustomDoughnutOptions = ChartOptions<'doughnut'> & {
   centerText?: string;
-}
+  isSelected?: boolean;
+  isExpanded?: boolean;
+};
 
 interface PortfolioCardProps {
   currentPortfolio: CurrentPortfolio;
   goalPortfolio: GoalPortfolio;
+  onPortfolioUpdate?: () => Promise<void>; // optional로 변경
+  investmentType?: InvestmentType; // optional로 변경
 }
 
-interface ChartData {
+interface CustomChartData {
   labels: string[];
   datasets: {
     data: number[];
@@ -46,7 +58,11 @@ const CHART_COLORS = {
 
 const LABELS = ['입출금', '예적금', '투자', '외화', '연금', '기타'];
 
-const chartOptions = (centerText: string): DoughnutOptions => ({
+const chartOptions = (
+  centerText: string,
+  isSelected: boolean,
+  isExpanded: boolean
+): CustomDoughnutOptions => ({
   cutout: '50%',
   plugins: {
     legend: {
@@ -54,14 +70,32 @@ const chartOptions = (centerText: string): DoughnutOptions => ({
     },
     tooltip: {
       enabled: true,
+      callbacks: {
+        label: (context: TooltipItem<'doughnut'>) => {
+          const value = context.raw as number;
+          return `${context.label}: ${value.toLocaleString()}${
+            context.dataset.label === '목표' ? '%' : '원'
+          }`;
+        },
+      },
     },
   },
   elements: {
     arc: {
       borderWidth: 0,
+      hoverOffset: 8,
     },
   },
   centerText,
+  isSelected,
+  isExpanded,
+  hover: {
+    mode: 'nearest',
+    intersect: true,
+  },
+  animation: {
+    duration: 500,
+  },
 });
 
 const textCenter: Plugin<'doughnut'> = {
@@ -69,11 +103,14 @@ const textCenter: Plugin<'doughnut'> = {
   beforeDraw(chart: ChartJS<'doughnut'>) {
     const ctx = chart.canvas.getContext('2d')!;
     const { chartArea } = chart;
-    const text = (chart.options as DoughnutOptions).centerText || '';
+    const options = chart.options as CustomDoughnutOptions;
+    const text = options.centerText || '';
+    // isExpanded 상태를 확인하여 isSelected 값을 결정
+    const isSelected = options.isExpanded ? options.isSelected : false;
 
     ctx.save();
-    ctx.font = 'bold 16px sans-serif';
-    ctx.fillStyle = '#000';
+    ctx.font = isSelected ? 'bold 18px sans-serif' : 'bold 16px sans-serif';
+    ctx.fillStyle = isSelected ? '#069894' : '#5B5B5B';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
 
@@ -106,12 +143,24 @@ const getBackgroundColors = (
 export const PortfolioCard = ({
   currentPortfolio,
   goalPortfolio,
+  onPortfolioUpdate,
+  investmentType,
 }: PortfolioCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  // selectedPortfolio를 상수로 변경하여 항상 'goal'로 고정
   const [selectedPortfolio, setSelectedPortfolio] = useState<
     'goal' | 'current'
   >('goal');
   const [hoveredSection, setHoveredSection] = useState<string | null>('입출금');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [templates, setTemplates] = useState<PortfolioTemplate[] | null>(null);
+  const { getPortfolioTemplates, setManualPortfolio } = usePortfolioApi();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
 
   const handleToggleDetail = () => {
     setIsExpanded((prev) => {
@@ -128,6 +177,39 @@ export const PortfolioCard = ({
     setSelectedPortfolio(type);
     if (!isExpanded) {
       setIsExpanded(true);
+    }
+  };
+
+  const handleModalOpen = async () => {
+    try {
+      setIsLoading(true);
+      const templatesData = await getPortfolioTemplates();
+      setTemplates(templatesData.templates);
+      setIsModalOpen(true);
+    } catch (err) {
+      setError('템플릿을 불러오는데 실패했습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleConfirm = async (type: InvestmentType) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      await setManualPortfolio(type);
+      if (onPortfolioUpdate) {
+        await onPortfolioUpdate();
+      }
+      handleModalClose();
+    } catch (err) {
+      const errorMessage =
+        err instanceof Error ? err.message : '포트폴리오 설정에 실패했습니다.';
+      alert(errorMessage);
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -154,7 +236,7 @@ export const PortfolioCard = ({
     return <Card className='p-6'>Loading...</Card>;
   }
 
-  const currentChartData: ChartData = {
+  const currentChartData: CustomChartData = {
     labels: LABELS,
     datasets: [
       {
@@ -176,7 +258,7 @@ export const PortfolioCard = ({
     ],
   };
 
-  const goalChartData: ChartData = {
+  const goalChartData: CustomChartData = {
     labels: LABELS,
     datasets: [
       {
@@ -203,37 +285,43 @@ export const PortfolioCard = ({
       <div className='text-xl font-semibold mb-6'>
         총 자산: {getTotalAssets().toLocaleString()}원
       </div>
-
       <div className='flex justify-between gap-4 mb-6'>
         <div
-          className='w-1/2'
+          className={`w-1/2 flex items-center justify-center ${
+            selectedPortfolio === 'goal' && isExpanded ? 'scale-105' : ''
+          }`}
           onClick={() => handleChartClick('goal')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
         >
-          <div className=''>
-            <Doughnut
-              data={goalChartData}
-              options={chartOptions('목표')}
-              plugins={[textCenter]}
-            />
-          </div>
+          <Doughnut
+            data={goalChartData}
+            options={chartOptions(
+              '목표',
+              selectedPortfolio === 'goal',
+              isExpanded
+            )}
+            plugins={[textCenter]}
+          />
         </div>
         <div
-          className='w-1/2'
+          className={`w-1/2 flex items-center justify-center ${
+            selectedPortfolio === 'current' && isExpanded ? 'scale-105' : ''
+          }`}
           onClick={() => handleChartClick('current')}
-          style={{ cursor: 'pointer' }}
+          style={{ cursor: 'pointer', transition: 'transform 0.3s ease' }}
         >
-          <div className=''>
-            <Doughnut
-              data={currentChartData}
-              options={chartOptions('현재')}
-              plugins={[textCenter]}
-            />
-          </div>
+          <Doughnut
+            data={currentChartData}
+            options={chartOptions(
+              '현재',
+              selectedPortfolio === 'current',
+              isExpanded
+            )}
+            plugins={[textCenter]}
+          />
         </div>
       </div>
-
-      <div className='flex flex-col items-center'>
+      <div className='flex flex-col items-center relative'>
         <MoreButton
           size='xs'
           direction={isExpanded ? 'up' : 'down'}
@@ -242,7 +330,7 @@ export const PortfolioCard = ({
         />
         {isExpanded && (
           <div className='mt-2 w-full'>
-            <p className='text-gray-700 font-semibold mb-2 text-center'>
+            <p className='text-gray-700 font-semibold w-full text-center mb-2'>
               {selectedPortfolio === 'goal'
                 ? '목표 포트폴리오'
                 : '현재 포트폴리오'}
@@ -254,9 +342,29 @@ export const PortfolioCard = ({
               isGoal={selectedPortfolio === 'goal'}
               onHover={setHoveredSection}
             />
+            <div className='flex justify-center mt-4'>
+              <button
+                onClick={handleModalOpen}
+                className='flex items-center gap-2 text-sm text-primary-main hover:text-primary-dark transition-colors focus:outline-none'
+                aria-label='목표 포트폴리오 수정'
+              >
+                <BsPencilSquare className='w-4 h-4' />
+                <span>목표 포트폴리오 수정하기</span>
+              </button>
+            </div>
           </div>
         )}
       </div>
+      <PortfolioModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        templates={templates}
+        onConfirm={handleConfirm}
+        isLoading={isLoading}
+        error={error}
+        setError={setError}
+        currentInvestmentType={investmentType || null}
+      />
     </Card>
   );
 };

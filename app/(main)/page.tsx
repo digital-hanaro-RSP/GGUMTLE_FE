@@ -8,7 +8,7 @@ import { AdsResponse } from '@/types/Ads';
 import { PortfolioResponse } from '@/types/Portfolio';
 import { InvestmentTypeResponse, InvestmentType } from '@/types/Portfolio';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const investmentTypeConfig = {
   CONSERVATIVE: {
@@ -84,6 +84,28 @@ export default function MainPage() {
     };
   }, [getPortfolio, getInvestmentType, getAds, isLoading]);
 
+  const refreshPortfolioData = useCallback(async () => {
+    try {
+      const portfolioResult = await getPortfolio();
+      setPortfolioData(portfolioResult);
+    } catch (error) {
+      console.error('포트폴리오 데이터 로딩 실패:', error);
+    }
+  }, [getPortfolio]);
+
+  const handlePortfolioUpdate = useCallback(async () => {
+    try {
+      await refreshPortfolioData();
+      // 투자성향 데이터도 새로고침
+      const investmentResult = await getInvestmentType();
+      setInvestmentData(investmentResult);
+      alert('포트폴리오가 성공적으로 업데이트되었습니다.');
+    } catch (error) {
+      console.error('포트폴리오 데이터 로딩 실패:', error);
+      alert('포트폴리오 업데이트에 실패했습니다.');
+    }
+  }, [refreshPortfolioData, getInvestmentType]);
+
   return (
     <div className='max-w-screen-md mx-auto min-h-screen'>
       <div className='flex items-center justify-between p-4'>
@@ -125,13 +147,13 @@ export default function MainPage() {
                 입니다
               </h2>
             )}
-            {portfolioData && (
-              <div className='mt-4'>
-                <PortfolioCard
-                  currentPortfolio={portfolioData.currentPortfolio}
-                  goalPortfolio={portfolioData.goalPortfolio}
-                />
-              </div>
+            {portfolioData && investmentData && (
+              <PortfolioCard
+                currentPortfolio={portfolioData.currentPortfolio}
+                goalPortfolio={portfolioData.goalPortfolio}
+                onPortfolioUpdate={handlePortfolioUpdate}
+                investmentType={investmentData.investmentType}
+              />
             )}
           </section>
 

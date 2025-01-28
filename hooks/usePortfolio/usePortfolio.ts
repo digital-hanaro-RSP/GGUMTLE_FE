@@ -1,5 +1,9 @@
-// hooks/api/usePortfolioApi.ts
-import { PortfolioResponse, InvestmentTypeResponse } from '@/types/Portfolio';
+import {
+  PortfolioResponse,
+  InvestmentTypeResponse,
+  PortfolioTemplatesResponse,
+  ManualPortfolioResponse,
+} from '@/types/Portfolio';
 import { useCallback } from 'react';
 import { useApi } from '../useApi';
 
@@ -37,5 +41,41 @@ export const usePortfolioApi = () => {
       return response.data;
     }, [fetchApi]);
 
-  return { getPortfolio, getInvestmentType };
+  const getPortfolioTemplates =
+    useCallback(async (): Promise<PortfolioTemplatesResponse> => {
+      const response = (await fetchApi('/portfolio/templates', {
+        method: 'GET',
+      })) as ApiResponse<PortfolioTemplatesResponse>;
+
+      if (response.code !== 200) {
+        throw new Error('템플릿을 가져오는 데 실패했습니다.');
+      }
+
+      return response.data;
+    }, [fetchApi]);
+
+  const setManualPortfolio = useCallback(
+    async (
+      customizedInvestmentType: string
+    ): Promise<ManualPortfolioResponse> => {
+      const response = (await fetchApi('/portfolio/recommendation', {
+        method: 'PATCH',
+        body: JSON.stringify({ customizedInvestmentType }),
+      })) as ApiResponse<ManualPortfolioResponse>;
+
+      if (response.code !== 200) {
+        throw new Error('포트폴리오 설정에 실패했습니다.');
+      }
+
+      return response.data;
+    },
+    [fetchApi]
+  );
+
+  return {
+    getPortfolio,
+    getInvestmentType,
+    getPortfolioTemplates,
+    setManualPortfolio,
+  };
 };
