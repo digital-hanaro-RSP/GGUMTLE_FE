@@ -49,6 +49,7 @@ export default function GroupLayout({
   const handleJoinGroup = async () => {
     await joinGroup(groupId);
     fetchIsMember();
+    window.location.reload();
   };
 
   const handleLeaveGroup = async () => {
