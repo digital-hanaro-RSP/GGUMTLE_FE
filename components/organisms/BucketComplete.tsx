@@ -106,7 +106,7 @@ export const ShareToGroup = () => {
             <div className='flex flex-col'>
               <p className='text-center break-all'>
                 <strong className='text-[15px] font-bold'>
-                  ${userNickname}님 &quot;
+                  {userNickname}님 &quot;
                 </strong>
                 <strong className='text-[16px] text-primary-main font-bold '>
                   {title}

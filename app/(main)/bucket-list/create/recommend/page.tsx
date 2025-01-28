@@ -85,9 +85,11 @@ export default function RecommendBucketPage() {
   useEffect(() => {
     if (!api) return;
     setCurrent(api.selectedScrollSnap());
+    onClickMenuBar(api.selectedScrollSnap());
 
     api.on('select', () => {
       setCurrent(api.selectedScrollSnap());
+      onClickMenuBar(api.selectedScrollSnap());
     });
   }, [api]);
 
@@ -150,7 +152,7 @@ export default function RecommendBucketPage() {
             {bucketType.map((type, index) => (
               <button
                 key={index}
-                onClick={() => onClickMenuBar(index)}
+                onClick={() => api?.scrollTo(index)}
                 className={cn('w-20 justify-center flex relative py-3')}
               >
                 <h3
