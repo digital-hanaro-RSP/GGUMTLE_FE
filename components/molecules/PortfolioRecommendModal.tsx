@@ -6,6 +6,7 @@ import {
   InvestmentType,
   PortfolioTemplate,
 } from '@/types/Portfolio';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '../atoms/Button';
 import { PortfolioTemplateChart } from './PortfolioTemplateChart';
@@ -56,6 +57,7 @@ export const PortfolioRecommendModal = ({
   const [selectedTemplate, setSelectedTemplate] =
     useState<PortfolioTemplate | null>(null);
   const { getPortfolioTemplates, setManualPortfolio } = usePortfolioApi();
+  const router = useRouter();
 
   useEffect(() => {
     const initialIndex = investmentTypes.findIndex(
@@ -85,6 +87,7 @@ export const PortfolioRecommendModal = ({
       await setManualPortfolio(investmentType)
         .then(() => {
           alert('정상적으로 변경되었습니다.');
+          router.push('/');
         })
         .catch((err) => {
           alert(err);
