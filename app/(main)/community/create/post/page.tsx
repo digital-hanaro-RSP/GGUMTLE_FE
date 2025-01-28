@@ -136,7 +136,10 @@ export default function CreatePostPage() {
       try {
         const snapshot = JSON.stringify({
           // bucketId: selectedBucketList ? [selectedBucketList.bucketId] : [],
-          bucketId: selectedBucketList ? [] : [],
+          bucketId:
+            bucketLists.length > 0
+              ? selectedBucketList.map((bucket) => bucket.id)
+              : [],
           portfolio: isPortfolioIncluded,
         });
 

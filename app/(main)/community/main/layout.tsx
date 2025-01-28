@@ -10,7 +10,6 @@ import { useCategoryStore } from '@/store/useCategoryStore';
 import { useSearchStore } from '@/store/useSearchStore';
 import * as motion from 'motion/react-client';
 import { IoIosArrowDown } from 'react-icons/io';
-import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -98,7 +97,12 @@ export default function CommunityMainLayout({
       {/* 상단 헤더 */}
       <div className='fixed top-0 left-0 right-0 z-10'>
         <div className='mx-auto max-w-screen-md'>
-          <Header text='커뮤니티' showActionButton={false} bgNone={true} />
+          <Header
+            text='커뮤니티'
+            onBack={() => router.push('/')}
+            showActionButton={false}
+            bgNone={true}
+          />
         </div>
       </div>
 
