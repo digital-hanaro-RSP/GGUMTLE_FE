@@ -55,7 +55,9 @@ export default function CommunityMainPopularPage() {
             transition={{ duration: 0.5, delay: index * 0.1 }}
             className='cursor-pointer'
           >
-            <Post {...post} onDelete={() => handlePostDelete(post.id)} />
+            {post.postType === 'POST' ? (
+              <Post {...post} onDelete={() => handlePostDelete(post.id)} />
+            ) : null}
           </m.div>
         ))}
         {isLoading && (
