@@ -67,3 +67,9 @@ export interface ManualPortfolioResponse {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface getPortfolioRecommendationResponse {
+  investmentType: InvestmentType;
+  estimatedInvestRatio: number;
+  recommended: true;
+}
