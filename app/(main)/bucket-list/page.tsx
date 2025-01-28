@@ -4,6 +4,7 @@ import ColorChip from '@/components/atoms/ColorChips';
 import AccountCard from '@/components/molecules/AccountCard';
 import { AddNewCard } from '@/components/molecules/AddNewCard';
 import { BucketListCard } from '@/components/molecules/BucketListCard';
+import { PortfolioRecommendModal } from '@/components/molecules/PortfolioRecommendModal';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,21 +16,31 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
+import { usePortfolioApi } from '@/hooks/usePortfolio/usePortfolio';
 import { accountInfoRes } from '@/types/Account';
 import { getAllBucketListRes } from '@/types/BucketList';
+import { InvestmentType } from '@/types/Portfolio';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { calculatePercent, cn } from '@/lib/utils';
 
 export default function BucketListPage() {
   const { getAllBucketList } = useBucketListApi();
+  const searchParams = useSearchParams();
+  const getRecommend = searchParams.get('getRecommend');
   const { getAccountInfo } = useDreamAccountApi();
+  const { getPortfolioRecommendation } = usePortfolioApi();
   const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
   const [bucketLists, setBucketLists] = useState<getAllBucketListRes[]>();
   const [filter, setFilter] = useState<string>('DEFAULT');
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isAdd, setIsAdd] = useState<boolean>(false);
+  /** 포트폴리오 추천 관련 */
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [investmentType, setInvestmentType] = useState<InvestmentType>();
+  const [estimatedInvestRatio, setEstimatedInvestRatio] = useState<number>();
+
   const lastScrollY = useRef(0);
   const categories = new Map([
     ['DEFAULT', '전체'],
@@ -82,8 +93,24 @@ export default function BucketListPage() {
           alert(err);
         });
     };
+    const needRecommendation = async () => {
+      if (getRecommend === 'true') {
+        await getPortfolioRecommendation()
+          .then((res) => {
+            if (res.recommended) {
+              setIsModalOpen(true);
+              setInvestmentType(res.investmentType);
+              setEstimatedInvestRatio(res.estimatedInvestRatio);
+            }
+          })
+          .catch((err) => {
+            alert(err);
+          });
+      }
+    };
     fetchAccountInfo();
     fetchBucketList();
+    needRecommendation();
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll); // 클린업
@@ -279,6 +306,14 @@ export default function BucketListPage() {
           </TabsContent>
         </Tabs>
       </div>
+      {isModalOpen && investmentType && estimatedInvestRatio && (
+        <PortfolioRecommendModal
+          recommended={true}
+          investmentType={investmentType}
+          estimatedInvestRatio={estimatedInvestRatio}
+          setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   );
 }

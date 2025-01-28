@@ -67,6 +67,7 @@ export default function RecommendBucketPage() {
   useEffect(() => {
     reset();
     getRecommendation(setPopular);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const bucketType = [
@@ -91,6 +92,7 @@ export default function RecommendBucketPage() {
       setCurrent(api.selectedScrollSnap());
       onClickMenuBar(api.selectedScrollSnap());
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [api]);
 
   const onClickMenuBar = (index: number) => {

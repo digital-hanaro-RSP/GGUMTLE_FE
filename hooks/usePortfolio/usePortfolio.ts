@@ -3,6 +3,7 @@ import {
   InvestmentTypeResponse,
   PortfolioTemplatesResponse,
   ManualPortfolioResponse,
+  getPortfolioRecommendationResponse,
 } from '@/types/Portfolio';
 import { useCallback } from 'react';
 import { useApi } from '../useApi';
@@ -72,10 +73,20 @@ export const usePortfolioApi = () => {
     [fetchApi]
   );
 
+  const getPortfolioRecommendation =
+    useCallback(async (): Promise<getPortfolioRecommendationResponse> => {
+      const response = (await fetchApi('/portfolio/recommendation', {
+        method: 'GET',
+      })) as ApiResponse<getPortfolioRecommendationResponse>;
+
+      return response.data;
+    }, [fetchApi]);
+
   return {
     getPortfolio,
     getInvestmentType,
     getPortfolioTemplates,
     setManualPortfolio,
+    getPortfolioRecommendation,
   };
 };
