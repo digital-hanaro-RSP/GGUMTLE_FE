@@ -314,7 +314,7 @@ export const MoneyTransferDrawer = ({
                         입력하신 금액이 맞으신가요?
                       </AlertDialogTitle>
                       <AlertDialogDescription className='text-5xl font-semibold text-primary-main'>
-                        {amount}원
+                        {amount.toLocaleString()}원
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter className='flex flex-col justify-center items-center '>

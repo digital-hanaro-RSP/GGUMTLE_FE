@@ -95,18 +95,31 @@ export default function BucketListDetail({
 
   const calculateExpect = () => {
     if (percent === 0) {
-      return '계산하기 위해 진행이 필요합니다.';
+      return '언젠가';
     }
     if (bucketList) {
       const now = new Date();
       const start = new Date(bucketList.createdAt);
-      const restPercentRatio = Math.floor((100 - percent) / percent);
-      const result = (now.getTime() - start.getTime()) * restPercentRatio;
-      if (result > 1000 * 60 * 60 * 24 * 30)
-        return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
-      return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+      const restPercentRatio = (100 - percent) / percent;
+      if (bucketList.howTo === 'MONEY') {
+        const result =
+          (Math.floor(
+            (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
+          ) +
+            1) *
+          restPercentRatio;
+
+        return `${result.toFixed(1)} 개월`;
+      } else {
+        const dueDate = new Date(bucketList.dueDate);
+        const result = dueDate.getTime() - now.getTime();
+        if (result > 1000 * 60 * 60 * 24 * 30)
+          return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
+        return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+      }
     }
-    return '계산하기 위해 진행이 필요합니다.';
+
+    return '언젠가';
   };
 
   return (
@@ -125,6 +138,8 @@ export default function BucketListDetail({
               tagType={bucketList?.tagType}
               bucketId={bucketList?.id}
               status={bucketList.status}
+              dueDate={bucketList.dueDate}
+              isDueDate={bucketList.isDueSet}
             >
               <div className='pt-10'>
                 <ProgressBar
