@@ -32,12 +32,14 @@ export default function BucketListDetail({
 
   useEffect(() => {
     setPercent(
-      calculatePercent(
-        bucketList?.howTo,
-        bucketList?.goalAmount,
-        bucketList?.safeBox,
-        new Date(bucketList?.dueDate ?? 0),
-        new Date(bucketList?.createdAt ?? 0)
+      parseInt(
+        calculatePercent(
+          bucketList?.howTo,
+          bucketList?.goalAmount,
+          bucketList?.safeBox,
+          new Date(bucketList?.dueDate ?? 0),
+          new Date(bucketList?.createdAt ?? 0)
+        )
       )
     );
   }, [bucketList]);
@@ -101,18 +103,22 @@ export default function BucketListDetail({
       const now = new Date();
       const start = new Date(bucketList.createdAt);
       const restPercentRatio = (100 - percent) / percent;
-      const result =
-        (Math.floor(
-          (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
-        ) +
-          1) *
-        restPercentRatio;
-      console.log('🚀 ~ calculateExpect ~ result:', result);
-      console.log('🚀 ~ calculateExpect ~ restPercentRatio:', restPercentRatio);
-      // if (result > 1000 * 60 * 60 * 24 * 30)
-      //   return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
-      // return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
-      return `${result.toFixed(1)} 개월`;
+      if (bucketList.howTo === 'MONEY') {
+        const result =
+          (Math.floor(
+            (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
+          ) +
+            1) *
+          restPercentRatio;
+
+        return `${result.toFixed(1)} 개월`;
+      } else {
+        const dueDate = new Date(bucketList.dueDate);
+        const result = dueDate.getTime() - now.getTime();
+        if (result > 1000 * 60 * 60 * 24 * 30)
+          return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
+        return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+      }
     }
 
     return '언젠가';
@@ -134,15 +140,19 @@ export default function BucketListDetail({
               tagType={bucketList?.tagType}
               bucketId={bucketList?.id}
               status={bucketList.status}
+              dueDate={bucketList.dueDate}
+              isDueDate={bucketList.isDueSet}
             >
               <div className='pt-10'>
                 <ProgressBar
-                  dataPercent={calculatePercent(
-                    bucketList.howTo,
-                    bucketList.goalAmount,
-                    bucketList.safeBox,
-                    new Date(bucketList.dueDate),
-                    new Date(bucketList.createdAt)
+                  dataPercent={parseInt(
+                    calculatePercent(
+                      bucketList.howTo,
+                      bucketList.goalAmount,
+                      bucketList.safeBox,
+                      new Date(bucketList.dueDate),
+                      new Date(bucketList.createdAt)
+                    )
                   )}
                 />
               </div>
