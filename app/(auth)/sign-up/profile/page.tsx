@@ -45,9 +45,17 @@ export default function ProfilePage() {
     const passwordInput = document.querySelector(
       "input[name='password']"
     ) as HTMLInputElement;
+    const confirmPasswordInput = document.querySelector(
+      "input[name='confirmPassword']" // 새로 추가
+    ) as HTMLInputElement;
     const nicknameInput = document.querySelector(
       "input[name='nickname']"
     ) as HTMLInputElement;
+
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
 
     let profileImageUrl = ''; // 기본값으로 빈 문자열 설정
 
@@ -132,7 +140,7 @@ export default function ProfilePage() {
             </p>
             <DefaultInputRef
               type='password'
-              name='password'
+              name='confirmPassword'
               placeHolder='비밀번호를 다시 입력해주세요'
               required
               error='비밀번호를 입력해주세요'
