@@ -249,7 +249,7 @@ export default function BucketListPage() {
                   <div key={item.id}>
                     <div key={item.id}>
                       <BucketListCard
-                        isSelectMode={false}
+                        isSelectMode={true}
                         safeBox={item.safeBox}
                         howTo={item.howTo}
                         dataPercent={calculatePercent(

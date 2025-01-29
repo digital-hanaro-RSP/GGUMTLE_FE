@@ -11,7 +11,7 @@ export default function SupportPage() {
       <div className='scrollContainer'>
         <h1 className='text-2xl font-bold'>인기 교육/취미</h1>
         {/*횡 스크롤 구역 */}
-        <div className='flex flex-row w-full overflow-scroll  gap-10 py-2 px-2 scrollContent duration-[40s]'>
+        <div className='flex flex-row w-full overflow-scroll  gap-10 py-2 px-2 scrollContent'>
           {supportEduData.map((item, i) => (
             <SupportCard
               key={i}

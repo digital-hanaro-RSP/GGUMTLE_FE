@@ -138,7 +138,7 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
     };
 
     return (
-      <div className='flex items-center w-full text-2xl text-primary-main border rounded-[10px] bg-white overflow-hidden px-[20px]'>
+      <div className='flex items-center w-full text-2xl text-primary-main border rounded-[10px] py-1.5 bg-white overflow-hidden px-[10px]'>
         <input
           value={value}
           disabled={disable}
@@ -149,9 +149,9 @@ const MoneyInputRef = forwardRef<HTMLInputElement, MoneyInputProps>(
           onBlur={onBlur}
           placeholder={placeHolder}
           max={Number.MAX_VALUE}
-          className='flex w-full text-2xl font-semibold py-1 border-none text-right placeholder:text-primary-placeholder focus:outline-none'
+          className='flex w-full text-base font-semibold py-1 border-none text-right placeholder:text-primary-placeholder focus:outline-none'
         />
-        <span className='ml-1'>원</span>
+        <span className='ml-1 text-lg'>원</span>
       </div>
     );
   }
