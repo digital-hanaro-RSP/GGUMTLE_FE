@@ -95,18 +95,27 @@ export default function BucketListDetail({
 
   const calculateExpect = () => {
     if (percent === 0) {
-      return '계산하기 위해 진행이 필요합니다.';
+      return '언젠가';
     }
     if (bucketList) {
       const now = new Date();
       const start = new Date(bucketList.createdAt);
-      const restPercentRatio = Math.floor((100 - percent) / percent);
-      const result = (now.getTime() - start.getTime()) * restPercentRatio;
-      if (result > 1000 * 60 * 60 * 24 * 30)
-        return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
-      return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+      const restPercentRatio = (100 - percent) / percent;
+      const result =
+        (Math.floor(
+          (now.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 30)
+        ) +
+          1) *
+        restPercentRatio;
+      console.log('🚀 ~ calculateExpect ~ result:', result);
+      console.log('🚀 ~ calculateExpect ~ restPercentRatio:', restPercentRatio);
+      // if (result > 1000 * 60 * 60 * 24 * 30)
+      //   return `${(result / (1000 * 60 * 60 * 24 * 30)).toFixed(1)} 개월`;
+      // return `${Math.floor(result / (1000 * 60 * 60 * 24))}일`;
+      return `${result.toFixed(1)} 개월`;
     }
-    return '계산하기 위해 진행이 필요합니다.';
+
+    return '언젠가';
   };
 
   return (
