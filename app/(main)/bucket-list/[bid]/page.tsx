@@ -32,14 +32,12 @@ export default function BucketListDetail({
 
   useEffect(() => {
     setPercent(
-      parseInt(
-        calculatePercent(
-          bucketList?.howTo,
-          bucketList?.goalAmount,
-          bucketList?.safeBox,
-          new Date(bucketList?.dueDate ?? 0),
-          new Date(bucketList?.createdAt ?? 0)
-        )
+      calculatePercent(
+        bucketList?.howTo,
+        bucketList?.goalAmount,
+        bucketList?.safeBox,
+        new Date(bucketList?.dueDate ?? 0),
+        new Date(bucketList?.createdAt ?? 0)
       )
     );
   }, [bucketList]);
@@ -145,14 +143,12 @@ export default function BucketListDetail({
             >
               <div className='pt-10'>
                 <ProgressBar
-                  dataPercent={parseInt(
-                    calculatePercent(
-                      bucketList.howTo,
-                      bucketList.goalAmount,
-                      bucketList.safeBox,
-                      new Date(bucketList.dueDate),
-                      new Date(bucketList.createdAt)
-                    )
+                  dataPercent={calculatePercent(
+                    bucketList.howTo,
+                    bucketList.goalAmount,
+                    bucketList.safeBox,
+                    new Date(bucketList.dueDate),
+                    new Date(bucketList.createdAt)
                   )}
                 />
               </div>
