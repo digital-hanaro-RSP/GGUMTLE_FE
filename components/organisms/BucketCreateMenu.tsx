@@ -199,6 +199,8 @@ export const CreateBucketDueDate = () => {
                 <SelectItem value='30'>한달 뒤</SelectItem>
                 <SelectItem value='183'>6개월 뒤</SelectItem>
                 <SelectItem value='365'>1년 뒤</SelectItem>
+                <SelectItem value='1825'>5년 뒤</SelectItem>
+                <SelectItem value='3650'>10년 뒤</SelectItem>
               </SelectContent>
             </Select>
             <Calendar
