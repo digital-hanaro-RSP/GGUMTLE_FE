@@ -53,9 +53,17 @@ export default function Post({
   const [likeCount, setLikeCount] = useState(initialLikeCount);
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const router = useRouter();
-  const { plusLike, minusLike, deletePost } = useCommunityApi();
+  const { plusLike, minusLike, deletePost, isMember } = useCommunityApi();
 
   const handleLikeClick = async () => {
+    // 현재 가입하지 않은 사람은 좋아요 불가라서 alert 처리 추가
+    // 댓글은 그룹 가입 안해도 좋아요 되는 문제 있음.
+    const res = await isMember(groupId);
+    if (res.isMember === false) {
+      alert('좋아요를 원하시면 그룹에 가입해 주세요.');
+      return;
+    }
+
     const newLikeState = !isLiked;
     try {
       if (newLikeState) {

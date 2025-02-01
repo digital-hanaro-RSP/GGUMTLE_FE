@@ -1,5 +1,6 @@
 'use client';
 
+import LoadingDot from '@/components/atoms/LoadingDot';
 import { PortfolioCard } from '@/components/molecules/PortfolioCard';
 import ProductCard from '@/components/molecules/ProductCard';
 import { useAdsApi } from '@/hooks/useAds/useAds';
@@ -122,9 +123,7 @@ export default function MainPage() {
       </div>
 
       {isLoading ? (
-        <div className='flex justify-center items-center h-[calc(100vh-4rem)]'>
-          로딩 중...
-        </div>
+        <LoadingDot />
       ) : (
         <div className='px-4 pb-4'>
           {/* 포트폴리오 섹션 */}

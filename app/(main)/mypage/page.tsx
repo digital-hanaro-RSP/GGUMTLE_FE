@@ -2,6 +2,7 @@
 
 import { Button, ImgButton } from '@/components/atoms/Button';
 import { Card } from '@/components/atoms/Card';
+import LoadingDot from '@/components/atoms/LoadingDot';
 import {
   DropCard,
   DropCardItem,
@@ -110,11 +111,7 @@ export default function MyPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className='h-[100vh] flex items-center justify-center overflow-hidden'>
-        Loading...
-      </div>
-    );
+    return <LoadingDot />;
   }
 
   if (!userInfo) {
