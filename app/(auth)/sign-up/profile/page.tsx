@@ -46,7 +46,7 @@ export default function ProfilePage() {
       "input[name='password']"
     ) as HTMLInputElement;
     const confirmPasswordInput = document.querySelector(
-      "input[name='confirmPassword']" // 새로 추가
+      "input[name='confirmPassword']"
     ) as HTMLInputElement;
     const nicknameInput = document.querySelector(
       "input[name='nickname']"
@@ -57,9 +57,8 @@ export default function ProfilePage() {
       return;
     }
 
-    let profileImageUrl = ''; // 기본값으로 빈 문자열 설정
+    let profileImageUrl = '';
 
-    // 이미지가 있을 경우에만 업로드 진행
     if (selectedFile) {
       const encodedUrls = await uploadImages([selectedFile]);
       profileImageUrl = encodedUrls[0];
@@ -75,7 +74,7 @@ export default function ProfilePage() {
         tel: formData.tel,
         password: passwordInput.value,
         nickname: nicknameInput.value,
-        profileImageUrl: profileImageUrl, // 이미지 URL이 있으면 사용, 없으면 빈 문자열
+        profileImageUrl: profileImageUrl,
       };
 
       try {
@@ -96,7 +95,17 @@ export default function ProfilePage() {
           alert('회원가입이 성공적으로 완료되었습니다.');
           router.push('/sign-in');
         } else {
-          throw new Error(data.message || '회원가입에 실패했습니다.');
+          // API에서 다양한 에러 코드와 메시지 전달 시
+          switch (data.code) {
+            case 409:
+              alert(data.message || '중복된 전화번호입니다.');
+              break;
+            case 500:
+              alert(data.message || '내부 서버 오류가 발생했습니다.');
+              break;
+            default:
+              alert(data.message || '회원가입에 실패했습니다.');
+          }
         }
       } catch (error) {
         console.error('회원가입 실패:', error);
