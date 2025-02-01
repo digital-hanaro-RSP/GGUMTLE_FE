@@ -1,5 +1,6 @@
 import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
+import plugin from 'tailwindcss/plugin';
 
 const config: Config = {
   darkMode: ['class'],
@@ -105,6 +106,20 @@ const config: Config = {
       },
     },
   },
-  plugins: [animate],
+  plugins: [
+    animate,
+    plugin(function ({ addComponents }) {
+      addComponents({
+        '.custom-pagination': {
+          '.swiper-pagination-bullet': {
+            '@apply h-2 w-2 bg-gray-300 opacity-100 mx-1': {},
+          },
+          '.swiper-pagination-bullet-active': {
+            '@apply bg-primary-main': {},
+          },
+        },
+      });
+    }),
+  ],
 };
 export default config;
