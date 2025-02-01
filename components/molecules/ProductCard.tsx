@@ -10,6 +10,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { MoreButton } from '../atoms/Button';
 
 type ProductCardProps = {
   adsData: { mainAds: Ad[] };
@@ -52,7 +53,7 @@ export default function ProductCard({ adsData }: ProductCardProps) {
   };
 
   return (
-    <div className='w-full'>
+    <div className='w-full relative'>
       <Swiper
         modules={[Navigation, Pagination]}
         spaceBetween={8}
@@ -135,10 +136,36 @@ export default function ProductCard({ adsData }: ProductCardProps) {
           </SwiperSlide>
         ))}
       </Swiper>
-      <div className='w-full mt-4 flex justify-center items-center'>
-        <div className='flex items-center gap-4'>
-          <div className='swiper-pagination !static !w-auto' />
-        </div>
+
+      {/* Pagination 및 네비게이션 버튼: Pagination 컨테이너의 양쪽에 버튼 배치 */}
+      <div className='w-full mt-4 flex items-center justify-between'>
+        <MoreButton
+          direction='left'
+          onClick={() => {
+            (
+              document.querySelector(
+                '.swiper-button-prev'
+              ) as HTMLElement | null
+            )?.click();
+          }}
+        />
+        <div className='swiper-pagination !static !w-auto' />
+        <MoreButton
+          direction='right'
+          onClick={() => {
+            (
+              document.querySelector(
+                '.swiper-button-next'
+              ) as HTMLElement | null
+            )?.click();
+          }}
+        />
+      </div>
+
+      {/* 스와이퍼 네비게이션을 위한 더미 엘리먼트 (실제 동작은 위 MoreButton 클릭 시 발생) */}
+      <div className='hidden'>
+        <div className='swiper-button-prev' />
+        <div className='swiper-button-next' />
       </div>
     </div>
   );
