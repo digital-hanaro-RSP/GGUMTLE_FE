@@ -29,13 +29,18 @@ export default function CommentCard({
   const [isLiked, setIsLiked] = useState(initialIsLiked);
   const [likeCount, setLikeCount] = useState(initialLikeCount);
 
-  const { plusCommentLike, minusCommentLike, delelteComment } =
+  const { plusCommentLike, minusCommentLike, delelteComment, isMember } =
     useCommunityApi();
 
   const handleLikeClick = async () => {
     if (typeof tempGroupId !== 'string') return;
     const newLikeState = !isLiked;
     const groupId = parseInt(tempGroupId);
+    const res = await isMember(groupId);
+    if (res.isMember === false) {
+      alert('좋아요를 원하시면 그룹에 가입해 주세요.');
+      return;
+    }
 
     try {
       if (newLikeState) {
