@@ -1,5 +1,17 @@
 import CommentCard from '@/components/molecules/CommentCard';
 import type { Meta, StoryObj } from '@storybook/react';
+import { SessionProvider } from 'next-auth/react';
+
+// Mock session 데이터
+const mockSession = {
+  user: {
+    id: 'John Doe',
+    name: 'John Doe',
+    jwt: 'johndoe@example.com',
+    permission: 3,
+  },
+  expires: '9999-12-31T23:59:59.999Z',
+};
 
 const meta: Meta<typeof CommentCard> = {
   title: 'Molecules/CommentCard',
@@ -10,9 +22,11 @@ const meta: Meta<typeof CommentCard> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='w-[700px] relative flex flex-col gap-[20px]'>
-        <Story />
-      </div>
+      <SessionProvider session={mockSession}>
+        <div className='w-[700px] relative flex flex-col gap-[20px]'>
+          <Story />
+        </div>
+      </SessionProvider>
     ),
   ],
 };
