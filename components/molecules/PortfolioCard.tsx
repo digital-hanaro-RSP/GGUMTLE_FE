@@ -42,6 +42,7 @@ interface PortfolioCardProps {
 interface CustomChartData {
   labels: string[];
   datasets: {
+    label?: string; // 옵셔널 속성 추가
     data: number[];
     backgroundColor: string[];
   }[];
@@ -73,9 +74,9 @@ const chartOptions = (
       callbacks: {
         label: (context: TooltipItem<'doughnut'>) => {
           const value = context.raw as number;
-          return `${context.label}: ${value.toLocaleString()}${
-            context.dataset.label === '목표' ? '%' : '원'
-          }`;
+          return context.dataset.label === '목표'
+            ? `${context.label}: ${(value * 100).toFixed(1)}%`
+            : `${context.label}: ${value.toLocaleString()}원`;
         },
       },
     },
@@ -262,13 +263,14 @@ export const PortfolioCard = ({
     labels: LABELS,
     datasets: [
       {
+        label: '목표',
         data: [
-          goalPortfolio.depositWithdrawalRatio * 100,
-          goalPortfolio.savingTimeDepositRatio * 100,
-          goalPortfolio.investmentRatio * 100,
-          goalPortfolio.foreignCurrencyRatio * 100,
-          goalPortfolio.pensionRatio * 100,
-          goalPortfolio.etcRatio * 100,
+          goalPortfolio.depositWithdrawalRatio,
+          goalPortfolio.savingTimeDepositRatio,
+          goalPortfolio.investmentRatio,
+          goalPortfolio.foreignCurrencyRatio,
+          goalPortfolio.pensionRatio,
+          goalPortfolio.etcRatio,
         ],
         backgroundColor: getBackgroundColors(
           Object.values(CHART_COLORS),

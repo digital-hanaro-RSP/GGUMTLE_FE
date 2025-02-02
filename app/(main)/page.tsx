@@ -48,7 +48,7 @@ export default function MainPage() {
   );
   const [investmentData, setInvestmentData] =
     useState<InvestmentTypeResponse | null>(null);
-  const [adsData, setAdsData] = useState<AdsResponse | null>(null);
+  const [adsData, setAdsData] = useState<AdsResponse['data'] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const { getPortfolio, getInvestmentType } = usePortfolioApi();
@@ -157,7 +157,7 @@ export default function MainPage() {
           </section>
 
           {/* 상품 추천 섹션 */}
-          {adsData?.data && (
+          {adsData?.mainAds && (
             <section className='bg-[#FBFBFB] p-6 shadow-[0px_2px_8px_0px_rgba(136,137,157,0.30)]'>
               <h2 className='text-lg font-bold mb-2'>
                 나에게 맞는 금융상품을 추천해드려요
@@ -165,17 +165,9 @@ export default function MainPage() {
               <p className='text-gray-600 text-md mb-3'>
                 꿈을 이루는데 도움될 금융상품입니다
               </p>
-              <div className='space-y-4'>
-                <ProductCard
-                  key={adsData.data.id}
-                  productType={adsData.data.productType}
-                  productName={adsData.data.productName}
-                  riskRating={adsData.data.riskRating}
-                  yield={adsData.data.yield}
-                  bannerImageUrl={null}
-                  link={adsData.data.link}
-                />
-              </div>
+
+              {/* 개별 props 제거 */}
+              <ProductCard adsData={adsData} />
             </section>
           )}
         </div>

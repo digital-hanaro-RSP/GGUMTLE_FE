@@ -150,7 +150,9 @@ export const calculatePercent = (
     goalAmount !== undefined &&
     currentAmount !== undefined
   ) {
-    return Math.min(Math.max((100 * currentAmount) / goalAmount, 0), 100);
+    return parseInt(
+      Math.min(Math.max((100 * currentAmount) / goalAmount, 0), 100).toFixed(0)
+    );
   } else if (createdAt) {
     const now = new Date().getTime();
     const start = createdAt.getTime();
@@ -158,7 +160,9 @@ export const calculatePercent = (
 
     const elapsed = Math.max(now - start, 0);
     const totalDuration = goal - start;
-    return Math.min(Math.max((100 * elapsed) / totalDuration, 0), 100);
+    return parseInt(
+      Math.min(Math.max((100 * elapsed) / totalDuration, 0), 100).toFixed(0)
+    );
   }
   throw new Error(
     "Invalid parameters or missing 'createdAt' for non-MONEY types."

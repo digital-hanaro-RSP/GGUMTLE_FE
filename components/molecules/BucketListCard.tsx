@@ -245,7 +245,7 @@ export const BucketListCard = ({
               {howTo === 'MONEY' && isSelectMode === false && (
                 <>
                   <div className='text-2xl truncate ml-2'>
-                    {`${safeBox?.toLocaleString()}원`}
+                    {`${safeBox?.toLocaleString() ?? 0}원`}
                   </div>
                   <div className='flex flex-row gap-2'>
                     <Button

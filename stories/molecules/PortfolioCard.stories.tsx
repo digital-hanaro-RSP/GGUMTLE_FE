@@ -1,5 +1,6 @@
 import { PortfolioCard } from '@/components/molecules/PortfolioCard';
 import type { Meta, StoryObj } from '@storybook/react';
+import { SessionProvider } from 'next-auth/react';
 
 const mockCurrentPortfolio = {
   id: 1,
@@ -25,6 +26,15 @@ const mockGoalPortfolio = {
   createdAt: '2024-01-01T00:00:00Z',
   updatedAt: '2024-01-01T00:00:00Z',
 };
+const mockSession = {
+  user: {
+    id: 'John Doe',
+    name: 'John Doe',
+    jwt: 'johndoe@example.com',
+    permission: 3,
+  },
+  expires: '9999-12-31T23:59:59.999Z',
+};
 
 const meta = {
   title: 'Molecules/PortfolioCard',
@@ -33,6 +43,13 @@ const meta = {
     layout: 'centered',
   },
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <SessionProvider session={mockSession}>
+        <Story />
+      </SessionProvider>
+    ),
+  ],
   argTypes: {
     currentPortfolio: {
       description: '현재 포트폴리오 데이터',
