@@ -14,7 +14,6 @@ import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 
 export default function CommentCard({
-  postId,
   id,
   content,
   createdAt,
