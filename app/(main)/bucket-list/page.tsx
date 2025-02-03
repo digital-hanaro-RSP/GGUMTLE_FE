@@ -124,7 +124,7 @@ export default function BucketListPage() {
         balance={accountInfo?.balance.toString() ?? '0'}
         className={cn(
           // 'bg-opacity-30 w-[calc(100%-40px)] max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-1000 ',
-          'bg-opacity-30 max-w-screen-md z-[99] overflow-hidden backdrop-blur-lg transition duration-100 '
+          'bg-opacity-30 max-w-screen-md z-[1] overflow-hidden backdrop-blur-lg transition duration-100 '
           // heightClass
         )}
         aid={accountInfo?.id}
