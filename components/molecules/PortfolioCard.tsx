@@ -291,9 +291,12 @@ export const PortfolioCard = ({
 
   return (
     <Card className='px-6 py-2'>
-      <div className='text-xl font-semibold mb-6'>
-        총 자산: {getTotalAssets().toLocaleString()}원
-      </div>
+      {isMain && (
+        <div className='text-xl font-semibold mb-6'>
+          총 자산: {getTotalAssets().toLocaleString()}원
+        </div>
+      )}
+
       <div className='flex justify-between gap-4 mb-6'>
         <div
           className={`w-1/2 flex items-center justify-center ${
