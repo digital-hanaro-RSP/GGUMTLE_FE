@@ -211,6 +211,7 @@ export const PortfolioCard = ({
         await onPortfolioUpdate();
       }
       handleModalClose();
+      window.location.reload();
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : '포트폴리오 설정에 실패했습니다.';
