@@ -144,7 +144,6 @@ export const calculatePercent = (
   goalDate?: Date,
   createdAt?: Date
 ): number => {
-  console.log('🚀 ~ howTo:', howTo);
   if (
     howTo === 'MONEY' &&
     goalAmount !== undefined &&

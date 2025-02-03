@@ -111,16 +111,12 @@ export const MoneyTransferDrawer = ({
     title?: string;
   };
   const [fromBalance, setFromBalance] = useState<InfoCard>();
-  console.log('🚀 ~ fromBalance:', fromBalance);
   const [toBalance, setToBalance] = useState<InfoCard>();
-  console.log('🚀 ~ toBalance:', toBalance);
 
   const { getAccountInfo } = useDreamAccountApi();
   const { getBucketListbyId } = useBucketListApi();
   const [accountInfo, setAccountInfo] = useState<accountInfoRes>();
-  console.log('🚀 ~ accountInfo:', accountInfo);
   const [bucketList, setBucketList] = useState<getBucketListbyIdRes>();
-  console.log('🚀 ~ bucketList:', bucketList);
 
   /**계좌및 버킷 잔액 확인용 */
   useEffect(() => {
@@ -175,16 +171,13 @@ export const MoneyTransferDrawer = ({
 
   useEffect(() => {
     if (accountInfo) {
-      console.log('hi');
       switch (transferType) {
         case 'BRINGOUT':
         case 'RECEIVE':
-          console.log('err1');
           setToBalance({ title: '꿈 모음 통장', balance: accountInfo.balance });
           break;
         case 'SEND':
         case 'FILLUP':
-          console.log('err2');
           setFromBalance({
             title: '꿈 모음 통장',
             balance: accountInfo.balance,
@@ -194,8 +187,6 @@ export const MoneyTransferDrawer = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [accountInfo, setAccountInfo]);
-
-  console.log('🚀 ~ useEffect ~ transferType:', transferType);
 
   return (
     <Drawer

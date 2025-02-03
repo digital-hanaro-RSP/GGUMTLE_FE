@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '../atoms/Button';
 import { DefaultInputRef } from '../atoms/Inputs';
 
-interface NicknameEditModalProps {
+export interface NicknameEditModalProps {
   onSubmit: (nickname: string) => void;
   onClose: () => void;
 }

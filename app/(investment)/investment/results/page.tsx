@@ -91,8 +91,7 @@ export default function ResultsPage() {
   const handleRegister = async () => {
     const investmentType = TENDENCY_TO_INVESTMENT_TYPE[tendency];
     try {
-      const response = await submitSurvey({ investmentType });
-      console.log('성향 등록 성공:', response);
+      await submitSurvey({ investmentType });
       router.push('/');
     } catch (error) {
       console.error('성향 등록 실패:', error);

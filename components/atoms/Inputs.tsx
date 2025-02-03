@@ -174,7 +174,6 @@ function SearchInput(
   const SearchHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     onSubmit(e);
-    console.log('button click');
   };
 
   return (

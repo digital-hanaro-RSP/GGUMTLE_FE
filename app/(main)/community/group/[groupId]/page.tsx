@@ -30,7 +30,6 @@ export default function GroupIdPage() {
   useEffect(() => {
     const fetchGetAd = async () => {
       const res = await getAdvertisement(groupId);
-      // console.log('fetchGetAd ', res);
       setAdvertisement(res);
     };
 
@@ -40,8 +39,6 @@ export default function GroupIdPage() {
   useEffect(() => {
     if (Array.isArray(data)) {
       setPosts(data.map(parsePostData));
-    } else {
-      console.log('data는 array가 아닙니다.');
     }
   }, [data]);
 

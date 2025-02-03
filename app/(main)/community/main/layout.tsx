@@ -122,7 +122,6 @@ export default function CommunityMainLayout({
                     e.preventDefault();
                     const searchValue = searchInputRef.current?.value || '';
                     setSearchInput(searchValue);
-                    console.log('검색어:', searchValue);
                   }}
                 />
               </div>

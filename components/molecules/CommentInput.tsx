@@ -23,21 +23,18 @@ export default function CommentInput({
   const [comment, setComment] = useState('');
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    console.log('댓글 변경', e.target.value === '\n');
     setComment(e.target.value);
   };
 
   const handleSubmit = () => {
     // 댓글 작성 로직 추가
     if (!comment.trim()) {
-      console.log('댓글 작성 실패');
       return;
     }
     if (onClick) {
       onClick(comment);
     }
     setComment('');
-    console.log('댓글', comment);
   };
 
   return (

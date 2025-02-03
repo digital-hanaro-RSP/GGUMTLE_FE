@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button, MoreButton } from '../atoms/Button';
 import { PortfolioTemplateChart } from './PortfolioTemplateChart';
 
-interface PortfolioModalProps {
+export interface PortfolioModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (type: InvestmentType) => void;

@@ -7,6 +7,7 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // 이 console.log는 살릴게요.
   console.log('에러 : ', error);
   return (
     <div className='flex flex-col items-center justify-center min-h-screen'>

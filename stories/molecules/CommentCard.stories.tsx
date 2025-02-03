@@ -36,7 +36,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    postId: 1,
     id: 1,
     content: '댓글 내용입니다.',
     createdAt: new Date().toISOString(),

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-interface TermsModalProps {
+export interface TermsModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;

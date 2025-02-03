@@ -118,16 +118,8 @@ export default function CreatePostPage() {
           portfolio: isPortfolioIncluded,
         });
 
-        console.log(snapshot);
+        await createPost(selectedGroup?.id, imageUrls, content, snapshot);
 
-        const response = await createPost(
-          selectedGroup?.id,
-          imageUrls,
-          content,
-          snapshot
-        );
-
-        console.log('응답 : ' + response);
         router.replace(`/community/group/${selectedGroup.id}`);
       } catch (error) {
         console.error('게시물 작성 실패:', error);
@@ -143,25 +135,14 @@ export default function CreatePostPage() {
           portfolio: isPortfolioIncluded,
         });
 
-        const response = await createPost(
-          selectedGroup?.id,
-          '[]',
-          content,
-          snapshot
-        );
+        await createPost(selectedGroup?.id, '[]', content, snapshot);
 
-        console.log('응답 : ' + response);
         router.replace(`/community/group/${selectedGroup.id}`);
       } catch (error) {
         console.error('게시물 작성 실패:', error);
       }
     }
   };
-
-  useEffect(() => {
-    console.log('All Bucket Lists:', bucketLists);
-    console.log('Selected Bucket Lists:', selectedBucketList);
-  }, [selectedBucketList, bucketLists]);
 
   return (
     <div className='flex flex-col gap-[20px] w-full'>
