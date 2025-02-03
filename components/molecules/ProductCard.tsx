@@ -6,7 +6,7 @@ import { LiaWonSignSolid } from 'react-icons/lia';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -55,7 +55,7 @@ export default function ProductCard({ adsData }: ProductCardProps) {
   return (
     <div className='w-full relative'>
       <Swiper
-        modules={[Navigation, Pagination]}
+        modules={[Navigation, Pagination, Autoplay]}
         spaceBetween={8}
         slidesPerView={1}
         navigation={{
@@ -68,6 +68,10 @@ export default function ProductCard({ adsData }: ProductCardProps) {
         }}
         className='relative pl-4'
         loop={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false, // 사용자 상호작용시 슬라이더 일시 정지 비활성
+        }}
       >
         {adsData.mainAds.map((ad) => (
           <SwiperSlide key={ad.id} className='flex justify-start'>
