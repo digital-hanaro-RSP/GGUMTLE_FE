@@ -40,3 +40,10 @@ next-env.d.ts
 # components test
 /app/(main)/comptest
 /app/comptest
+
+# PWA files
+public/sw.js
+public/workbox-*.js
+public/worker-*.js
+public/sw.js.map
+public/workbox-*.js.map
