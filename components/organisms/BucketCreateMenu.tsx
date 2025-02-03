@@ -162,7 +162,7 @@ export const CreateBucketDueDate = () => {
           id='date-op2'
           name='date'
           onChange={() => clickIsDueDate(true)}
-          checked={isDueDate}
+          checked={isDueDate === true}
         >
           기간 설정
         </RadioItem>
@@ -322,7 +322,7 @@ export const CreateBucketHowTo = () => {
             disable={!autoAllocate}
             ref={allocateAmountinputRef}
             onChange={onAllocateAmountChange}
-            value={allocateAmount?.toLocaleString()}
+            value={allocateAmount?.toLocaleString() ?? '0'}
             placeHolder='자동이체 금액 입력'
           />
         </div>
@@ -330,7 +330,7 @@ export const CreateBucketHowTo = () => {
           ref={goalAmountinputRef}
           onChange={onGoalAmountChange}
           placeHolder='목표금액 입력'
-          value={goalAmount?.toLocaleString()}
+          value={goalAmount?.toLocaleString() ?? '0'}
         />
       </div>
     </div>
