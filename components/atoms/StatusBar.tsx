@@ -1,4 +1,4 @@
-interface StatusBarProps {
+export interface StatusBarProps {
   current: number;
   total: number;
   className?: string;

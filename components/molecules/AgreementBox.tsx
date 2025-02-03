@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AgreementItem } from '../atoms/AgreementItem';
 import CheckBox from '../atoms/CheckBox';
 
-interface AgreementBoxProps {
+export interface AgreementBoxProps {
   title?: string;
   checked: boolean;
   onChange: (checked: boolean) => void;
