@@ -1,7 +1,7 @@
 import { FaCheck } from 'react-icons/fa6';
 
 // AgreementItem.tsx
-interface AgreementItemProps {
+export interface AgreementItemProps {
   title: string;
   checked: boolean;
   onChange: (checked: boolean) => void;

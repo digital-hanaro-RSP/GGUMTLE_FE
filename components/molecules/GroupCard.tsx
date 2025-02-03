@@ -23,7 +23,6 @@ type GroupCardProps = Group & {
 
 export default function GroupCard({
   ref,
-  id,
   name,
   category,
   description,
@@ -37,7 +36,6 @@ export default function GroupCard({
 
   const handleClick = () => {
     onClick?.();
-    console.log(id);
     // router.push(`/community/group/${id}`);
   };
 

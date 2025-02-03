@@ -7,7 +7,7 @@ import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { useSignUpStore } from '@/store/useSignUpStore';
 import { SignUpData } from '@/types/Auth';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { checkImageSize } from '@/lib/utils';
 
 export default function ProfilePage() {
@@ -34,12 +34,6 @@ export default function ProfilePage() {
     setSelectedImage('');
     setSelectedFile(null);
   };
-
-  useEffect(() => {
-    if (formData.password && formData.nickname) {
-      console.log('최종 회원가입 정보:', formData);
-    }
-  }, [formData]);
 
   const handleSignUp = async () => {
     const passwordInput = document.querySelector(

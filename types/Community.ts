@@ -1,6 +1,6 @@
+import { getAllBucketListRes } from './BucketList';
 import { CurrentPortfolio, GoalPortfolio } from './Portfolio';
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type UserBriefInfo = {
   name: string;
   profileImageUrl: string;
@@ -8,8 +8,7 @@ export type UserBriefInfo = {
 };
 
 export type Snapshot = {
-  // bucketLists: any[]; // bucketLists의 구체적 타입을 알 수 없으므로 any[]
-  bucketLists: any[]; // bucketLists의 구체적 타입을 알 수 없으므로 any[]
+  bucketLists: getAllBucketListRes[];
   goalPortfolio: GoalPortfolio;
   currentPortfolio: CurrentPortfolio;
 };
@@ -83,13 +82,3 @@ export type IsMember = {
   groupName: string;
   isMember: boolean;
 };
-
-// 게시글 snapshot bucketList
-// export type postBucketList = {
-//   bucketHowTo: bucketListHowTo;
-//   bucketTagType: string;
-//   dueDate: string;
-//   goalAmount: number;
-//   safeBox: number;
-//   title: string;
-// };

@@ -96,8 +96,7 @@ export default function BucketListRegisterPage() {
       // safeBox: 0,
     };
     await createBucketList(formData)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         reset();
         router.push('/bucket-list?getRecommend=true');
       })

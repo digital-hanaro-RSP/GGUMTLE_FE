@@ -7,6 +7,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: '꿈틀',
   description: '버킷리스트를 통한 자산 관리 서비스',
+  icons: {
+    icon: '/image/icons/favicon.png'
+  },
 };
 
 // app/layout.tsx

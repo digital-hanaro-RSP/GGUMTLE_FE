@@ -1,7 +1,17 @@
 import Post from '@/components/molecules/Post';
 import { Post as PostType } from '@/types/Community';
 import type { Meta, StoryObj } from '@storybook/react';
+import { SessionProvider } from 'next-auth/react';
 
+const mockSession = {
+  user: {
+    id: 'John Doe',
+    name: 'John Doe',
+    jwt: 'johndoe@example.com',
+    permission: 3,
+  },
+  expires: '9999-12-31T23:59:59.999Z',
+};
 const meta: Meta<typeof Post> = {
   title: 'Molecules/Post',
   component: Post,
@@ -11,9 +21,11 @@ const meta: Meta<typeof Post> = {
   tags: ['autodocs'],
   decorators: [
     (Story) => (
-      <div className='w-[375px]'>
-        <Story />
-      </div>
+      <SessionProvider session={mockSession}>
+        <div className='w-[375px]'>
+          <Story />
+        </div>
+      </SessionProvider>
     ),
   ],
 };

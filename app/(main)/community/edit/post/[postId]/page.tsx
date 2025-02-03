@@ -45,7 +45,6 @@ export default function EditPostPage() {
     const fetchPost = async () => {
       const postRes = await getPost(Number(groupId), Number(param.postId));
       const parseData = parsePostData(postRes);
-      console.log(parseData);
 
       setSelectedImage(parseData.imageUrls);
 
@@ -75,8 +74,6 @@ export default function EditPostPage() {
     if (tempIds?.length > 0) {
       const matched = allBuckets.filter((item) => tempIds.includes(item.id));
       setSelectedBucketList(matched);
-      console.log('tempIds ', tempIds);
-      console.log('allBuckets ', allBuckets);
     }
   };
 

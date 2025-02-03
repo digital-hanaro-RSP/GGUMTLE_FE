@@ -85,8 +85,6 @@ export default function SignUpPage() {
     // Zustand store에 저장
     setBasicInfo(name, birthDate, genderValue);
 
-    console.log('저장된 정보: ', useSignUpStore.getState().formData);
-
     // 다음 페이지로 이동
     router.push('/sign-up/phone');
   };

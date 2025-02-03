@@ -37,7 +37,6 @@ export default function ConsentPage() {
           },
         });
 
-        console.log(response.permission);
         router.push('/mydata/sync');
       } else {
         alert('마이데이터 권한 설정에 실패했습니다.');

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from '../atoms/Button';
 import { DefaultInputRef } from '../atoms/Inputs';
 
-interface PasswordEditModalProps {
+export interface PasswordEditModalProps {
   onSubmit: (passwords: {
     currentPassword: string;
     newPassword: string;

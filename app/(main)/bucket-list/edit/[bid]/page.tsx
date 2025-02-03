@@ -96,10 +96,8 @@ export default function BucketListEdit({
       originId: originId,
       // safeBox: 0,
     };
-    console.log("🚀 ~ updateBucket ~ formData:", formData)
     await editBucketListbyId(params.bid, formData)
-      .then((res) => {
-        console.log(res);
+      .then(() => {
         reset();
         router.push('/bucket-list?getRecommend=true');
       })

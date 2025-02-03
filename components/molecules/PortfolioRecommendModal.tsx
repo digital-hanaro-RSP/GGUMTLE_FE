@@ -48,10 +48,8 @@ interface recommendModal extends getPortfolioRecommendationResponse {
 export const PortfolioRecommendModal = ({
   recommended,
   investmentType,
-  estimatedInvestRatio,
   setIsModalOpen,
 }: recommendModal) => {
-  console.log('🚀 ~ estimatedInvestRatio:', estimatedInvestRatio);
   const [recommendTypeIndex, setRecommendTypeIndex] = useState(0);
   const [selectedType, setSelectedType] = useState<InvestmentType>();
   const [selectedTemplate, setSelectedTemplate] =
