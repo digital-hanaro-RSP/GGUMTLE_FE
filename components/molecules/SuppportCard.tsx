@@ -30,11 +30,11 @@ export const SupportCard = ({
         />
       </Card>
       <div className=''>
-        <p className='text-lg font-semibold break-keep text-center h-14 overflow-y-hidden'>
+        <p className='text-lg font-semibold break-keep mb-[2px] text-center h-14 overflow-y-hidden'>
           {title}
         </p>
-        <p className='text-gray-500 w-full text-right text-xs'>{desc1}</p>
-        <p className='text-gray-500 w-full text-right text-xs'>{desc2}</p>
+        <p className='text-gray-500 w-full text-center text-xs'>{desc1}</p>
+        <p className='text-gray-500 w-full text-center text-xs'>{desc2}</p>
         <p className='text-gray-500 w-full text-right text-xs'>{desc3}</p>
       </div>
     </a>
