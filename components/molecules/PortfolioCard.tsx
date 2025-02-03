@@ -30,6 +30,7 @@ type CustomDoughnutOptions = ChartOptions<'doughnut'> & {
   centerText?: string;
   isSelected?: boolean;
   isExpanded?: boolean;
+  isCommunity?: boolean;
 };
 
 interface PortfolioCardProps {
@@ -63,7 +64,8 @@ const LABELS = ['입출금', '예적금', '투자', '외화', '연금', '기타'
 const chartOptions = (
   centerText: string,
   isSelected: boolean,
-  isExpanded: boolean
+  isExpanded: boolean,
+  isCommunity: boolean
 ): CustomDoughnutOptions => ({
   cutout: '50%',
   plugins: {
@@ -75,6 +77,9 @@ const chartOptions = (
       callbacks: {
         label: (context: TooltipItem<'doughnut'>) => {
           const value = context.raw as number;
+          if (isCommunity) {
+            return `${context.label}: ${(value * 100).toFixed(1)}%`;
+          }
           return context.dataset.label === '목표'
             ? `${context.label}: ${(value * 100).toFixed(1)}%`
             : `${context.label}: ${value.toLocaleString()}원`;
@@ -302,7 +307,8 @@ export const PortfolioCard = ({
             options={chartOptions(
               '목표',
               selectedPortfolio === 'goal',
-              isExpanded
+              isExpanded,
+              !isMain
             )}
             plugins={[textCenter]}
           />
@@ -319,7 +325,8 @@ export const PortfolioCard = ({
             options={chartOptions(
               '현재',
               selectedPortfolio === 'current',
-              isExpanded
+              isExpanded,
+              !isMain
             )}
             plugins={[textCenter]}
           />

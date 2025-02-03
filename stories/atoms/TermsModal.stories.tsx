@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 
 const meta: Meta<typeof TermsModal> = {
-  title: 'Components/TermsModal',
+  title: 'Atoms/TermsModal',
   component: TermsModal,
   tags: ['autodocs'],
   decorators: (Story) => (

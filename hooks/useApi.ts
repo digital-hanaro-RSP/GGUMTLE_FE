@@ -17,7 +17,8 @@ export const useApi = () => {
     // public route가 아닐 경우에만 JWT 체크
     if (!isPublicRoute && !session?.user?.jwt) {
       update();
-      if (!session?.user.jwt) await signOut({ callbackUrl: '/login' });
+      if (!session?.user.jwt) throw new Error('No JWT token found');
+      await signOut({ callbackUrl: '/login' });
     }
 
     // JWT가 있는 경우에만 Authorization 헤더 추가
