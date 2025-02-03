@@ -7,6 +7,7 @@ export async function middleware(req: NextRequest) {
 
   const signinPath = '/start';
   const consentPath = '/mydata/consent';
+  const surveyPath = '/investment/start';
 
   // 로그인하지 않은 경우의 처리
   if (!didLogin && req.nextUrl.pathname !== signinPath) {
@@ -23,6 +24,9 @@ export async function middleware(req: NextRequest) {
       if (req.nextUrl.pathname !== consentPath) {
         return NextResponse.redirect(new URL(consentPath, req.url));
       }
+    }
+    if (permission === 1) {
+      return NextResponse.redirect(new URL(surveyPath, req.url));
     }
     // permission이 0이 아닌 경우
     else {

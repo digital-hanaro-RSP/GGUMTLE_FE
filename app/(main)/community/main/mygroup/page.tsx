@@ -33,20 +33,27 @@ export default function CommunityMainMyGroupPage() {
   return (
     <LazyMotion features={domAnimation}>
       <div className='flex flex-col w-full gap-[20px]'>
-        {groups.map((group, index) => (
-          <m.div
-            key={group.id}
-            ref={index === groups.length - 1 ? lastElementObserver : null}
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            onClick={() => router.push(`/community/group/${group.id}`)}
-            className='cursor-pointer'
-          >
-            <GroupCard {...group} />
-          </m.div>
-        ))}
+        {groups.length > 0 ? (
+          groups.map((group, index) => (
+            <m.div
+              key={group.id}
+              ref={index === groups.length - 1 ? lastElementObserver : null}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              onClick={() => router.push(`/community/group/${group.id}`)}
+              className='cursor-pointer'
+            >
+              <GroupCard {...group} />
+            </m.div>
+          ))
+        ) : (
+          <div className='mt-[100px] flex flex-col items-center gap-[20px] font-semibold text-[20px] text-primary-placeholder'>
+            <p>아직 가입한 꿈모임이 없어요.</p>
+            <p>원하시는 꿈모임에 가입해 주세요!</p>
+          </div>
+        )}
         {isLoading && (
           <div className='w-full flex justify-center mt-[20px]'>
             <div className='dot-loading'>

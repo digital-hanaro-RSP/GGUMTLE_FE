@@ -43,7 +43,7 @@ export default function AccountCard({
             {title}
           </h1>
           {/* 잔액 및 숨김 버튼 */}
-          <div className='flex items-center'>
+          <div className='flex items-center  mb-[10px]'>
             {/* 잔액 */}
             {isHide ? (
               <div className='flex items-center h-[36px]'>
