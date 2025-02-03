@@ -105,6 +105,29 @@ export default function BucketListEdit({
         .catch((err) => {
           alert(err);
         });
+    } else {
+      const formData: createBucketListReq = {
+        title: title,
+        tagType: tagType,
+        isDueSet: isDueDate,
+        howTo: howTo,
+        isAutoAllocate: autoAllocate,
+        allocateAmount: allocateAmount,
+        cronCycle: createCronCode(cycleOpt1, cycleOpt2),
+        goalAmount: goalAmount,
+        memo: memo,
+        isRecommended: false,
+        originId: originId,
+        // safeBox: 0,
+      };
+      await editBucketListbyId(params.bid, formData)
+        .then(() => {
+          reset();
+          router.push('/bucket-list?getRecommend=true');
+        })
+        .catch((err) => {
+          alert(err);
+        });
     }
   };
   useEffect(() => {
