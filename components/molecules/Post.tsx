@@ -67,10 +67,8 @@ export default function Post({
     const newLikeState = !isLiked;
     try {
       if (newLikeState) {
-        console.log('plusLike');
         await plusLike(groupId, id);
       } else {
-        console.log('minusLike');
         await minusLike(groupId, id);
       }
       // API 성공 시에만 state 업데이트

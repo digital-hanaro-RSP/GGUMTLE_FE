@@ -44,11 +44,9 @@ export default function CommentCard({
     try {
       if (newLikeState) {
         // 좋아요
-        console.log('plusCommentLike');
         await plusCommentLike(id);
       } else {
         // 좋아요 취소
-        console.log('minusCommentLike');
         await minusCommentLike(id);
       }
 

@@ -60,10 +60,8 @@ export const BucketListCard = ({
   isDueDate,
   onClick,
 }: BucketListCardProps) => {
-  console.log('🚀 ~ dueDate:', dueDate);
   const router = useRouter();
   const [transferDrawerOpen, setTransferDrawerOpen] = useState<boolean>(false);
-  console.log('🚀 ~ isDueDate:', isDueDate);
   const data = {
     datasets: [
       {

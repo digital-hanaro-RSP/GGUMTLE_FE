@@ -117,8 +117,6 @@ export default function BucketListPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(bucketLists);
-
   return (
     <div className='gap-2 flex flex-col w-full relative'>
       <AccountCard

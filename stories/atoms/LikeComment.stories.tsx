@@ -52,7 +52,6 @@ const LikeCommentWithState = ({
     const newLikeState = !isLiked;
     setIsLiked(newLikeState);
     setLikeCount((prev: number) => (newLikeState ? prev + 1 : prev - 1));
-    console.log('좋아요 상태:', newLikeState);
   };
 
   return (

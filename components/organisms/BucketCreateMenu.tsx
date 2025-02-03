@@ -364,7 +364,6 @@ export const CreateBucketMemo = () => {
         return false;
     }
     if (goalAmount === undefined) return false;
-    console.log('passed');
     return true;
   };
 

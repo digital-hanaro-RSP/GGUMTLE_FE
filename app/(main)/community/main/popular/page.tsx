@@ -31,8 +31,6 @@ export default function CommunityMainPopularPage() {
   useEffect(() => {
     if (Array.isArray(data)) {
       setPosts(data.map(parsePostData));
-    } else {
-      console.log('data는 array가 아닙니다.');
     }
   }, [data]);
 

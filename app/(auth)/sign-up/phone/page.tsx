@@ -127,7 +127,6 @@ export default function PhonePage() {
       );
 
       const data = await response.json();
-      console.log('Response:', response.status, data); // 디버깅용
 
       if (response.status === 200) {
         setShowVerification(true); // 순서 변경
