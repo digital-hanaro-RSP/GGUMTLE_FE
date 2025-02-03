@@ -237,6 +237,7 @@ export default function Post({
             <PortfolioCard
               goalPortfolio={snapShot.goalPortfolio}
               currentPortfolio={snapShot.currentPortfolio}
+              isMain={false}
             />
           </div>
         )}

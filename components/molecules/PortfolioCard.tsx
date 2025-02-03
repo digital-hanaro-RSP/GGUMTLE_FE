@@ -37,6 +37,7 @@ interface PortfolioCardProps {
   goalPortfolio: GoalPortfolio;
   onPortfolioUpdate?: () => Promise<void>; // optional로 변경
   investmentType?: InvestmentType; // optional로 변경
+  isMain?: boolean;
 }
 
 interface CustomChartData {
@@ -146,6 +147,7 @@ export const PortfolioCard = ({
   goalPortfolio,
   onPortfolioUpdate,
   investmentType,
+  isMain = true,
 }: PortfolioCardProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   // selectedPortfolio를 상수로 변경하여 항상 'goal'로 고정
@@ -344,16 +346,18 @@ export const PortfolioCard = ({
               isGoal={selectedPortfolio === 'goal'}
               onHover={setHoveredSection}
             />
-            <div className='flex justify-center mt-4'>
-              <button
-                onClick={handleModalOpen}
-                className='flex items-center gap-2 text-sm text-primary-main hover:text-primary-dark transition-colors focus:outline-none'
-                aria-label='목표 포트폴리오 수정'
-              >
-                <BsPencilSquare className='w-4 h-4' />
-                <span>목표 포트폴리오 수정하기</span>
-              </button>
-            </div>
+            {isMain && (
+              <div className='flex justify-center mt-4'>
+                <button
+                  onClick={handleModalOpen}
+                  className='flex items-center gap-2 text-sm text-primary-main hover:text-primary-dark transition-colors focus:outline-none'
+                  aria-label='목표 포트폴리오 수정'
+                >
+                  <BsPencilSquare className='w-4 h-4' />
+                  <span>목표 포트폴리오 수정하기</span>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
