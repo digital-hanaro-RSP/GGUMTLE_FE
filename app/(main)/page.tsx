@@ -1,5 +1,6 @@
 'use client';
 
+import { InstallPWA } from '@/components/atoms/InstallPWA';
 import LoadingDot from '@/components/atoms/LoadingDot';
 import { PortfolioCard } from '@/components/molecules/PortfolioCard';
 import ProductCard from '@/components/molecules/ProductCard';
@@ -172,6 +173,10 @@ export default function MainPage() {
           )}
         </div>
       )}
+
+      <div className='w-full relative'>
+        <InstallPWA />
+      </div>
     </div>
   );
 }
