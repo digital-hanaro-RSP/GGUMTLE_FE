@@ -83,6 +83,15 @@ export default function BucketListDetail({
                   alert('돈을 내보내는데 실패했습니다.');
                   window.location.reload();
                 });
+            } else {
+              await deleteBucketListbyId(bucketList?.id)
+                .then(() => {
+                  alert('삭제에 성공했습니다');
+                  router.push('/bucket-list?getRecommend=true');
+                })
+                .catch((err) => {
+                  alert(err);
+                });
             }
           })
           .catch(() => {
