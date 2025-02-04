@@ -16,7 +16,6 @@ import { Switch } from '@/components/ui/switch';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { getAllBucketListRes } from '@/types/BucketList';
-import Swal from 'sweetalert2';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -162,7 +161,7 @@ export default function EditPostPage() {
           <p className='text-[18px] font-bold'>
             글을 작성할 버킷리스트를 선택해주세요 (선택)
           </p>
-          <div className='flex p-[20px] h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
+          <div className='flex py-1 px-[20px] min-h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
             {/* 선택된 버킷리스트 목록 표시 */}
             <div>
               {selectedBucketList.length === 0 ? (

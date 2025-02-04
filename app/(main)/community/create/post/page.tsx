@@ -182,7 +182,7 @@ export default function CreatePostPage() {
           <p className='text-[18px] font-bold'>
             글을 작성할 버킷리스트를 선택해주세요 (선택)
           </p>
-          <div className='flex p-[20px] h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
+          <div className='flex py-1 px-[20px] min-h-[42px] items-center justify-between bg-white border border-primary-placeholder rounded-[10px]'>
             <div className=''>
               {selectedBucketList.length === 0 ? (
                 <p className='text-[14px] text-primary-placeholder'>
