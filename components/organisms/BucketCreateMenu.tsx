@@ -336,7 +336,7 @@ export const CreateBucketHowTo = () => {
             disable={!autoAllocate}
             ref={allocateAmountinputRef}
             onChange={onAllocateAmountChange}
-            value={allocateAmount?.toLocaleString() ?? '0'}
+            value={allocateAmount?.toLocaleString() ?? ''}
             placeHolder='자동이체 금액 입력'
           />
         </div>
@@ -344,7 +344,7 @@ export const CreateBucketHowTo = () => {
           ref={goalAmountinputRef}
           onChange={onGoalAmountChange}
           placeHolder='목표금액 입력'
-          value={goalAmount?.toLocaleString() ?? '0'}
+          value={goalAmount?.toLocaleString() ?? ''}
         />
       </div>
     </div>
