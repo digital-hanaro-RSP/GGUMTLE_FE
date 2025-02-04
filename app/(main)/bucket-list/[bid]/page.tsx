@@ -247,7 +247,7 @@ export default function BucketListDetail({
               <div className='bg-[#F4F6F8]'>
                 <small className='text-left '>
                   <h3 className='text-lg'>메모</h3>
-                  <div className='bg-white py-3 px-5 mx-2 mt-2 rounded-lg border-2 min-h-40 text-base'>
+                  <div className='bg-white py-3 px-5 mx-2 mt-2 rounded-lg border-2 min-h-40 text-base break-all'>
                     {bucketList.memo}
                   </div>
                 </small>
