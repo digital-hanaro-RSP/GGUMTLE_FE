@@ -48,7 +48,7 @@ export default function CommunityMainMyGroupPage() {
               <GroupCard {...group} />
             </m.div>
           ))
-        ) : (
+        ) : isLoading ? null : (
           <div className='mt-[100px] flex flex-col items-center gap-[20px] font-semibold text-[20px] text-primary-placeholder'>
             <p>아직 가입한 꿈모임이 없어요.</p>
             <p>원하시는 꿈모임에 가입해 주세요!</p>
