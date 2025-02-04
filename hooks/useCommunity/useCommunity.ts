@@ -12,7 +12,6 @@ import { encodeImageUrl } from '@/lib/utils';
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
 
-  // offset으로 수정해야할듯
   const getPosts = async (
     groupId: number,
     offset: number,
@@ -278,11 +277,11 @@ export const useCommunityApi = () => {
         }
       }
 
-      const encodedUrls = imageInfoArray.map((imageInfo) =>
-        encodeImageUrl(imageInfo)
+      const resultUrls = presignedUrls.map((presignedUrl) =>
+        presignedUrl.slice(0, presignedUrl.indexOf('?'))
       );
 
-      return encodedUrls;
+      return resultUrls;
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
       throw error;

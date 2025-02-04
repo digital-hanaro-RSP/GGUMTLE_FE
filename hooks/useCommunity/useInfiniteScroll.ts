@@ -8,8 +8,7 @@ interface UseInfiniteScrollProps<T> {
     search?: string;
   }) => Promise<T[]>;
   limit?: number;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dependencies?: any[];
+  dependencies?: (string | number)[];
   category?: string;
   search?: string;
 }
@@ -77,6 +76,7 @@ export const useInfiniteScroll = <T>({
   );
 
   useEffect(() => {
+    setData([]);
     setOffset(0);
     setHasMore(true);
     fetchItems(true);
