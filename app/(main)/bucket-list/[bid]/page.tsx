@@ -139,8 +139,8 @@ export default function BucketListDetail({
       text: '삭제는 되돌릴 수 없어요',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#D80000',
+      cancelButtonColor: '#C0C0C0',
       confirmButtonText: '네, 삭제할게요.',
       cancelButtonText: '취소',
     }).then((result) => {

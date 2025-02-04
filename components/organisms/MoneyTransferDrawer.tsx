@@ -73,11 +73,16 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
+            setTransferDrawerOpen(false);
             Swal.fire({
               title: 'Oops!',
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             });
           });
         break;
@@ -87,11 +92,16 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
+            setTransferDrawerOpen(false);
             Swal.fire({
               title: 'Oops!',
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             });
           });
         break;
@@ -101,11 +111,16 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
+            setTransferDrawerOpen(false);
             Swal.fire({
               title: 'Oops!',
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             });
           });
         break;
@@ -115,11 +130,16 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
+            setTransferDrawerOpen(false);
             Swal.fire({
               title: 'Oops!',
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.reload();
+              }
             });
           });
         break;
@@ -160,7 +180,12 @@ export const MoneyTransferDrawer = ({
                 setBucketList(res);
               })
               .catch((err) => {
-                alert(err);
+                Swal.fire({
+                  title: 'Oops!',
+                  text: err || '금액을 확인할 수 없습니다.',
+                  icon: 'error',
+                  confirmButtonText: '네',
+                });
               });
           }
         };
@@ -173,7 +198,12 @@ export const MoneyTransferDrawer = ({
           setAccountInfo(res);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '계좌정보를 불러올 수 없습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     getAccount();
