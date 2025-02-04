@@ -66,6 +66,7 @@ export default function Post({
         text: '좋아요를 원하시면 그룹에 가입해 주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }

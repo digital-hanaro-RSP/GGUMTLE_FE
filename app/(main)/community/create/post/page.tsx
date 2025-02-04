@@ -66,6 +66,7 @@ export default function CreatePostPage() {
         setSelectedGroup(initialGroup);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, myGroups]);
 
   const onChangeContent = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

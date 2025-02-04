@@ -87,6 +87,7 @@ export default function BucketListPage() {
             text: err || '버킷리스트 가져오기에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
@@ -101,6 +102,7 @@ export default function BucketListPage() {
             text: err || '계좌 정보 가져오기에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
@@ -120,6 +122,7 @@ export default function BucketListPage() {
               text: err || '포트폴리오 추천 가져오기에 실패했습니다.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             });
           });
       }

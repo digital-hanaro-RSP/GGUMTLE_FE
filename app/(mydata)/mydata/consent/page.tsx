@@ -27,6 +27,7 @@ export default function ConsentPage() {
         text: '모든 항목에 동의해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -50,6 +51,7 @@ export default function ConsentPage() {
           text: '마이데이터 권한 설정에 실패했습니다.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       }
     } catch {
@@ -58,6 +60,7 @@ export default function ConsentPage() {
         text: '마이데이터 권한 설정에 실패했습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
     }
   };
