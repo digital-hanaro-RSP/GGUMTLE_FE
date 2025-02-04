@@ -277,11 +277,11 @@ export const useCommunityApi = () => {
         }
       }
 
-      const encodedUrls = imageInfoArray.map((imageInfo) =>
-        encodeImageUrl(imageInfo)
+      const resultUrls = presignedUrls.map((presignedUrl) =>
+        presignedUrl.slice(0, presignedUrl.indexOf('?'))
       );
 
-      return encodedUrls;
+      return resultUrls;
     } catch (error) {
       console.error('이미지 업로드 실패:', error);
       throw error;
