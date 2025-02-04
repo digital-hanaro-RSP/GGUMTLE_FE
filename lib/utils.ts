@@ -27,6 +27,9 @@ export const getRelativeTimeString = (dateString: string): string => {
   const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
   if (diffInMinutes < 60) {
+    if (diffInMinutes < 5) {
+      return `방금`;
+    }
     return `${diffInMinutes}분 전`;
   } else if (diffInHours < 24) {
     return `${diffInHours}시간 전`;
@@ -128,13 +131,24 @@ export const checkImageSize = (
   existingFiles: File[] = []
 ): boolean => {
   const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB
+  const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
+
+  if (!ALLOWED_TYPES.includes(newFile.type)) {
+    Swal.fire({
+      title: 'Oops!',
+      text: 'PNG, JPEG, JPG 형식의 이미지만 업로드 가능합니다.',
+      icon: 'error',
+      confirmButtonText: '네',
+    });
+    return false;
+  }
+
   const totalSizeSoFar = existingFiles.reduce((acc, cur) => acc + cur.size, 0);
   const newFileSize = newFile.size;
-
   if (totalSizeSoFar + newFileSize > MAX_TOTAL_SIZE) {
     Swal.fire({
       title: 'Oops!',
-      text: '이미지는 10MB 이하로 업로드해 주세요.',
+      text: '이미지는 총합 10MB 이하로 업로드해 주세요.',
       icon: 'error',
       confirmButtonText: '네',
     });

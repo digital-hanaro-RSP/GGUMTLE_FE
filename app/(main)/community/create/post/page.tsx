@@ -75,7 +75,7 @@ export default function CreatePostPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!checkImageSize(file)) {
+      if (!checkImageSize(file, selectedFiles)) {
         return;
       }
       const imageUrl = URL.createObjectURL(file);

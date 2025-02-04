@@ -16,6 +16,7 @@ import { Switch } from '@/components/ui/switch';
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { getAllBucketListRes } from '@/types/BucketList';
+import Swal from 'sweetalert2';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -81,7 +82,7 @@ export default function EditPostPage() {
     e.preventDefault();
 
     try {
-      // 1. 새로운 이미지(File 객체)와 기존 이미지(URL 문자열) 분리
+      //새로운 이미지(File 객체)와 기존 이미지(URL 문자열) 분리
       const newFiles = selectedImage.filter(
         (image): image is File => image instanceof File
       );
@@ -89,23 +90,23 @@ export default function EditPostPage() {
         (image): image is string => typeof image === 'string'
       );
 
-      // 2. 새로운 이미지만 업로드
+      //새로운 이미지만 업로드
       let finalImageUrls = [...existingUrls];
       if (newFiles.length > 0) {
         const uploadedUrls = await uploadImages(newFiles);
         finalImageUrls = [...finalImageUrls, ...uploadedUrls];
       }
 
-      // 3. 최종 이미지 URL 배열을 JSON 문자열로 변환
+      //최종 이미지 URL 배열을 JSON 문자열로 변환
       const imageUrlsString = JSON.stringify(finalImageUrls);
 
-      // 4. 스냅샷 생성 (create 페이지와 동일한 형식)
+      //스냅샷 생성 (create 페이지와 동일한 형식)
       const snapshot = JSON.stringify({
         bucketId: selectedBucketList.map((bucket) => bucket.id),
         portfolio: isPortfolioIncluded,
       });
 
-      // 5. 수정 API 호출
+      //수정 API 호출
       await editPost(
         Number(groupId),
         Number(param.postId),
@@ -127,7 +128,12 @@ export default function EditPostPage() {
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (!checkImageSize(file)) {
+      // 기존 이미지들은 이미 올라가 있기에 새로 추가되는 파일만 10mb 넘는지 검사
+      const existingFiles = selectedImage.filter(
+        (image): image is File => image instanceof File
+      );
+
+      if (!checkImageSize(file, existingFiles)) {
         return;
       }
       setSelectedImage((prev) => [...prev, file]); // File 객체를 직접 저장

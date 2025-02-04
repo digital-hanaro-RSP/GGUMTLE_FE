@@ -65,7 +65,10 @@ export default function PostIdPage() {
     fetchData: ({ limit, offset }) =>
       getComments(limit, offset, Number(param.postId)),
     limit: 10,
-    dependencies: [param.postId, commentTrigger],
+    dependencies: [
+      Array.isArray(param.postId) ? param.postId[0] : param.postId,
+      commentTrigger,
+    ],
   });
 
   const handleCreateComment = async (content: string) => {
@@ -102,7 +105,7 @@ export default function PostIdPage() {
   return (
     <div className='flex flex-col gap-[20px] w-full'>
       {post && <Post {...post} isDetailPage={true} />}
-      <p className='ml-[20px]'>{comments.length}개의 댓글</p>
+      <p className='ml-[20px]'>{post?.commentCount}개의 댓글</p>
       <LazyMotion features={domAnimation}>
         <div className='flex flex-col gap-[25px] pb-[200px] pt-[20px] bg-white'>
           {comments.map((comment, index) => (
