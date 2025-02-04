@@ -7,7 +7,8 @@ export async function middleware(req: NextRequest) {
 
   const signinPath = '/start';
   const consentPath = '/mydata/consent';
-  const surveyPath = '/investment/start';
+  const syncPath = '/mydata/sync';
+  const surveyPath = '/investment';
 
   // 로그인하지 않은 경우의 처리
   if (!didLogin && req.nextUrl.pathname !== signinPath) {
@@ -17,6 +18,8 @@ export async function middleware(req: NextRequest) {
   // 로그인했을 때의 처리
   if (didLogin) {
     const permission = session.user.permission;
+    console.log('🚀 ~ middleware ~ permission:', permission);
+    console.log('🚀 ~ middleware ~ url:', req.nextUrl.pathname);
 
     // permission이 0인 경우
     if (permission === 0) {
@@ -24,11 +27,12 @@ export async function middleware(req: NextRequest) {
       if (req.nextUrl.pathname !== consentPath) {
         return NextResponse.redirect(new URL(consentPath, req.url));
       }
+    } else if (permission === 1) {
+      if (req.nextUrl.pathname === syncPath) return;
+      if (!req.nextUrl.pathname.includes(surveyPath))
+        return NextResponse.redirect(new URL(`${surveyPath}/start`, req.url));
     }
-    if (permission === 1) {
-      return NextResponse.redirect(new URL(surveyPath, req.url));
-    }
-    // permission이 0이 아닌 경우
+    // permission이 0,1이 아닌 경우
     else {
       // consent 페이지로 접근하려 할 때
       if (req.nextUrl.pathname === consentPath) {

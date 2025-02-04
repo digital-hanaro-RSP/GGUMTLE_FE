@@ -93,24 +93,36 @@ export default function MyPage() {
   };
 
   const handleDeleteAccount = async () => {
-    if (
-      window.confirm('정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.')
-    ) {
-      try {
-        await deleteUser();
-        await signOut({ redirect: false });
-        router.push('/start');
-      } catch (error) {
-        console.error('Failed to delete account:', error);
-
-        Swal.fire({
-          title: 'Oops!',
-          text: '회원탈퇴 처리 중 오류가 발생했습니다.',
-          icon: 'error',
-          confirmButtonText: '네',
-        });
+    Swal.fire({
+      title: '정말 회원을 탈퇴하시겠어요?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네, 탈퇴할게요!',
+      cancelButtonText: '취소',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteUser();
+          Swal.fire({
+            title: '탈퇴되었어요!',
+            icon: 'success',
+          });
+          await signOut({ redirect: false });
+          router.push('/start');
+        } catch (error) {
+          console.error('Failed to delete account:', error);
+          Swal.fire({
+            title: 'Oops!',
+            text: '회원탈퇴 처리 중 오류가 발생했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
+        }
       }
-    }
+    });
   };
 
   const handleLogout = async () => {
