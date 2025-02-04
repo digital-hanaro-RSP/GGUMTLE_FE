@@ -117,7 +117,6 @@ export default function PostIdPage() {
               viewport={{ once: true }}
               transition={{
                 duration: 0.5,
-                delay: index * 0.1,
               }}
             >
               <CommentCard {...comment} onDelete={handleCommentDelete} />
