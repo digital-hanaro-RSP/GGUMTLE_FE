@@ -87,64 +87,49 @@ export default function BucketListEdit({
   const router = useRouter();
 
   const updateBucket = async () => {
-    if (date) {
-      const formData: createBucketListReq = {
-        title: title,
-        tagType: tagType,
-        isDueSet: isDueDate,
-        dueDate: new Date(date).toISOString().split('T')[0],
-        howTo: howTo,
-        isAutoAllocate: autoAllocate,
-        allocateAmount: allocateAmount,
-        cronCycle: createCronCode(cycleOpt1, cycleOpt2),
-        goalAmount: goalAmount,
-        memo: memo,
-        isRecommended: false,
-        originId: originId,
-        // safeBox: 0,
-      };
-      await editBucketListbyId(params.bid, formData)
-        .then(() => {
-          reset();
-          router.push('/bucket-list?getRecommend=true');
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: 'Oops!',
-            text: err || '버킷리스트 수정하기를 실패했습니다.',
-            icon: 'error',
-            confirmButtonText: '네',
-          });
+    const formData: createBucketListReq = date
+      ? {
+          title: title,
+          tagType: tagType,
+          isDueSet: isDueDate,
+          dueDate: new Date(new Date(date).getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .split('T')[0],
+          howTo: howTo,
+          isAutoAllocate: autoAllocate,
+          allocateAmount: allocateAmount,
+          cronCycle: createCronCode(cycleOpt1, cycleOpt2),
+          goalAmount: goalAmount,
+          memo: memo,
+          isRecommended: false,
+          originId: originId,
+        }
+      : {
+          title: title,
+          tagType: tagType,
+          isDueSet: isDueDate,
+          howTo: howTo,
+          isAutoAllocate: autoAllocate,
+          allocateAmount: allocateAmount,
+          cronCycle: createCronCode(cycleOpt1, cycleOpt2),
+          goalAmount: goalAmount,
+          memo: memo,
+          isRecommended: false,
+          originId: originId,
+        };
+    await editBucketListbyId(params.bid, formData)
+      .then(() => {
+        reset();
+        router.push('/bucket-list?getRecommend=true');
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: 'Oops!',
+          text: err || '버킷리스트 수정하기를 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
         });
-    } else {
-      const formData: createBucketListReq = {
-        title: title,
-        tagType: tagType,
-        isDueSet: isDueDate,
-        howTo: howTo,
-        isAutoAllocate: autoAllocate,
-        allocateAmount: allocateAmount,
-        cronCycle: createCronCode(cycleOpt1, cycleOpt2),
-        goalAmount: goalAmount,
-        memo: memo,
-        isRecommended: false,
-        originId: originId,
-        // safeBox: 0,
-      };
-      await editBucketListbyId(params.bid, formData)
-        .then(() => {
-          reset();
-          router.push('/bucket-list?getRecommend=true');
-        })
-        .catch((err) => {
-          Swal.fire({
-            title: 'Oops!',
-            text: err || '버킷리스트 수정하기를 실패했습니다.',
-            icon: 'error',
-            confirmButtonText: '네',
-          });
-        });
-    }
+      });
   };
   useEffect(() => {
     if (bucketList) {

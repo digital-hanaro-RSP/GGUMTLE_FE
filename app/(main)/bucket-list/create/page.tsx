@@ -81,21 +81,37 @@ export default function BucketListRegisterPage() {
   }, []);
 
   const createBucket = async () => {
-    const formData: createBucketListReq = {
-      title: title,
-      tagType: tagType,
-      isDueSet: isDueDate,
-      dueDate: date?.toISOString().split('T')[0],
-      howTo: howTo,
-      isAutoAllocate: autoAllocate,
-      allocateAmount: allocateAmount,
-      cronCycle: createCronCode(cycleOpt1, cycleOpt2),
-      goalAmount: goalAmount,
-      memo: memo,
-      isRecommended: false,
-      originId: originId,
-      // safeBox: 0,
-    };
+    const formData: createBucketListReq = date
+      ? {
+          title: title,
+          tagType: tagType,
+          isDueSet: isDueDate,
+          dueDate: new Date(date?.getTime() + 9 * 60 * 60 * 1000)
+            .toISOString()
+            .split('T')[0],
+          howTo: howTo,
+          isAutoAllocate: autoAllocate,
+          allocateAmount: allocateAmount,
+          cronCycle: createCronCode(cycleOpt1, cycleOpt2),
+          goalAmount: goalAmount,
+          memo: memo,
+          isRecommended: false,
+          originId: originId,
+          // safeBox: 0,
+        }
+      : {
+          title: title,
+          tagType: tagType,
+          isDueSet: isDueDate,
+          howTo: howTo,
+          isAutoAllocate: autoAllocate,
+          allocateAmount: allocateAmount,
+          cronCycle: createCronCode(cycleOpt1, cycleOpt2),
+          goalAmount: goalAmount,
+          memo: memo,
+          isRecommended: false,
+          originId: originId,
+        };
     await createBucketList(formData)
       .then(() => {
         reset();
