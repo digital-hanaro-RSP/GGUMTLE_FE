@@ -64,8 +64,8 @@ export default function GroupLayout({
       text: '이 작업은 되돌릴 수 없습니다.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#D80000',
+      cancelButtonColor: '#C0C0C0',
       confirmButtonText: '네, 탈퇴할게요!',
       cancelButtonText: '취소',
     }).then(async (result) => {
