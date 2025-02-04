@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import { RadioItem } from '@/components/atoms/RadioItem';
 import { useSignUpStore } from '@/store/useSignUpStore';
+import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useState } from 'react';
@@ -39,7 +40,12 @@ export default function SignUpPage() {
   const handleNext = () => {
     // 입력값 존재 여부 검증
     if (!name || !birth.year || !birth.month || !birth.day || !gender) {
-      alert('모든 정보를 입력해주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '모든 정보를 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
@@ -52,7 +58,12 @@ export default function SignUpPage() {
       !numberRegex.test(birth.month) ||
       !numberRegex.test(birth.day)
     ) {
-      alert('생년월일은 숫자만 입력 가능합니다.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '생년월일은 숫자만 입력 가능합니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
@@ -62,17 +73,32 @@ export default function SignUpPage() {
     const day = parseInt(birth.day);
 
     if (year < 1900 || year > new Date().getFullYear()) {
-      alert('올바른 출생연도를 입력해주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '올바른 출생연도를 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
     if (month < 1 || month > 12) {
-      alert('올바른 월을 입력해주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '올바른 월을 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
     if (day < 1 || day > 31) {
-      alert('올바른 일을 입력해주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '올바른 일을 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 

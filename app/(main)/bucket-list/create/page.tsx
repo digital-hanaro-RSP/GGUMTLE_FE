@@ -10,6 +10,7 @@ import {
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { bucketListTagType, createBucketListReq } from '@/types/BucketList';
+import Swal from 'sweetalert2';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
@@ -98,10 +99,21 @@ export default function BucketListRegisterPage() {
     await createBucketList(formData)
       .then(() => {
         reset();
+        Swal.fire({
+          text: '버킷리스트 생성에 성공했습니다.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         router.push('/bucket-list?getRecommend=true');
       })
       .catch((err) => {
-        alert(err);
+        Swal.fire({
+          title: 'Oops!',
+          text: err || '버킷리스트 생성에 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       });
   };
 

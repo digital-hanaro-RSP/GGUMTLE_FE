@@ -9,6 +9,7 @@ import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import { useDreamAccountApi } from '@/hooks/useDreamAccount/useDreamAccount';
 import { accountInfoRes } from '@/types/Account';
 import { getBucketListbyIdRes } from '@/types/BucketList';
+import Swal from 'sweetalert2';
 import { useEffect, useRef, useState } from 'react';
 import { cn, parseIntWithoutCommas } from '@/lib/utils';
 import { Button } from '../atoms/Button';
@@ -72,7 +73,12 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
-            alert('금액이 부족합니다.');
+            Swal.fire({
+              title: 'Oops!',
+              text: '금액이 부족합니다.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
         break;
       case 'RECEIVE':
@@ -81,7 +87,12 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
-            alert('금액이 부족합니다.');
+            Swal.fire({
+              title: 'Oops!',
+              text: '금액이 부족합니다.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
         break;
       case 'FILLUP':
@@ -90,7 +101,12 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
-            alert('금액이 부족합니다.');
+            Swal.fire({
+              title: 'Oops!',
+              text: '금액이 부족합니다.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
         break;
       case 'BRINGOUT':
@@ -99,7 +115,12 @@ export const MoneyTransferDrawer = ({
             setTransferSuccess(true);
           })
           .catch(() => {
-            alert('금액이 부족합니다.');
+            Swal.fire({
+              title: 'Oops!',
+              text: '금액이 부족합니다.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
         break;
     }

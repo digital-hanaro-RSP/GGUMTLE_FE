@@ -23,6 +23,7 @@ import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 import { BucketListCard } from './BucketListCard';
 import { PortfolioCard } from './PortfolioCard';
+import Swal from 'sweetalert2';
 
 // TODO
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
@@ -60,7 +61,12 @@ export default function Post({
     // 댓글은 그룹 가입 안해도 좋아요 되는 문제 있음.
     const res = await isMember(groupId);
     if (res.isMember === false) {
-      alert('좋아요를 원하시면 그룹에 가입해 주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '좋아요를 원하시면 그룹에 가입해 주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 

@@ -15,6 +15,7 @@ import { transferReq } from '@/types/Account';
 import { getBucketListbyIdRes } from '@/types/BucketList';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { calculatePercent, changeStatus, cn } from '@/lib/utils';
@@ -49,7 +50,12 @@ export default function BucketListDetail({
           setBucketList(res);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 가져오기에 실패했습니다',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     fetchBucketListbyId();
@@ -70,36 +76,78 @@ export default function BucketListDetail({
                 .then(async () => {
                   await deleteBucketListbyId(bucketList?.id)
                     .then(() => {
-                      alert(
-                        '삭제에 성공했습니다. 잔액은 꿈 계좌로 이동시켜드릴게요.'
-                      );
+                      Swal.fire({
+                        text: '삭제에 성공했습니다. 잔액은 꿈 계좌로 이동시켜드릴게요.',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 1500,
+                      });
                       router.push('/bucket-list?getRecommend=true');
                     })
                     .catch((err) => {
-                      alert(err);
+                      Swal.fire({
+                        title: 'Oops!',
+                        text: err || '삭제에 실패했습니다. 다시 시도해주세요.',
+                        icon: 'error',
+                        confirmButtonText: '네',
+                      });
                     });
                 })
-                .catch(() => {
-                  alert('돈을 내보내는데 실패했습니다.');
+                .catch((err) => {
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: err || '돈을 내보내는데 실패했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '네',
+                  });
                   window.location.reload();
                 });
             } else {
               await deleteBucketListbyId(bucketList?.id)
                 .then(() => {
-                  alert('삭제에 성공했습니다');
+                  Swal.fire({
+                    text: '삭제에 성공했습니다.',
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500,
+                  });
                   router.push('/bucket-list?getRecommend=true');
                 })
                 .catch((err) => {
-                  alert(err);
+                  Swal.fire({
+                    title: 'Oops!',
+                    text: err || '삭제에 실패했습니다. 다시 시도해주세요.',
+                    icon: 'error',
+                    confirmButtonText: '네',
+                  });
                 });
             }
           })
-          .catch(() => {
-            alert('삭제에 실패했습니다.');
+          .catch((err) => {
+            Swal.fire({
+              title: 'Oops!',
+              text:
+                err || '계좌 정보 가져오기를 실패했습니다. 다시 시도해주세요.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
       }
     };
-    del();
+    Swal.fire({
+      title: '정말 삭제하시겠어요?',
+      text: '삭제는 되돌릴 수 없어요',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네, 삭제할게요.',
+      cancelButtonText: '취소',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        del();
+      }
+    });
   };
 
   const calculateExpect = () => {
