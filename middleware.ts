@@ -18,8 +18,6 @@ export async function middleware(req: NextRequest) {
   // 로그인했을 때의 처리
   if (didLogin) {
     const permission = session.user.permission;
-    console.log('🚀 ~ middleware ~ permission:', permission);
-    console.log('🚀 ~ middleware ~ url:', req.nextUrl.pathname);
 
     // permission이 0인 경우
     if (permission === 0) {
