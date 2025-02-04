@@ -43,7 +43,7 @@ export default function GroupCard({
     <Card onClick={handleClick} className={cn(className)} ref={ref}>
       <div className='flex gap-[20px] height-[80px] items-center justify-between'>
         <div className='flex gap-[20px] items-center'>
-          <div className='w-[80px] h-[80px] relative rounded-[10px] overflow-hidden'>
+          <div className='min-w-[80px] min-h-[80px] relative rounded-[10px] overflow-hidden'>
             <Image
               src={`${imageUrl}`}
               alt='group image'
@@ -54,7 +54,7 @@ export default function GroupCard({
 
           <div className='flex flex-col gap-[7px]'>
             <p className='font-bold text-[16px]'>{name}</p>
-            <p className='text-[14px]'>{description}</p>
+            <p className='text-[14px] break-all'>{description}</p>
             <div className='flex gap-[7px] items-center text-[#B9B9B9]'>
               <IoPeople width={14} height={14} />
               <span className='text-[12px]'>{memberCount} 명</span>
@@ -69,7 +69,7 @@ export default function GroupCard({
           <IoIosArrowDown
             width={20}
             height={20}
-            className='-rotate-90 text-primary-placeholder'
+            className='-rotate-90 text-primary-placeholder min-w-5 min-h-5'
           />
         )}
       </div>
