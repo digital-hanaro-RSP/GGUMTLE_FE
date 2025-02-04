@@ -10,6 +10,7 @@ import {
 import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import useCreateBucketStore from '@/store/useCreateBucketStore';
 import { createBucketListReq, getBucketListbyIdRes } from '@/types/BucketList';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -54,7 +55,12 @@ export default function BucketListEdit({
           setBucketList(res);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 가져오기에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     reset();
@@ -103,7 +109,12 @@ export default function BucketListEdit({
           router.push('/bucket-list?getRecommend=true');
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 수정하기를 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     } else {
       const formData: createBucketListReq = {
@@ -126,7 +137,12 @@ export default function BucketListEdit({
           router.push('/bucket-list?getRecommend=true');
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 수정하기를 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     }
   };

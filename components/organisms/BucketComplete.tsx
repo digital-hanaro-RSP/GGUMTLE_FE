@@ -4,6 +4,7 @@ import { useInfiniteScroll } from '@/hooks/useCommunity/useInfiniteScroll';
 import { useUserApi } from '@/hooks/useUser/useUser';
 import { shareBucketlistCompleteReq } from '@/types/BucketList';
 import { Group } from '@/types/Community';
+import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -75,7 +76,12 @@ export const ShareToGroup = () => {
           setUserNickName(res.nickname);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '회원정보 불러오기에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     UserInfo();
@@ -172,7 +178,12 @@ export const GroupListDrawer = ({ title }: GroupListDrawerProps) => {
           setIsCompleteSharing(true);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 성공 공유에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     }
     return;

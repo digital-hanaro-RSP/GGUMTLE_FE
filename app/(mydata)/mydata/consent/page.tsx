@@ -5,6 +5,7 @@ import { AgreementBox } from '@/components/molecules/AgreementBox';
 import { TermsModal } from '@/components/molecules/TermsModal';
 import { useMyDataApi } from '@/hooks/useMyData/useMyData';
 import { useSession } from 'next-auth/react';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -21,7 +22,12 @@ export default function ConsentPage() {
 
   const handleConsentSuccess = async () => {
     if (!isChecked) {
-      alert('모든 항목에 동의해주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '모든 항목에 동의해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
@@ -39,10 +45,20 @@ export default function ConsentPage() {
 
         router.push('/mydata/sync');
       } else {
-        alert('마이데이터 권한 설정에 실패했습니다.');
+        Swal.fire({
+          title: 'Oops!',
+          text: '마이데이터 권한 설정에 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       }
-    } catch (error) {
-      alert(error);
+    } catch {
+      Swal.fire({
+        title: 'Oops!',
+        text: '마이데이터 권한 설정에 실패했습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
     }
   };
 

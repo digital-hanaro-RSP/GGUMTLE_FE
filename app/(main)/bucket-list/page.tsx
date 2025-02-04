@@ -21,6 +21,7 @@ import { accountInfoRes } from '@/types/Account';
 import { getAllBucketListRes } from '@/types/BucketList';
 import { InvestmentType } from '@/types/Portfolio';
 import { IoIosArrowDown } from 'react-icons/io';
+import Swal from 'sweetalert2';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import { calculatePercent, cn } from '@/lib/utils';
@@ -81,7 +82,12 @@ export default function BucketListPage() {
           setBucketLists(res);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '버킷리스트 가져오기에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     const fetchAccountInfo = async () => {
@@ -90,7 +96,12 @@ export default function BucketListPage() {
           setAccountInfo(res);
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '계좌 정보 가져오기에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
         });
     };
     const needRecommendation = async () => {
@@ -104,7 +115,12 @@ export default function BucketListPage() {
             }
           })
           .catch((err) => {
-            alert(err);
+            Swal.fire({
+              title: 'Oops!',
+              text: err || '포트폴리오 추천 가져오기에 실패했습니다.',
+              icon: 'error',
+              confirmButtonText: '네',
+            });
           });
       }
     };

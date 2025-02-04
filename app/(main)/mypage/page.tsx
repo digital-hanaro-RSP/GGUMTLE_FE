@@ -14,6 +14,7 @@ import { PasswordEditModal } from '@/components/molecules/PasswordEditModal';
 import { useUserApi } from '@/hooks/useUser/useUser';
 import { signOut } from 'next-auth/react';
 import { IoMenu } from 'react-icons/io5';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 
@@ -101,7 +102,13 @@ export default function MyPage() {
         router.push('/start');
       } catch (error) {
         console.error('Failed to delete account:', error);
-        alert('회원탈퇴 처리 중 오류가 발생했습니다.');
+
+        Swal.fire({
+          title: 'Oops!',
+          text: '회원탈퇴 처리 중 오류가 발생했습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       }
     }
   };

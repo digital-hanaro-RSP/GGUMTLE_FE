@@ -20,6 +20,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import { BsPencilSquare } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { PortfolioDetails } from './PortfolioDetails';
 import { PortfolioModal } from './PortfolioModal';
@@ -215,7 +216,12 @@ export const PortfolioCard = ({
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : '포트폴리오 설정에 실패했습니다.';
-      alert(errorMessage);
+      Swal.fire({
+        title: 'Oops!',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       console.error(err);
     } finally {
       setIsLoading(false);

@@ -12,6 +12,7 @@ import { useBucketListApi } from '@/hooks/useBucketList/useBucketList';
 import useRecommendBucketStore from '@/store/useRecommendBucketStore';
 import { bucketListTagType, RecommendBucketListType } from '@/types/BucketList';
 import { FiPlusCircle } from 'react-icons/fi';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
@@ -61,7 +62,14 @@ export default function RecommendBucketPage() {
       .then((res) => {
         setData(res);
       })
-      .catch((err) => alert(err));
+      .catch((err) => {
+        Swal.fire({
+          title: 'Oops!',
+          text: err || '버킷리스트 추천 가져오기에 실패했습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
+      });
   };
 
   useEffect(() => {

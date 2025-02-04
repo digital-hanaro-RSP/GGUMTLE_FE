@@ -6,6 +6,7 @@ import {
   InvestmentType,
   PortfolioTemplate,
 } from '@/types/Portfolio';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { Button } from '../atoms/Button';
@@ -84,11 +85,22 @@ export const PortfolioRecommendModal = ({
     const changeGoalPortfolio = async () => {
       await setManualPortfolio(investmentType)
         .then(() => {
-          alert('정상적으로 변경되었습니다.');
+          Swal.fire({
+            text: '정상적으로 변경되었습니다.',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500,
+          });
           router.push('/');
         })
         .catch((err) => {
-          alert(err);
+          Swal.fire({
+            title: 'Oops!',
+            text: err || '목표 포트폴리오 변경에 실패했습니다.',
+            icon: 'error',
+            confirmButtonText: '네',
+          });
+          window.location.reload();
         });
     };
     changeGoalPortfolio();
