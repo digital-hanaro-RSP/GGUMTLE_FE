@@ -77,7 +77,6 @@ export default function MyPage() {
   };
 
   const handlePasswordUpdate = async (passwords: {
-    currentPassword: string;
     newPassword: string;
     confirmPassword: string;
   }) => {
@@ -109,6 +108,7 @@ export default function MyPage() {
           Swal.fire({
             title: '탈퇴되었어요!',
             icon: 'success',
+            timer: 1500,
           });
           await signOut({ redirect: false });
           router.push('/start');
@@ -119,6 +119,7 @@ export default function MyPage() {
             text: '회원탈퇴 처리 중 오류가 발생했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         }
       }

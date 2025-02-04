@@ -53,6 +53,7 @@ export default function ProfilePage() {
         text: '비밀번호가 일치하지 않습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -97,6 +98,7 @@ export default function ProfilePage() {
             icon: 'success',
             showConfirmButton: false,
             timer: 1500,
+            confirmButtonColor: '#069894',
           });
           router.push('/sign-in');
         } else {
@@ -108,6 +110,7 @@ export default function ProfilePage() {
                 text: data.message || '중복된 전화번호입니다.',
                 icon: 'error',
                 confirmButtonText: '네',
+                confirmButtonColor: '#069894',
               });
               break;
             case 500:
@@ -116,6 +119,7 @@ export default function ProfilePage() {
                 text: data.message || '내부 서버 오류가 발생했습니다.',
                 icon: 'error',
                 confirmButtonText: '네',
+                confirmButtonColor: '#069894',
               });
               break;
             default:
@@ -124,6 +128,7 @@ export default function ProfilePage() {
                 text: data.message || '회원가입에 실패했습니다.',
                 icon: 'error',
                 confirmButtonText: '네',
+                confirmButtonColor: '#069894',
               });
           }
         }
@@ -134,6 +139,7 @@ export default function ProfilePage() {
           text: '회원가입 중 오류가 발생했습니다.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       }
     } else {
@@ -142,6 +148,7 @@ export default function ProfilePage() {
         text: '모든 필수 항목을 입력해주세요',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
     }
   };

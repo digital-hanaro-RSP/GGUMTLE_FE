@@ -55,6 +55,7 @@ export default function BucketListDetail({
             text: err || '버킷리스트 가져오기에 실패했습니다',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
@@ -81,6 +82,7 @@ export default function BucketListDetail({
                         icon: 'success',
                         showConfirmButton: false,
                         timer: 1500,
+                        confirmButtonColor: '#069894',
                       });
                       router.push('/bucket-list?getRecommend=true');
                     })
@@ -90,6 +92,7 @@ export default function BucketListDetail({
                         text: err || '삭제에 실패했습니다. 다시 시도해주세요.',
                         icon: 'error',
                         confirmButtonText: '네',
+                        confirmButtonColor: '#069894',
                       });
                     });
                 })
@@ -99,6 +102,7 @@ export default function BucketListDetail({
                     text: err || '돈을 내보내는데 실패했습니다.',
                     icon: 'error',
                     confirmButtonText: '네',
+                    confirmButtonColor: '#069894',
                   });
                   window.location.reload();
                 });
@@ -110,6 +114,7 @@ export default function BucketListDetail({
                     icon: 'success',
                     showConfirmButton: false,
                     timer: 1500,
+                    confirmButtonColor: '#069894',
                   });
                   router.push('/bucket-list?getRecommend=true');
                 })
@@ -119,6 +124,7 @@ export default function BucketListDetail({
                     text: err || '삭제에 실패했습니다. 다시 시도해주세요.',
                     icon: 'error',
                     confirmButtonText: '네',
+                    confirmButtonColor: '#069894',
                   });
                 });
             }
@@ -130,6 +136,7 @@ export default function BucketListDetail({
                 err || '계좌 정보 가져오기를 실패했습니다. 다시 시도해주세요.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             });
           });
       }

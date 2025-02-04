@@ -34,6 +34,7 @@ export default function SignInPage() {
           text: '전화번호와 비밀번호를 확인해주세요',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
         return;
       }
@@ -44,6 +45,7 @@ export default function SignInPage() {
         icon: 'success',
         showConfirmButton: false,
         timer: 1500,
+        confirmButtonColor: '#069894',
       });
       router.push('/mydata/consent'); // 로그인 후 리다이렉트할 페이지
       router.refresh(); // 세션 상태 업데이트를 위한 새로고침
