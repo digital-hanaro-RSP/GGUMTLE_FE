@@ -83,6 +83,7 @@ function DefaultInput(
           onBlur={handleBlur}
           required={required}
           ref={ref}
+          maxLength={17}
           {...props}
         />
         {ref?.current?.value && (
@@ -189,6 +190,7 @@ function SearchInput(
           placeholder={placeHolder}
           ref={ref}
           {...props}
+          maxLength={17}
         />
         <div className='absolute h-11 w-fit right-0 flex z-100'>
           <button

@@ -7,6 +7,7 @@ import ShowSelectedImage from '@/components/atoms/ShowSelectedImage';
 import Tag from '@/components/atoms/Tag';
 import TextArea from '@/components/atoms/TextArea';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { checkImageSize } from '@/lib/utils';
@@ -77,6 +78,12 @@ export default function CreateGroupPage() {
       router.replace('/community/main/mygroup');
     } catch (error) {
       console.error('그룹 생성 실패:', error);
+      Swal.fire({
+        title: 'Oops!',
+        text: `${error}`,
+        icon: 'error',
+        confirmButtonText: '네',
+      });
     }
   };
 

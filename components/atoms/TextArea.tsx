@@ -47,6 +47,7 @@ const TextArea: React.FC<TextAreaProps> = ({ type, value, onChange }) => {
         onChange={onChange}
         placeholder={getPlaceholder(type)}
         className={`${baseClasses} ${sizeClasses[type]}`}
+        maxLength={255}
       />
     </div>
   );

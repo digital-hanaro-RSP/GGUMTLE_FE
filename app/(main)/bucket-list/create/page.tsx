@@ -81,6 +81,7 @@ export default function BucketListRegisterPage() {
   }, []);
 
   const createBucket = async () => {
+    
     const formData: createBucketListReq = date
       ? {
           title: title,
