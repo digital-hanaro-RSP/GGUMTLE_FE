@@ -7,6 +7,7 @@ import {
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { Comment } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 import { useParams } from 'next/navigation';
 import { useState } from 'react';
 import { getRelativeTimeString } from '@/lib/utils';
@@ -37,7 +38,12 @@ export default function CommentCard({
     const groupId = parseInt(tempGroupId);
     const res = await isMember(groupId);
     if (res.isMember === false) {
-      alert('좋아요를 원하시면 그룹에 가입해 주세요.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '좋아요를 원하시면 그룹에 가입해 주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 

@@ -9,6 +9,7 @@ import { usePortfolioApi } from '@/hooks/usePortfolio/usePortfolio';
 import { AdsResponse } from '@/types/Ads';
 import { PortfolioResponse } from '@/types/Portfolio';
 import { InvestmentTypeResponse, InvestmentType } from '@/types/Portfolio';
+import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useCallback, useEffect, useState } from 'react';
 
@@ -101,10 +102,20 @@ export default function MainPage() {
       // 투자성향 데이터도 새로고침
       const investmentResult = await getInvestmentType();
       setInvestmentData(investmentResult);
-      alert('포트폴리오가 성공적으로 업데이트되었습니다.');
+      Swal.fire({
+        text: '포트폴리오가 성공적으로 업데이트되었습니다.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       console.error('포트폴리오 데이터 로딩 실패:', error);
-      alert('포트폴리오 업데이트에 실패했습니다.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '포트폴리오 업데이트에 실패했습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
     }
   }, [refreshPortfolioData, getInvestmentType]);
 

@@ -67,16 +67,13 @@ export const ProgressBar = ({ dataPercent, className }: ProgressBarProps) => {
           >
             {countProgress.toFixed(0)}%
           </div>
-        </span>
-        <span
-          className={cn('absolute -top-1 w-full transition duration-1000')}
-          style={{ transform: `translateX(-${100 - (progress || 0)}%)` }}
-        >
           <div
             className={cn(
               'text-base break-keep -top-[30px] absolute w-36 transition duration-1000 font-semibold text-primary-main bg-transparent px-1 rounded-md backdrop-blur-lg bg-opacity-30 floating border-primary-main border-2 text-center py-2 ',
               showPercent ? 'opacity-100' : 'opacity-0',
-              dataPercent < 60 ? 'left-[325px] rounded-bl-none' : 'right-12 rounded-br-none'
+              dataPercent < 60
+                ? '-right-44 rounded-bl-none'
+                : 'right-12 rounded-br-none'
             )}
           >
             {mention()}

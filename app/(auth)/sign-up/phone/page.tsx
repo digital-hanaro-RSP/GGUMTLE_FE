@@ -3,6 +3,7 @@
 import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import { useSignUpStore } from '@/store/useSignUpStore';
+import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -38,7 +39,12 @@ export default function PhonePage() {
     ) as HTMLInputElement;
 
     if (!phoneInput?.value || !codeInput?.value) {
-      alert('전화번호와 인증번호를 모두 입력해주세요');
+      Swal.fire({
+        title: 'Oops!',
+        text: '전화번호와 인증번호를 모두 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
@@ -60,15 +66,35 @@ export default function PhonePage() {
       if (response.status === 200) {
         const formattedPhone = formatPhoneNumber(phoneInput.value);
         setPhoneInfo(formattedPhone);
-        alert('인증에 성공하였습니다.');
+        Swal.fire({
+          text: '인증에 성공하였습니다.',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500,
+        });
         router.push('/sign-up/profile');
       } else if (response.status === 401) {
-        alert('인증번호가 일치하지 않습니다.');
+        Swal.fire({
+          title: 'Oops!',
+          text: '인증번호가 일치하지 않습니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       } else {
-        alert('인증에 실패했습니다. 다시 시도해주세요.');
+        Swal.fire({
+          title: 'Oops!',
+          text: '인증에 실패했습니다. 다시 시도해주세요.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       }
     } catch (error) {
-      alert('요청 중 오류가 발생했습니다.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '요청 중 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       console.error(error);
     }
   };
@@ -105,7 +131,12 @@ export default function PhonePage() {
       "input[name='phone']"
     ) as HTMLInputElement;
     if (!phoneInput?.value) {
-      alert('휴대전화 번호를 입력해주세요');
+      Swal.fire({
+        title: 'Oops!',
+        text: '휴대전화 번호를 입력해주세요.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       return;
     }
 
@@ -134,7 +165,12 @@ export default function PhonePage() {
         setTimerExpired(false);
 
         setTimeout(() => {
-          alert('문자가 발송되었습니다. 잠시만 기다려주세요.');
+          Swal.fire({
+            text: '문자가 발송되었습니다. 잠시만 기다려주세요.',
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 1500,
+          });
         }, 100);
 
         setTimeout(() => {
@@ -142,15 +178,35 @@ export default function PhonePage() {
           setIsButtonDisabled(false);
         }, 180000);
       } else if (response.status === 409) {
-        alert('이미 가입된 휴대전화 번호입니다.');
+        Swal.fire({
+          title: 'Oops!',
+          text: '이미 가입된 휴대전화 번호입니다.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       } else if (response.status === 400) {
-        alert(data.message);
+        Swal.fire({
+          title: 'Oops!',
+          text: data.message,
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       } else if (response.status === 500) {
-        alert('SMS 발송에 실패했습니다. 잠시 후 다시 시도해주세요.');
+        Swal.fire({
+          title: 'Oops!',
+          text: 'SMS 발송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
       }
     } catch (error) {
       console.error('Error:', error); // 디버깅용
-      alert('요청 중 오류가 발생했습니다.');
+      Swal.fire({
+        title: 'Oops!',
+        text: '요청 중 오류가 발생했습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
       setButtonText('인증번호 받기');
       setIsButtonDisabled(false);
     }
