@@ -44,6 +44,7 @@ export default function PhonePage() {
         text: '전화번호와 인증번호를 모두 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -71,6 +72,7 @@ export default function PhonePage() {
           icon: 'success',
           showConfirmButton: false,
           timer: 1500,
+          confirmButtonColor: '#069894',
         });
         router.push('/sign-up/profile');
       } else if (response.status === 401) {
@@ -79,6 +81,7 @@ export default function PhonePage() {
           text: '인증번호가 일치하지 않습니다.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       } else {
         Swal.fire({
@@ -86,6 +89,7 @@ export default function PhonePage() {
           text: '인증에 실패했습니다. 다시 시도해주세요.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       }
     } catch (error) {
@@ -94,6 +98,7 @@ export default function PhonePage() {
         text: '요청 중 오류가 발생했습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       console.error(error);
     }
@@ -136,6 +141,7 @@ export default function PhonePage() {
         text: '휴대전화 번호를 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -170,6 +176,7 @@ export default function PhonePage() {
             icon: 'info',
             showConfirmButton: false,
             timer: 1500,
+            confirmButtonColor: '#069894',
           });
         }, 100);
 
@@ -183,6 +190,7 @@ export default function PhonePage() {
           text: '이미 가입된 휴대전화 번호입니다.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       } else if (response.status === 400) {
         Swal.fire({
@@ -190,6 +198,7 @@ export default function PhonePage() {
           text: data.message,
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       } else if (response.status === 500) {
         Swal.fire({
@@ -197,6 +206,7 @@ export default function PhonePage() {
           text: 'SMS 발송에 실패했습니다. 잠시 후 다시 시도해주세요.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       }
     } catch (error) {
@@ -206,6 +216,7 @@ export default function PhonePage() {
         text: '요청 중 오류가 발생했습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       setButtonText('인증번호 받기');
       setIsButtonDisabled(false);

@@ -60,6 +60,7 @@ export default function BucketListEdit({
             text: err || '버킷리스트 가져오기에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
@@ -128,6 +129,7 @@ export default function BucketListEdit({
           text: err || '버킷리스트 수정하기를 실패했습니다.',
           icon: 'error',
           confirmButtonText: '네',
+          confirmButtonColor: '#069894',
         });
       });
   };

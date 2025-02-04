@@ -81,6 +81,7 @@ export const ShareToGroup = () => {
             text: err || '회원정보 불러오기에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
@@ -183,6 +184,7 @@ export const GroupListDrawer = ({ title }: GroupListDrawerProps) => {
             text: err || '버킷리스트 성공 공유에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     }

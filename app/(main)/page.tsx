@@ -106,6 +106,7 @@ export default function MainPage() {
         text: '포트폴리오가 성공적으로 업데이트되었습니다.',
         icon: 'success',
         showConfirmButton: false,
+        confirmButtonColor: '#069894',
         timer: 1500,
       });
     } catch (error) {
@@ -115,6 +116,7 @@ export default function MainPage() {
         text: '포트폴리오 업데이트에 실패했습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
     }
   }, [refreshPortfolioData, getInvestmentType]);
