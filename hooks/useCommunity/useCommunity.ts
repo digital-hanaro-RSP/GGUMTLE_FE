@@ -12,7 +12,6 @@ import { encodeImageUrl } from '@/lib/utils';
 export const useCommunityApi = () => {
   const { fetchApi } = useApi();
 
-  // offset으로 수정해야할듯
   const getPosts = async (
     groupId: number,
     offset: number,

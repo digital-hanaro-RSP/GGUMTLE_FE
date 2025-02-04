@@ -142,8 +142,6 @@ export default function Post({
             </div>
           </div>
 
-          {/* TODO */}
-          {/* 만약 본인이 작성자라면 드롭 다운 노출해야함 현재 본인이 작성자라는 판단을 할 수 없어서 구현 못했음*/}
           {mine && (
             <DropdownMenu>
               <DropdownMenuTrigger>

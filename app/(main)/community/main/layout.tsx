@@ -37,6 +37,7 @@ export default function CommunityMainLayout({
 
   const handleTabChange = (tab: Tab) => router.push(`/community/main/${tab}`);
 
+  //검색창 스크롤 감지
   useEffect(() => {
     const handleScroll = () => {
       if (!ticking.current) {
@@ -58,6 +59,7 @@ export default function CommunityMainLayout({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  //카테고리 스크롤 감지
   useEffect(() => {
     const checkScroll = () => {
       const container = categoryContainerRef.current;
@@ -193,7 +195,7 @@ export default function CommunityMainLayout({
         />
       </div>
 
-      {/* 추가 카드 모달 */}
+      {/* 게시글 추가 및 모임 추가 모달 */}
       {isAdd && (
         <div
           className='bg-black/50 backdrop-blur-sm fixed mx-auto w-full md:w-[768px] h-full z-[123] flex gap-4 justify-center items-center sm:px-[100px] md:px-[150px]'

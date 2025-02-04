@@ -26,6 +26,9 @@ export const getRelativeTimeString = (dateString: string): string => {
   const diffInDays = Math.floor(diffInMilliseconds / (1000 * 60 * 60 * 24));
 
   if (diffInMinutes < 60) {
+    if (diffInMinutes < 5) {
+      return `방금`;
+    }
     return `${diffInMinutes}분 전`;
   } else if (diffInHours < 24) {
     return `${diffInHours}시간 전`;
