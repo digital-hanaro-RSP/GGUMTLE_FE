@@ -45,6 +45,7 @@ export default function GroupLayout({
 
   useEffect(() => {
     fetchIsMember();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupId]);
 
   const handleJoinGroup = async () => {

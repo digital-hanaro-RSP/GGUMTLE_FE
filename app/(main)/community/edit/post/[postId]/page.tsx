@@ -51,6 +51,7 @@ export default function EditPostPage() {
       setContent(parseData.content);
 
       if (parseData.snapShot?.bucketLists) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         tempSeletedBucketIds = parseData.snapShot?.bucketLists.map(
           (bucketList: getAllBucketListRes) => bucketList.id
         );
