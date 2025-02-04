@@ -53,7 +53,7 @@ export default function GroupCard({
           </div>
 
           <div className='flex flex-col gap-[7px]'>
-            <p className='font-bold text-[16px]'>{name}</p>
+            <p className='font-bold text-[16px] break-all'>{name}</p>
             <p className='text-[14px] break-all'>{description}</p>
             <div className='flex gap-[7px] items-center text-[#B9B9B9]'>
               <IoPeople width={14} height={14} />
