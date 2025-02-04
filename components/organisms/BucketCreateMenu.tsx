@@ -26,7 +26,7 @@ import { addDays, format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { IoIosArrowDown } from 'react-icons/io';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { cn, parseIntWithoutCommas } from '@/lib/utils';
 import { DefaultInputRef } from '../atoms/Inputs';
 import { RadioItem } from '../atoms/RadioItem';
@@ -133,6 +133,7 @@ export const CreateBucketDueDate = () => {
   const clickIsDueDate = (tf: boolean) => {
     setIsDueDate(tf);
   };
+  const [popOverOpen, setPopOverOpen] = useState<boolean>();
   return (
     <div
       className={cn(
@@ -167,8 +168,14 @@ export const CreateBucketDueDate = () => {
           기간 설정
         </RadioItem>
       </fieldset>
-      <div className={cn(isDueDate ? 'animate-fadeIn' : 'hidden')}>
-        <Popover>
+      <div
+        className={cn(
+          isDueDate ? 'animate-fadeIn' : 'hidden',
+          popOverOpen ? 'h-96' : 'h-10',
+          'transition-all duration-500 ease-in-out'
+        )}
+      >
+        <Popover open={popOverOpen} onOpenChange={setPopOverOpen}>
           <PopoverTrigger asChild>
             <Button
               variant={'outline'}
@@ -181,15 +188,16 @@ export const CreateBucketDueDate = () => {
               {date ? (
                 format(date, 'yyyy년 M월 d일', { locale: ko })
               ) : (
-                <span>Pick a date</span>
+                <span>날짜를 선택해주세요</span>
               )}
             </Button>
           </PopoverTrigger>
           <PopoverContent className='w-full p-0'>
             <Select
-              onValueChange={(value) =>
-                setDate(addDays(new Date(), parseInt(value)))
-              }
+              onValueChange={(value) => {
+                setDate(addDays(new Date(), parseInt(value)));
+                setPopOverOpen(!popOverOpen);
+              }}
             >
               <SelectTrigger>
                 <SelectValue placeholder='Select' />
@@ -207,9 +215,15 @@ export const CreateBucketDueDate = () => {
               className='w-full'
               mode='single'
               selected={date}
-              onSelect={setDate}
+              onSelect={(e) => {
+                setDate(e);
+                setPopOverOpen(!popOverOpen);
+              }}
               initialFocus
               disabled={(date) => date < new Date()}
+              pagedNavigation={true}
+              defaultMonth={date ?? new Date()}
+              locale={ko}
             />
           </PopoverContent>
         </Popover>
