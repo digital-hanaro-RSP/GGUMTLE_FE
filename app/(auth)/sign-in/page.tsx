@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import { DefaultInputRef } from '@/components/atoms/Inputs';
 import LoadingDot from '@/components/atoms/LoadingDot';
 import { signIn } from 'next-auth/react';
+import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { FormEvent, useState } from 'react';
@@ -28,12 +29,22 @@ export default function SignInPage() {
       });
 
       if (result?.error) {
-        alert('로그인 에러! 전화번호와 비밀번호를 확인해주세요');
+        Swal.fire({
+          title: 'Oops!',
+          text: '전화번호와 비밀번호를 확인해주세요',
+          icon: 'error',
+          confirmButtonText: '네',
+        });
         return;
       }
 
       // 로그인 성공
-      alert('로그인 성공! 환영합니다!');
+      Swal.fire({
+        text: '로그인 성공! 환영합니다.',
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+      });
       router.push('/mydata/consent'); // 로그인 후 리다이렉트할 페이지
       router.refresh(); // 세션 상태 업데이트를 위한 새로고침
     } catch (error) {

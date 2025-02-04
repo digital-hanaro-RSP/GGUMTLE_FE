@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button';
 import LoadingCircle from '@/components/atoms/LoadingCircle';
 import { useSurveyApi } from '@/hooks/useServey/useServey';
 import { useSurveyStore } from '@/store/surveyStore';
+import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -67,6 +68,7 @@ export default function ResultsPage() {
   const router = useRouter();
   const { answers, getTotalScore, clearAnswers } = useSurveyStore();
   const { submitSurvey } = useSurveyApi();
+  const { data: session, update } = useSession();
 
   useEffect(() => {
     const totalAnswers = Object.keys(answers).length;
@@ -92,7 +94,13 @@ export default function ResultsPage() {
     const investmentType = TENDENCY_TO_INVESTMENT_TYPE[tendency];
     try {
       await submitSurvey({ investmentType });
-      router.push('/');
+      await update({
+        ...session,
+        user: {
+          ...session?.user,
+          permission: 3,
+        },
+      }).then(() => router.push('/'));
     } catch (error) {
       console.error('성향 등록 실패:', error);
     }

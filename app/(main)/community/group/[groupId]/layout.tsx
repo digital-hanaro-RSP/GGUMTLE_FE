@@ -3,6 +3,7 @@
 import { PlusButton } from '@/components/atoms/Button';
 import Header from '@/components/atoms/Header';
 import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
+import Swal from 'sweetalert2';
 import { useRouter } from 'next/navigation';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -58,11 +59,26 @@ export default function GroupLayout({
 
   const handleLeaveGroup = async () => {
     // 이 부분 shadcn으로 할지 고민해보자
-    const isConfirmed = window.confirm('정말 그룹을 탈퇴하시겠습니까?');
-    if (!isConfirmed) return;
+    Swal.fire({
+      title: '정말 그룹을 탈퇴하시겠어요?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: '네, 탈퇴할게요!',
+      cancelButtonText: '취소',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await leaveGroup(groupId);
+        router.push('/community/main/mygroup');
+        Swal.fire({
+          title: '탈퇴되었어요.!',
+          icon: 'success',
+        });
+      }
+    });
 
-    await leaveGroup(groupId);
-    router.push('/community/main/mygroup');
     // fetchIsMember();
   };
 

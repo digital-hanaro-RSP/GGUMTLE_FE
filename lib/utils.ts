@@ -5,6 +5,7 @@ import {
 } from '@/types/BucketList';
 import { PostResponse } from '@/types/Community';
 import { clsx, type ClassValue } from 'clsx';
+import Swal from 'sweetalert2';
 import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
@@ -131,7 +132,12 @@ export const checkImageSize = (
   const newFileSize = newFile.size;
 
   if (totalSizeSoFar + newFileSize > MAX_TOTAL_SIZE) {
-    alert('이미지는 10MB 이하로 업로드해 주세요.');
+    Swal.fire({
+      title: 'Oops!',
+      text: '이미지는 10MB 이하로 업로드해 주세요.',
+      icon: 'error',
+      confirmButtonText: '네',
+    });
     return false;
   }
   return true;
@@ -209,7 +215,12 @@ export const changeStatus = async (
         window.location.reload();
       }
     })
-    .catch((err) => {
-      alert(err);
+    .catch(() => {
+      Swal.fire({
+        title: 'Oops!',
+        text: '버킷리스트 상태 변경에 실패했습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+      });
     });
 };
