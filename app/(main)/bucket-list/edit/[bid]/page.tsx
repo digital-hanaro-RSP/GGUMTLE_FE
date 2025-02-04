@@ -92,7 +92,7 @@ export default function BucketListEdit({
           title: title,
           tagType: tagType,
           isDueSet: isDueDate,
-          dueDate: new Date(date?.getTime() + 9 * 60 * 60 * 1000)
+          dueDate: new Date(new Date(date).getTime() + 9 * 60 * 60 * 1000)
             .toISOString()
             .split('T')[0],
           howTo: howTo,
