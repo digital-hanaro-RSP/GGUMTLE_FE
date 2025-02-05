@@ -1,12 +1,12 @@
 'use client';
 
+import Swal from 'sweetalert2';
 import { useState } from 'react';
 import { Button } from '../atoms/Button';
 import { DefaultInputRef } from '../atoms/Inputs';
 
 export interface PasswordEditModalProps {
   onSubmit: (passwords: {
-    currentPassword: string;
     newPassword: string;
     confirmPassword: string;
   }) => void;
@@ -18,7 +18,6 @@ export const PasswordEditModal = ({
   onClose,
 }: PasswordEditModalProps) => {
   const [passwords, setPasswords] = useState({
-    currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
@@ -26,7 +25,14 @@ export const PasswordEditModal = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (passwords.newPassword !== passwords.confirmPassword) {
-      return; // 새 비밀번호와 확인 비밀번호가 일치하지 않을 경우
+      Swal.fire({
+        title: 'Oops!',
+        text: '비밀번호가 일치하지 않습니다.',
+        icon: 'error',
+        confirmButtonText: '네',
+        confirmButtonColor: '#069894',
+      });
+      return;
     }
     onSubmit(passwords);
   };
@@ -45,15 +51,6 @@ export const PasswordEditModal = ({
         <h2 className='text-xl font-bold mb-4'>비밀번호 변경</h2>
         <form onSubmit={handleSubmit}>
           <div className='space-y-4'>
-            <DefaultInputRef
-              name='currentPassword'
-              type='password'
-              value={passwords.currentPassword}
-              onChange={handleChange}
-              placeHolder='현재 비밀번호'
-              required
-              error='현재 비밀번호를 입력해주세요'
-            />
             <DefaultInputRef
               name='newPassword'
               type='password'

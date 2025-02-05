@@ -99,6 +99,7 @@ export const PortfolioRecommendModal = ({
             text: err || '목표 포트폴리오 변경에 실패했습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
           window.location.reload();
         });

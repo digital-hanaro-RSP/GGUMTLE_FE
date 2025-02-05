@@ -139,6 +139,7 @@ export const checkImageSize = (
       text: 'PNG, JPEG, JPG 형식의 이미지만 업로드 가능합니다.',
       icon: 'error',
       confirmButtonText: '네',
+      confirmButtonColor: '#069894',
     });
     return false;
   }
@@ -151,6 +152,7 @@ export const checkImageSize = (
       text: '이미지는 총합 10MB 이하로 업로드해 주세요.',
       icon: 'error',
       confirmButtonText: '네',
+      confirmButtonColor: '#069894',
     });
     return false;
   }
@@ -235,6 +237,7 @@ export const changeStatus = async (
         text: '버킷리스트 상태 변경에 실패했습니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
     });
 };

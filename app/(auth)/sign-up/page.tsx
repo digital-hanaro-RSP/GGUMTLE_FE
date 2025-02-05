@@ -45,6 +45,7 @@ export default function SignUpPage() {
         text: '모든 정보를 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -63,6 +64,7 @@ export default function SignUpPage() {
         text: '생년월일은 숫자만 입력 가능합니다.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -78,6 +80,7 @@ export default function SignUpPage() {
         text: '올바른 출생연도를 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -88,6 +91,7 @@ export default function SignUpPage() {
         text: '올바른 월을 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }
@@ -98,6 +102,7 @@ export default function SignUpPage() {
         text: '올바른 일을 입력해주세요.',
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       return;
     }

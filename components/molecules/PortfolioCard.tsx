@@ -221,6 +221,7 @@ export const PortfolioCard = ({
         text: errorMessage,
         icon: 'error',
         confirmButtonText: '네',
+        confirmButtonColor: '#069894',
       });
       console.error(err);
     } finally {

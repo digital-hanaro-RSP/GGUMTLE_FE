@@ -79,6 +79,7 @@ export const MoneyTransferDrawer = ({
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.reload();
@@ -98,6 +99,7 @@ export const MoneyTransferDrawer = ({
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.reload();
@@ -117,6 +119,7 @@ export const MoneyTransferDrawer = ({
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.reload();
@@ -136,6 +139,7 @@ export const MoneyTransferDrawer = ({
               text: '금액이 부족합니다.',
               icon: 'error',
               confirmButtonText: '네',
+              confirmButtonColor: '#069894',
             }).then((result) => {
               if (result.isConfirmed) {
                 window.location.reload();
@@ -185,6 +189,7 @@ export const MoneyTransferDrawer = ({
                   text: err || '금액을 확인할 수 없습니다.',
                   icon: 'error',
                   confirmButtonText: '네',
+                  confirmButtonColor: '#069894',
                 });
               });
           }
@@ -203,6 +208,7 @@ export const MoneyTransferDrawer = ({
             text: err || '계좌정보를 불러올 수 없습니다.',
             icon: 'error',
             confirmButtonText: '네',
+            confirmButtonColor: '#069894',
           });
         });
     };
