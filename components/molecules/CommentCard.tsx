@@ -66,12 +66,25 @@ export default function CommentCard({
   };
 
   const handleDelete = async () => {
-    try {
-      await delelteComment(id);
-      onDelete?.();
-    } catch (error) {
-      console.error('댓글 삭제 실패:', error);
-    }
+    await Swal.fire({
+      title: '정말 삭제하시겠어요?',
+      text: '삭제는 되돌릴 수 없어요',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#D80000',
+      cancelButtonColor: '#C0C0C0',
+      confirmButtonText: '네, 삭제할게요.',
+      cancelButtonText: '취소',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await delelteComment(id);
+          onDelete?.();
+        } catch (error) {
+          console.error('댓글 삭제 실패:', error);
+        }
+      }
+    });
   };
 
   return (

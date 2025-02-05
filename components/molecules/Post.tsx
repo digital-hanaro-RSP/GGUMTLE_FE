@@ -10,6 +10,7 @@ import { useCommunityApi } from '@/hooks/useCommunity/useCommunity';
 import { getAllBucketListRes } from '@/types/BucketList';
 import { Post as PostType } from '@/types/Community';
 import { BsThreeDots } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -23,7 +24,6 @@ import LikeComment from '../atoms/LikeComment';
 import UserProfile from '../atoms/UserProfile';
 import { BucketListCard } from './BucketListCard';
 import { PortfolioCard } from './PortfolioCard';
-import Swal from 'sweetalert2';
 
 // TODO
 // 추후 게시글 상세 페이지일떄 '더보기' 버튼 제거 하고 줄 수 제한 제거 로직 추가해야함.
@@ -118,12 +118,27 @@ export default function Post({
   };
 
   const handleDelete = async () => {
-    try {
-      await deletePost(groupId, id);
-      onDelete?.(); // 삭제 성공 시 콜백 호출
-    } catch (error) {
-      console.error('게시물 삭제 실패:', error);
-    }
+    await Swal.fire({
+      title: '정말 삭제하시겠어요?',
+      text: '삭제는 되돌릴 수 없어요',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#D80000',
+      cancelButtonColor: '#C0C0C0',
+      confirmButtonText: '네, 삭제할게요.',
+      cancelButtonText: '취소',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deletePost(groupId, id);
+          onDelete?.(); // 삭제 성공 시 콜백 호출
+        } catch (error) {
+          console.error('게시물 삭제 실패:', error);
+        } finally {
+          router.push(`/community/group/${groupId}`);
+        }
+      }
+    });
   };
 
   return (
