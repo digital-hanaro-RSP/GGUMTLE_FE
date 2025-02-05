@@ -100,7 +100,9 @@ export default function ResultsPage() {
           ...session?.user,
           permission: 3,
         },
-      }).then(() => router.push('/'));
+      }).then(() => {
+        window.location.reload();
+      });
     } catch (error) {
       console.error('성향 등록 실패:', error);
     }
