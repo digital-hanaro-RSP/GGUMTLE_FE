@@ -379,8 +379,10 @@ export const MoneyTransferDrawer = ({
           </>
         ) : (
           <div className='flex flex-col justify-center items-center h-full gap-5 animate-fadeIn'>
-            <h1 className='text-3xl font-semibold'>
-              거래가 정상적으로 처리되었어요
+            <h1 className='text-3xl font-semibold text-center break-words'>
+              거래가 정상적으로
+              <br />
+              처리되었어요
             </h1>
             <div className='w-full flex justify-center items-center bg-none'>
               <video
