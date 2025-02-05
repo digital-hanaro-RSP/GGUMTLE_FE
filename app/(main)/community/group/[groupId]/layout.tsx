@@ -52,10 +52,17 @@ export default function GroupLayout({
     await joinGroup(groupId);
     fetchIsMember();
 
-    if (params.postId !== undefined) {
-      // 일단 임시로 상세 글 페이지에서 가입하면 리로드해서 댓글 입력창 표시
-      window.location.reload();
-    }
+    Swal.fire({
+      text: '가입 성공! 환영합니다.',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1500,
+    }).then(() => {
+      if (params.postId !== undefined) {
+        // 일단 임시로 상세 글 페이지에서 가입하면 리로드해서 댓글 입력창 표시
+        window.location.reload();
+      }
+    });
   };
 
   const handleLeaveGroup = async () => {
