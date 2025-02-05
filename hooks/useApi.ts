@@ -32,8 +32,9 @@ export const useApi = () => {
       ...options,
       headers,
     });
-
-    if (!response.ok) {
+    if (response.status === 404) {
+      window.location.href = '/not-found';
+    } else if (!response.ok) {
       throw new Error(`API request failed: ${response.statusText}`);
     }
     return response.json();
