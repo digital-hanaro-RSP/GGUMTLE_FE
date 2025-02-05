@@ -81,7 +81,7 @@ export default function GroupLayout({
         await leaveGroup(groupId);
         router.push('/community/main/mygroup');
         Swal.fire({
-          title: '탈퇴되었어요.!',
+          title: '탈퇴되었어요!',
           icon: 'success',
           timer: 1500,
         });
