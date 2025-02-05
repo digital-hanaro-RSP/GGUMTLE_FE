@@ -33,7 +33,10 @@ export async function middleware(req: NextRequest) {
     // permission이 0,1이 아닌 경우
     else {
       // consent 페이지로 접근하려 할 때
-      if (req.nextUrl.pathname === consentPath) {
+      if (
+        req.nextUrl.pathname === consentPath ||
+        req.nextUrl.pathname.includes(surveyPath)
+      ) {
         return NextResponse.redirect(new URL('/', req.url));
       }
     }
