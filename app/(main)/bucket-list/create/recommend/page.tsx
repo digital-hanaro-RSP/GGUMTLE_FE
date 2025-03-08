@@ -106,38 +106,25 @@ export default function RecommendBucketPage() {
 
   const onClickMenuBar = (index: number) => {
     if (!api) return;
+    type categoriesProps = {
+      list: RecommendBucketListType[];
+      setter: (value: RecommendBucketListType[]) => void;
+      type?: bucketListTagType;
+    };
+    const categories: categoriesProps[] = [
+      { list: Popular, setter: setPopular },
+      { list: Do, setter: setDo, type: 'DO' },
+      { list: Be, setter: setBe, type: 'BE' },
+      { list: Have, setter: setHave, type: 'HAVE' },
+      { list: Go, setter: setGo, type: 'GO' },
+      { list: Learn, setter: setLearn, type: 'LEARN' },
+    ];
 
-    switch (index) {
-      case 0:
-        if (Popular.length === 0) {
-          getRecommendation(setPopular);
-        }
-        break;
-      case 1:
-        if (Do.length === 0) {
-          getRecommendation(setDo, 'DO');
-        }
-        break;
-      case 2:
-        if (Be.length === 0) {
-          getRecommendation(setBe, 'BE');
-        }
-        break;
-      case 3:
-        if (Have.length === 0) {
-          getRecommendation(setHave, 'HAVE');
-        }
-        break;
-      case 4:
-        if (Go.length === 0) {
-          getRecommendation(setGo, 'GO');
-        }
-        break;
-      case 5:
-        if (Learn.length === 0) {
-          getRecommendation(setLearn, 'LEARN');
-        }
-        break;
+    if (index >= 0 && index < categories.length) {
+      const category = categories[index];
+      if (category.list.length === 0) {
+        getRecommendation(category.setter, category.type);
+      }
     }
 
     api.scrollTo(index);
